@@ -1,6 +1,6 @@
 Project Contributors:
   - Hikmet Demir
-  - Mertalp Taytak
+  - Mert Alp Taytak
   - Burak Yaşar
   - Mert Duman
-  - Görkem
+  - Görkem Yılmaz
