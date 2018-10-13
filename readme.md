@@ -1,5 +1,9 @@
 # Q-bitz Project by Fellowship of the CS-319
 
+# Project Name:
+
+# Group Number:
+
 ### Project Contributors
 
   - Hikmet Demir
@@ -7,6 +11,16 @@
   - Burak Yaşar
   - Mert Duman
   - Görkem Yılmaz
+
+# Project Topic
+
+# Description
+
+# Requirements
+
+# Differences with real game
+
+# References
 
 ### Introduction
 
