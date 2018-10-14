@@ -19,7 +19,7 @@ Q-Bitz: Q-bitz offers three types of visual challenges, making it the perfect ga
 ### Requirements
 
 ### Differences with real game
-
+The tabletop version of the game is multiplayer, but we will also add a singleplayer mode where the player will race against time and try to get as many correct cards as possible.
 ### References
 Written description of the game:
 Geekdo. “Q•Bitz.” BoardGameGeek, boardgamegeek.com/boardgame/66088/qbitz.
