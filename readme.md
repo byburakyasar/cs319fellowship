@@ -1,8 +1,8 @@
 # Q-bitz Project by Fellowship of the CS-319
 
-### Project Name:
+### Project Name: Fellowship of the CS-319
 
-### Group Number:
+### Group Number: 1F
 
 ### Project Contributors
 
@@ -15,7 +15,7 @@
 ### Project Topic
 
 ### Description
-
+Q-Bitz: Q-bitz offers three types of visual challenges, making it the perfect game for multiple playing styles. Round one of this game s all about speed as players race to manipulate their cubes to copy the pattern on the Q-bitz pattern card. In round two, players roll all of their cubes on the table like dice. Using the cubes as rolled (face up), players place as many cubes as possible in the tray to recreate the pattern shown on the card. Players race to re-roll all remaining unusable cubes until they roll the shapes that are needed to complete the pattern. Round three really tests brain power: players study the pattern card for ten seconds, flip it face down and then re-create the pattern from memory!
 ### Requirements
 
 ### Differences with real game
