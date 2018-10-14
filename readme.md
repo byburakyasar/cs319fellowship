@@ -21,6 +21,11 @@ Q-Bitz: Q-bitz offers three types of visual challenges, making it the perfect ga
 ### Differences with real game
 
 ### References
+Written description of the game:
+Geekdo. “Q•Bitz.” BoardGameGeek, boardgamegeek.com/boardgame/66088/qbitz.
+
+Video explanation of the game:
+TTPM Toy Reviews. “Q-Bitz from MindWare.”, YouTube, 3 Sept. 2013, www.youtube.com/watch?v=j4PEAbkT780.
 
 ### Introduction
 
