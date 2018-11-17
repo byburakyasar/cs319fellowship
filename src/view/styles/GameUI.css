@@ -7,3 +7,8 @@
     -fx-pref-width: 50;
     -fx-pref-height: 50;
 }
+
+#backToMenuBtn {
+    -fx-pref-width: 50;
+    -fx-pref-height: 20;
+}

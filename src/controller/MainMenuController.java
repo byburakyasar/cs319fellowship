@@ -29,7 +29,6 @@ public class MainMenuController {
 
     public void initialize() {
         playButtonAnimations();
-
     }
 
     @FXML

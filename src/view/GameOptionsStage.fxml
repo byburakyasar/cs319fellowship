@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@MenuStage.css"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/MenuStage.css"
             fx:controller="controller.GameOptionsController">
     <fx:define>
         <ToggleGroup fx:id="difficultyGroup"/>
