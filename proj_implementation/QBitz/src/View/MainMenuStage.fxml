@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane fx:controller="sample.MainMenuController"
+<BorderPane fx:controller="Controller.MainMenuController"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@MainMenuStage.css"
             fx:id="mainBorderPane" id="mainBorderPane">
     <top>
