@@ -9,8 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css"
-            fx:controller="controller.GameUIController">
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
     <left>
         <VBox spacing="50">
             <ImageView>
@@ -30,16 +29,7 @@
         </VBox>
     </left>
     <center>
-        <GridPane gridLinesVisible="true" alignment="CENTER">
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-            <Button GridPane.rowIndex="0" GridPane.columnIndex="2"/>
-            <Button GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-            <Button GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-            <Button GridPane.rowIndex="1" GridPane.columnIndex="2"/>
-            <Button GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-            <Button GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-            <Button GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <GridPane fx:id="boardPane" gridLinesVisible="true" alignment="CENTER" minWidth="400" minHeight="400">
         </GridPane>
     </center>
 

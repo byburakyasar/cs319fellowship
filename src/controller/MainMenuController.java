@@ -19,7 +19,6 @@ public class MainMenuController {
     @FXML BorderPane mainBorderPane;
     @FXML Button playBtn;
     @FXML Button levelSelectBtn;
-    @FXML Button multiplayerBtn;
     @FXML Button howToPlayBtn;
     @FXML Button settingsBtn;
     @FXML Button creditsBtn;
@@ -47,14 +46,14 @@ public class MainMenuController {
     }
 
     private void playButtonAnimations() {
-        Button[] btnArr = {playBtn, levelSelectBtn, multiplayerBtn, howToPlayBtn, settingsBtn, creditsBtn, exitBtn};
+        Button[] btnArr = {playBtn, levelSelectBtn, howToPlayBtn, settingsBtn, creditsBtn, exitBtn};
 
         setClips(btnArr);
         playTimeline(btnArr);
     }
 
     private void setClips(Button[] btnArr) {
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 6; i++) {
             btnArr[i].setTranslateX(-300);
             Rectangle clip = new Rectangle(210, 40);
             clip.translateXProperty().bind( btnArr[i].translateXProperty().negate());
@@ -76,8 +75,8 @@ public class MainMenuController {
                         playTransition(btnArr[position]);
                         position++;
                     }
-                }), new KeyFrame( Duration.millis(200)));
-                fiveSecondsT.setCycleCount(7);
+                }), new KeyFrame( Duration.millis(150)));
+                fiveSecondsT.setCycleCount(6);
                 fiveSecondsT.play();
             }
         });
