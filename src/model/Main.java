@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,11 +11,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../View/MainMenuStage.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
         primaryStage.setTitle("QBitz");
         primaryStage.setScene(new Scene(root, 800, 600));
-        primaryStage.show();
         primaryStage.getIcons().add(new Image("./qbitz.png"));
+        primaryStage.show();
     }
 
 

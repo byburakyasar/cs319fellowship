@@ -7,8 +7,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane fx:controller="Controller.MainMenuController"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@MainMenuStage.css"
+<BorderPane fx:controller="controller.MainMenuController"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@MenuStage.css"
             fx:id="mainBorderPane" id="mainBorderPane">
     <top>
         <VBox alignment="CENTER" spacing="20">

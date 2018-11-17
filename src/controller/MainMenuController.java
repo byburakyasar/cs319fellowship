@@ -1,17 +1,19 @@
-package Controller;
+package controller;
 
 import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.io.IOException;
 
 public class MainMenuController {
     @FXML BorderPane mainBorderPane;
@@ -31,9 +33,9 @@ public class MainMenuController {
     }
 
     @FXML
-    public void playBtnClicked() {
+    public void playBtnClicked() throws IOException {
         Stage current = (Stage) playBtn.getScene().getWindow();
-        GridPane root = new GridPane();
+        BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
         Scene scene = new Scene(root, 800, 600);
 
         current.setScene(scene);

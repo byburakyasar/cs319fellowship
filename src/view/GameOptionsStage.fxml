@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.String?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@MenuStage.css"
+            fx:controller="controller.GameOptionsController">
+    <fx:define>
+        <ToggleGroup fx:id="difficultyGroup"/>
+        <ToggleGroup fx:id="playerGroup"/>
+    </fx:define>
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="gameOptionsLabel" text="Game Options">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="TOP_CENTER" spacing="100">
+            <HBox spacing="40" alignment="CENTER">
+                <VBox.margin>
+                    <Insets top="50"/>
+                </VBox.margin>
+                <Label text="Difficulty: "/>
+                <RadioButton text="3x3" toggleGroup="$difficultyGroup"/>
+                <RadioButton text="4x4" toggleGroup="$difficultyGroup"/>
+                <RadioButton text="5x5" toggleGroup="$difficultyGroup"/>
+            </HBox>
+            <HBox spacing="40" alignment="CENTER">
+                <Label text="Players: "/>
+                <RadioButton text="1" toggleGroup="$playerGroup" id="deneme"/>
+                <RadioButton text="2" toggleGroup="$playerGroup"/>
+                <RadioButton text="3" toggleGroup="$playerGroup"/>
+                <RadioButton text="4" toggleGroup="$playerGroup"/>
+            </HBox>
+            <HBox spacing="40" alignment="CENTER">
+                <Label text="Game Mode: "/>
+                <ComboBox>
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Pattern Maching"/>
+                            <String fx:value="Tetris"/>
+                            <String fx:value="Time Limited"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+            <HBox spacing="40" alignment="CENTER">
+                <Button fx:id="backToMainBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
+                <Button fx:id="startBtn" text="Start" onAction="#startGame"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

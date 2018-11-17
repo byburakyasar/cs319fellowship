@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@GameUI.css"
+            fx:controller="controller.GameUIController">
+    <Group>
+
+    </Group>
+    <left>
+        <VBox spacing="50">
+            <ImageView>
+                <Image url="/pattern1.jpeg"/>
+            </ImageView>
+
+            <GridPane id="cubeButtonsGrid" alignment="CENTER" hgap="10" vgap="10">
+                <Button fx:id="cubeBtn1" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Button fx:id="cubeBtn2" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                <Button fx:id="cubeBtn3" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                <Button fx:id="cubeBtn4" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Button fx:id="cubeBtn5" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                <Button fx:id="cubeBtn6" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            </GridPane>
+        </VBox>
+    </left>
+    <center>
+        <GridPane gridLinesVisible="true" alignment="CENTER">
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Button GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <Button GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Button GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            <Button GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+            <Button GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Button GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+            <Button GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        </GridPane>
+    </center>
+
+</BorderPane>
