@@ -1,8 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
-
-import java.awt.*;
+import javafx.scene.control.Button;
 
 /**
  * @author Mert Duman
@@ -17,6 +16,6 @@ public class GameUIController {
     @FXML Button cubeBtn6;
 
     public void initialize() {
-        
+
     }
 }
