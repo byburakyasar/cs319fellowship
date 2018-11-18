@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fxyz3d-0.4.0-sources">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../fxyz3d-0.4.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
