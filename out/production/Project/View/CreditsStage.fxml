@@ -9,7 +9,7 @@
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.CreditsController"
+            fx:controller="controller.CreditsController" stylesheets="@styles/Credits.css"
             prefHeight="400.0" prefWidth="600.0">
     <top>
         <VBox alignment="CENTER" spacing="20">
@@ -23,16 +23,19 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="20">
-            <Label id="isimler" text="Mert Duman" >
+        <VBox alignment="TOP_CENTER" spacing="20">
+            <Label id="names" text="Mert Duman">
+                <VBox.margin>
+                    <Insets top="80"></Insets>
+                </VBox.margin>
             </Label>
-            <Label id="isimler" text="Burak Yaşar">
+            <Label id="names" text="Burak Yaşar">
             </Label>
-            <Label id="isimler" text="Mertalp Taytak">
+            <Label id="names" text="Mertalp Taytak">
             </Label>
-            <Label id="isimler" text="Görkem Yılmaz">
+            <Label id="names" text="Görkem Yılmaz">
             </Label>
-            <Label id="isimler" text="Hikmet Demir">
+            <Label id="names" text="Hikmet Demir">
             </Label>
         </VBox>
     </center>
