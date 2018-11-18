@@ -28,9 +28,7 @@
             </GridPane>
 
             <Button id="backToMenuBtn" text="Main Menu" onAction="#backToMainMenu">
-                <VBox.margin>
-                    
-                </VBox.margin>
+
             </Button>
         </VBox>
     </left>
