@@ -20,11 +20,22 @@
 
     <center>
         <VBox alignment="CENTER_LEFT" spacing="60">
-            <Label id="labels" text="Music">
-                <VBox.margin>
-                    <Insets left="100"></Insets>
-                </VBox.margin>
-            </Label>
+            <HBox>
+
+                <Label id="labels" text="Music">
+                    <VBox.margin>
+                        <Insets left="100"></Insets>
+                    </VBox.margin>
+                </Label>
+
+                <ToggleButton>
+
+                </ToggleButton>
+
+
+            </HBox>
+
+
             <Label id="labels" text= "Sound">
                 <VBox.margin>
                     <Insets left="100"></Insets>

@@ -10,7 +10,8 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css"
+            fx:controller="controller.GameUIController">
     <left>
         <VBox spacing="150">
             <ImageView>

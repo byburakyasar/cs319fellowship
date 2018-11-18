@@ -23,22 +23,18 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER_LEFT" spacing="10">
-            <VBox.margin>
-                <Insets top="80" left="50" ></Insets>
-            </VBox.margin>
-
+        <VBox alignment="CENTER" spacing="10">
             <Label id="content" text="Q-bitz is a game about building a pattern.">
             </Label>
-            <Label id="content" text= "The patterns are chosen randomly from a pile of cards and players try to match">
+            <Label id="content" text= "The  patterns  are  chosen randomly from a pile of cards and  players try  to match">
             </Label>
             <Label id="content" text= "the pattern using cubes. Cubes are identical to each other but each face of a cube">
             </Label>
-            <Label id="content" text= "is different from its other faces. Depending on the specifics of the current round">
+            <Label id="content" text= "is different from  its other faces.  Depending on the specifics of the current round">
             </Label>
-            <Label id="content" text= "the player who builds the correct pattern fastest or the player who gets closest">
+            <Label id="content" text= "the player who  builds the correct  pattern fastest or the player who gets closest">
             </Label>
-            <Label id="content" text= "to the correct pattern wins the round. Player with the most rounds wins the game.">
+            <Label id="content" text= "to  the correct pattern wins the round. Player with the most rounds wins the game.">
             </Label>
 
         </VBox>
