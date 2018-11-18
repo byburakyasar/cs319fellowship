@@ -27,18 +27,19 @@ public class GameUIController {
     @FXML Button cubeBtn6;
     @FXML GridPane boardPane;
     @FXML GridPane solutionGrid;
-    GameOptionsController goc;
+
     int difficulty;
+    int playerCount;
     Cube cube;
     Pattern pattern;
     Game game;
 
-    public GameUIController(GameOptionsController goc) {
-        this.goc = goc;
-        difficulty = goc.getDifficulty();
-        cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
-        game = Game.createRandomGame(1, difficulty);
-        pattern = game.getPattern();
+    public GameUIController(int difficulty, int playerCount) {
+        this.difficulty = difficulty;
+        this.playerCount = playerCount;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.game = Game.createRandomGame(1, difficulty);
+        this.pattern = game.getPattern();
     }
 
     public void initialize() {
@@ -148,7 +149,7 @@ public class GameUIController {
         }
     }
 
-    public void playerPlayed(Pane pane, int imageLoc) {
+    private void playerPlayed(Pane pane, int imageLoc) {
         CubeFaces[] cubeFaces = {
                 CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
                 CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK
@@ -165,7 +166,27 @@ public class GameUIController {
 
             System.out.println(winner);
             System.out.println(winTime/1000.0 + " seconds.");
+
+            try {
+                loadEndStage(winTime, winner);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    private void loadEndStage(long winTime, Player winner) throws IOException {
+        Stage current = (Stage)cubeBtn1.getScene().getWindow();
+
+        FXMLLoader loader = new FXMLLoader();
+        EndController endC = new EndController(difficulty, playerCount, winTime, winner);
+        loader.setController(endC);
+        loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
+
+        BorderPane root = loader.load();
+        Scene scene = new Scene(root, 800, 600);
+
+        current.setScene(scene);
     }
 
     public int getDifficulty() {

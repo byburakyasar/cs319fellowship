@@ -8,7 +8,7 @@
 
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
+            xmlns:fx="http://javafx.com/fxml" id="mainBorderPane"
             fx:controller="controller.HowToPlayController" stylesheets="@styles/HowToPlay.css"
             prefHeight="400.0" prefWidth="600.0">
     <top>

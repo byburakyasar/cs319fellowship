@@ -66,7 +66,7 @@ public class GameOptionsController {
         Stage current = (Stage) startBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(this);
+        GameUIController gui = new GameUIController(getDifficulty(), 1);
         loader.setController(gui);
         loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 

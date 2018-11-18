@@ -3,10 +3,6 @@
     -fx-font-size: 20px;
 }
 
-#HowToPlayLabel {
+#endGameLabel {
     -fx-font-size: 50px;
-}
-
-#content {
-    -fx-font-size: 15px;
 }
