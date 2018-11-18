@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -72,5 +73,14 @@ public class Pattern {
 
         // If not incorrect, then correct.
         return true;
+    }
+
+    public CubeFaces[][] getPatternGrid() {
+        return patternGrid;
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.deepToString(patternGrid);
     }
 }

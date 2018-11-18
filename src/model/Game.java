@@ -37,6 +37,7 @@ public class Game {
         Game game = new Game(maxPlayers, dimensions);
         game.pattern = Pattern.createRandomPattern(dimensions);
 
+        System.out.println(game.pattern);
         return game;
     }
 
@@ -147,5 +148,13 @@ public class Game {
         } else {
             return null;
         }
+    }
+
+    public Pattern getPattern() {
+        return pattern;
+    }
+
+    public long getStartTime() {
+        return startTimeMillis;
     }
 }
