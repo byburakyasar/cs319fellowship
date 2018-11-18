@@ -6,9 +6,55 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
+<?import com.sun.javafx.scene.control.skin.VirtualFlow?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.LevelSelectController"
+            fx:controller="controller.LevelSelectController" stylesheets="@styles/LevelSelect.css"
             prefHeight="400.0" prefWidth="600.0">
+
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="LevelsLabel" text="Levels">
+                <VBox.margin>
+                    <Insets top="20"></Insets>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="40">
+            <HBox alignment="CENTER" spacing="40">
+                <Button id="LevelButton" text="1" ></Button>
+                <Button id="LevelButton" text="2" ></Button>
+                <Button id="LevelButton" text="3" ></Button>
+            </HBox>
+            <HBox alignment="CENTER" spacing="40">
+                <Button id="LevelButton" text="4" ></Button>
+                <Button id="LevelButton" text="5" ></Button>
+                <Button id="LevelButton" text="6" ></Button>
+            </HBox>
+            <HBox alignment="CENTER" spacing="40">
+                <Button id="LevelButton" text="7" ></Button>
+                <Button id="LevelButton" text="8" ></Button>
+                <Button id="LevelButton" text="9" ></Button>
+            </HBox>
+
+
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="BOTTOM_RIGHT" spacing="20">
+            <Button text="Main Menu" fx:id="BackButton" onAction="#backToMainMenu">
+                <VBox.margin>
+                    <Insets right="40" bottom="40"></Insets>
+                </VBox.margin>
+
+            </Button>
+        </VBox>
+    </bottom>
 
 </BorderPane>

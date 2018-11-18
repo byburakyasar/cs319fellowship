@@ -42,7 +42,7 @@
 
     <bottom>
         <VBox alignment="BOTTOM_RIGHT" spacing="30">
-            <Button text="Main Menu">
+            <Button text="Main Menu" fx:id="MainMenu" onAction="#backToMainMenu">
                 <VBox.margin>
                     <Insets top="40" left="40" right="40" bottom="40"></Insets>
                 </VBox.margin>
