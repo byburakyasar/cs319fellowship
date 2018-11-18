@@ -1,0 +1,8 @@
+#mainBorderPane {
+    -fx-font-family: "Cambria Math", sans-serif;
+    -fx-font-size: 20px;
+}
+
+#endGameLabel {
+    -fx-font-size: 50px;
+}

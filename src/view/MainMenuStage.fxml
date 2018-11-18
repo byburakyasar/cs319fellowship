@@ -1,0 +1,33 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane fx:controller="controller.MainMenuController"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/MainMenu.css"
+            fx:id="mainBorderPane" id="mainBorderPane">
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="qbitzLabel" text="Q-Bitz">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <Button fx:id="playBtn" text="Play" onAction="#playBtnClicked"/>
+            <Button fx:id="levelSelectBtn" text="Level Select" onAction="#levelSelectBtnClicked"/>
+            <Button fx:id="howToPlayBtn" text="How to Play" onAction="#howToPlayBtnClicked"/>
+            <Button fx:id="settingsBtn" text="Settings" onAction="#settingsBtnClicked"/>
+            <Button fx:id="creditsBtn" text="Credits" onAction="#creditsBtnClicked"/>
+            <Button fx:id="exitBtn" text="Exit" onAction="#exit"/>
+        </VBox>
+    </center>
+</BorderPane>

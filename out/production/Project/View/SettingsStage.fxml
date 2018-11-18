@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.SettingsController" stylesheets="@styles/Settings.css"
+            prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="SettingsLabel" text="Settings">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER_LEFT" spacing="60">
+
+            <HBox>
+                <Label id="labels" text="Music">
+                    <HBox.margin>
+                        <Insets left="200"></Insets>
+                    </HBox.margin>
+                </Label>
+
+                <ToggleButton>
+                    <HBox.margin>
+                        <Insets left="307"></Insets>
+                    </HBox.margin>
+                </ToggleButton>
+            </HBox>
+
+            <HBox>
+                <Label id="labels" text= "Sound">
+                    <HBox.margin>
+                        <Insets left="200"></Insets>
+                    </HBox.margin>
+                </Label>
+
+                <ToggleButton>
+                    <HBox.margin>
+                        <Insets left="300"></Insets>
+                    </HBox.margin>
+                </ToggleButton>
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+    <bottom>
+        <VBox alignment="BOTTOM_RIGHT" spacing="30">
+            <Button text="Main Menu" fx:id="MainMenu" onAction="#backToMainMenu">
+                <VBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"></Insets>
+                </VBox.margin>
+
+            </Button>
+        </VBox>
+    </bottom>
+
+</BorderPane>

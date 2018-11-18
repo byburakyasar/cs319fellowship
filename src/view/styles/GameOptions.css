@@ -1,0 +1,12 @@
+#mainBorderPane {
+    -fx-font-family: "Cambria Math", sans-serif;
+    -fx-font-size: 20px;
+}
+
+#gameOptionsLabel {
+    -fx-font-size: 50px;
+}
+
+.label {
+    -fx-font-size: 25px;
+}
