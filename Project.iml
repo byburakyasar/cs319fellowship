@@ -8,5 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="jfxtras-labs-2.2-r5" level="project" />
+    <orderEntry type="library" name="fxyz3d-0.4.0" level="project" />
   </component>
 </module>
