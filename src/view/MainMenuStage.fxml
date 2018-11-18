@@ -23,7 +23,7 @@
     <center>
         <VBox alignment="CENTER" spacing="20">
             <Button fx:id="playBtn" text="Play" onAction="#playBtnClicked"/>
-            <Button fx:id="levelSelectBtn" text="Level Select"/>
+            <Button fx:id="levelSelectBtn" text="Level Select" onAction="#levelSelectBtnClicked"/>
             <Button fx:id="howToPlayBtn" text="How to Play"/>
             <Button fx:id="settingsBtn" text="Settings"/>
             <Button fx:id="creditsBtn" text="Credits" onAction="#creditsBtnClicked"/>

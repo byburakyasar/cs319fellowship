@@ -39,4 +39,15 @@
             </Label>
         </VBox>
     </center>
+
+    <bottom>
+        <VBox alignment="BOTTOM_RIGHT" spacing="30">
+            <Button text="Main Menu">
+                <VBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"></Insets>
+                </VBox.margin>
+
+            </Button>
+        </VBox>
+    </bottom>
 </BorderPane>

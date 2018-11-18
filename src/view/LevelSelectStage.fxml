@@ -6,9 +6,26 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.LevelSelectController"
+            fx:controller="controller.LevelSelectController" stylesheets="@styles/LevelSelect.css"
             prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="LevelsLabel" text="Levels">
+                <VBox.margin>
+                    <Insets top="20"></Insets>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
+    <center>
+        <GridPane>
+            
+        </GridPane>
+    </center>
+
+</BorderPane>
