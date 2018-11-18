@@ -23,11 +23,12 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="10">
+        <VBox alignment="CENTER_LEFT" spacing="10">
+            <VBox.margin>
+                <Insets top="80" left="50" ></Insets>
+            </VBox.margin>
+
             <Label id="content" text="Q-bitz is a game about building a pattern.">
-                <VBox.margin>
-                    <Insets top="80"></Insets>
-                </VBox.margin>
             </Label>
             <Label id="content" text= "The patterns are chosen randomly from a pile of cards and players try to match">
             </Label>
