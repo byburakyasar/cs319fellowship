@@ -138,6 +138,7 @@ public class ResourceLoader {
 
             case PatternPack:
                 try {
+                    System.out.println(root.toPath());
                     filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
                         @Override
                         public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
@@ -146,6 +147,7 @@ public class ResourceLoader {
                             }
 
                             String pathName = path.getFileName().toString();
+                            System.out.println(pathName);
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });
@@ -157,6 +159,7 @@ public class ResourceLoader {
 
             case GameIcon:
                 try {
+                    System.out.println(root.toPath());
                     filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
                         @Override
                         public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
