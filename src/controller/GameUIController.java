@@ -34,7 +34,7 @@ public class GameUIController {
     public GameUIController(GameOptionsController goc) {
         this.goc = goc;
         difficulty = goc.getDifficulty();
-        cube = ResourceLoader.getInstance().getPatternPacks().get(0).getCube();
+        cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
     }
 
     public void initialize() {
