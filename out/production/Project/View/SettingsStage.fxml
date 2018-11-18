@@ -20,17 +20,37 @@
 
     <center>
         <VBox alignment="CENTER_LEFT" spacing="60">
-            <Label id="labels" text="Music">
-                <VBox.margin>
-                    <Insets left="100"></Insets>
-                </VBox.margin>
-            </Label>
-            <Label id="labels" text= "Sound">
-                <VBox.margin>
-                    <Insets left="100"></Insets>
-                </VBox.margin>
-            </Label>
+
+            <HBox>
+                <Label id="labels" text="Music">
+                    <HBox.margin>
+                        <Insets left="200"></Insets>
+                    </HBox.margin>
+                </Label>
+
+                <ToggleButton>
+                    <HBox.margin>
+                        <Insets left="307"></Insets>
+                    </HBox.margin>
+                </ToggleButton>
+            </HBox>
+
+            <HBox>
+                <Label id="labels" text= "Sound">
+                    <HBox.margin>
+                        <Insets left="200"></Insets>
+                    </HBox.margin>
+                </Label>
+
+                <ToggleButton>
+                    <HBox.margin>
+                        <Insets left="300"></Insets>
+                    </HBox.margin>
+                </ToggleButton>
+            </HBox>
+
         </VBox>
+
     </center>
 
     <bottom>
