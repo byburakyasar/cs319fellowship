@@ -1,0 +1,15 @@
+.button {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+}
+
+#mainBorderPane {
+    -fx-font-family: "Cambria Math", sans-serif;
+    -fx-font-size: 20px;
+}
+
+
+#qbitzLabel {
+    -fx-font-size: 50px;
+}
+

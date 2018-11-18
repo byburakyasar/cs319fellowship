@@ -5,8 +5,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/MenuStage.css"
+<BorderPane id="mainBorderPane" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameOptions.css"
             fx:controller="controller.GameOptionsController">
     <fx:define>
         <ToggleGroup fx:id="difficultyGroup"/>
@@ -29,17 +29,15 @@
                 <VBox.margin>
                     <Insets top="50"/>
                 </VBox.margin>
-                <Label text="Difficulty: "/>
+                <Label text="Difficulty: " />
                 <RadioButton text="3x3" userData="3" toggleGroup="$difficultyGroup"/>
-                <RadioButton text="4x4" userData="4" toggleGroup="$difficultyGroup"/>
+                <RadioButton text="4x4" userData="4" toggleGroup="$difficultyGroup" selected="true"/>
                 <RadioButton text="5x5" userData="5" toggleGroup="$difficultyGroup"/>
             </HBox>
-            <HBox spacing="40" alignment="CENTER">
+            <HBox fx:id="playersHBox" spacing="40" alignment="CENTER">
                 <Label text="Players: "/>
-                <RadioButton text="1" toggleGroup="$playerGroup" id="deneme"/>
-                <RadioButton text="2" toggleGroup="$playerGroup"/>
-                <RadioButton text="3" toggleGroup="$playerGroup"/>
-                <RadioButton text="4" toggleGroup="$playerGroup"/>
+                <RadioButton text="1" toggleGroup="$playerGroup" selected="true"/>
+                <Button fx:id="multiplayerBtn" text="Multiplayer" onAction="#loadPlayerChoices"/>
             </HBox>
             <HBox spacing="40" alignment="CENTER">
                 <Label text="Game Mode: "/>

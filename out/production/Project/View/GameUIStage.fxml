@@ -8,10 +8,11 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
     <left>
-        <VBox spacing="50">
+        <VBox spacing="150">
             <ImageView>
                 <Image url="/patterns/cube1/pattern1.jpeg"/>
             </ImageView>
@@ -25,7 +26,11 @@
                 <Button fx:id="cubeBtn6" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
             </GridPane>
 
-            <Button id="backToMenuBtn" text="Main Menu" onAction="#backToMainMenu"/>
+            <Button id="backToMenuBtn" text="Main Menu" onAction="#backToMainMenu">
+                <VBox.margin>
+                    
+                </VBox.margin>
+            </Button>
         </VBox>
     </left>
     <center>

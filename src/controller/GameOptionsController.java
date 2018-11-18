@@ -2,13 +2,19 @@ package controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,10 +26,14 @@ import java.io.IOException;
 public class GameOptionsController {
     @FXML Button startBtn;
     @FXML Button backToMenuBtn;
+    @FXML Button multiplayerBtn;
+    @FXML HBox playersHBox;
     @FXML ToggleGroup difficultyGroup;
+    @FXML ToggleGroup playerGroup;
 
-    private int difficulty;
-    private int playerCount;
+
+    private int difficulty = 4;
+    private int playerCount = 1;
 
     public void initialize() {
         difficultyGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -32,6 +42,8 @@ public class GameOptionsController {
                 difficulty = Integer.parseInt(difficultyGroup.getSelectedToggle().getUserData().toString());
             }
         });
+
+
     }
 
     @FXML
@@ -57,6 +69,42 @@ public class GameOptionsController {
 
         current.setScene(scene);
 
+    }
+
+    private boolean flipflop = true;
+    @FXML
+    public void loadPlayerChoices(ActionEvent event) {
+        if(flipflop) {
+            RadioButton[] btns = new RadioButton[3];
+            for(int i = 0; i < 3; i++) {
+                RadioButton btn = new RadioButton(String.valueOf(i+2));
+                btn.setUserData(String.valueOf(i+2));
+                btn.setToggleGroup(playerGroup);
+                btns[i] = btn;
+            }
+
+            VBox vBox = new VBox();
+            vBox.setAlignment(Pos.CENTER);
+            vBox.setSpacing(10);
+
+            HBox hBox = new HBox();
+            hBox.setAlignment(Pos.CENTER);
+            hBox.setSpacing(30);
+            hBox.getChildren().addAll(btns);
+
+            Button btn = (Button) playersHBox.getChildren().remove(2);
+            vBox.getChildren().add(btn);
+            vBox.getChildren().add(hBox);
+            playersHBox.getChildren().add(vBox);
+            playersHBox.setMargin(vBox, new Insets(-40,0,0,0));
+
+            flipflop = false;
+        } else {
+            VBox vBox = (VBox)playersHBox.getChildren().remove(2);
+            playersHBox.getChildren().add(multiplayerBtn);
+
+            flipflop = true;
+        }
     }
 
     public GameOptionsController getSelf() {
