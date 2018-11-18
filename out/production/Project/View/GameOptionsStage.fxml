@@ -24,12 +24,12 @@
     </top>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="100">
+        <VBox alignment="CENTER" spacing="100">
             <HBox spacing="40" alignment="CENTER">
                 <VBox.margin>
                     <Insets top="50"/>
                 </VBox.margin>
-                <Label text="Difficulty: " />
+                <Label text="Difficulty: "/>
                 <RadioButton text="3x3" userData="3" toggleGroup="$difficultyGroup"/>
                 <RadioButton text="4x4" userData="4" toggleGroup="$difficultyGroup" selected="true"/>
                 <RadioButton text="5x5" userData="5" toggleGroup="$difficultyGroup"/>
@@ -52,7 +52,7 @@
                 </ComboBox>
             </HBox>
             <HBox spacing="40" alignment="CENTER">
-                <Button fx:id="backToMainBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
+                <Button fx:id="backToMenuBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
                 <Button fx:id="startBtn" text="Start" onAction="#startGame"/>
             </HBox>
         </VBox>
