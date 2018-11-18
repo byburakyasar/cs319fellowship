@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.SettingsController"
+            fx:controller="controller.SettingsController" stylesheets="@styles/Settings.css"
             prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="SettingsLabel" text="Settings">
+                <VBox.margin>
+                    <Insets top="20"/>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
 
-</AnchorPane>
+    <center>
+        <VBox alignment="CENTER_LEFT" spacing="60">
+            <Label id="labels" text="Music">
+                <VBox.margin>
+                    <Insets left="100"></Insets>
+                </VBox.margin>
+            </Label>
+            <Label id="labels" text= "Sound">
+                <VBox.margin>
+                    <Insets left="100"></Insets>
+                </VBox.margin>
+            </Label>
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="BOTTOM_RIGHT" spacing="30">
+            <Button text="Main Menu" fx:id="MainMenu" onAction="#backToMainMenu">
+                <VBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"></Insets>
+                </VBox.margin>
+
+            </Button>
+        </VBox>
+    </bottom>
+
+</BorderPane>

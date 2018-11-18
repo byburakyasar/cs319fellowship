@@ -41,12 +41,16 @@
             </HBox>
             <HBox spacing="40" alignment="CENTER">
                 <Label text="Game Mode: "/>
-                <ComboBox>
+                <ComboBox fx:id="gameModesComboBox" value="Pattern Maching" maxWidth="260">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Pattern Maching"/>
-                            <String fx:value="Tetris"/>
-                            <String fx:value="Time Limited"/>
+                            <String fx:value="Racing and Rolling (Multiplayer)"/>
+                            <String fx:value="From Memory in 10"/>
+                            <String fx:value="Maximum Patterns"/>
+                            <String fx:value="Against Time"/>
+                            <String fx:value="Painting Puzzle"/>
+                            <String fx:value="Different Cubes"/>
                         </FXCollections>
                     </items>
                 </ComboBox>

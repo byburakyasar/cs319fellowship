@@ -8,13 +8,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,6 +26,7 @@ public class GameOptionsController {
     @FXML Button backToMenuBtn;
     @FXML Button multiplayerBtn;
     @FXML HBox playersHBox;
+    @FXML ComboBox<String> gameModesComboBox;
     @FXML ToggleGroup difficultyGroup;
     @FXML ToggleGroup playerGroup;
 
@@ -43,7 +42,14 @@ public class GameOptionsController {
             }
         });
 
-
+        gameModesComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                Text text = new Text(newValue);
+                gameModesComboBox.setMaxWidth(text.getLayoutBounds().getWidth() + 150);
+                System.out.println(text.getLayoutBounds().getWidth() + 150);
+            }
+        });
     }
 
     @FXML
@@ -102,13 +108,10 @@ public class GameOptionsController {
         } else {
             VBox vBox = (VBox)playersHBox.getChildren().remove(2);
             playersHBox.getChildren().add(multiplayerBtn);
-
+            RadioButton btn = (RadioButton)(playersHBox.getChildren().get(1));
+            btn.setSelected(true);
             flipflop = true;
         }
-    }
-
-    public GameOptionsController getSelf() {
-        return this;
     }
 
     public int getDifficulty() {

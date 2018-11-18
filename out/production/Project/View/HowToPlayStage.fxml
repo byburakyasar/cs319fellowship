@@ -6,9 +6,51 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.HowToPlayController"
+            fx:controller="controller.HowToPlayController" stylesheets="@styles/HowToPlay.css"
             prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="HowToPlayLabel" text="How To Play">
+                <VBox.margin>
+                    <Insets top="20"></Insets>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
 
-</AnchorPane>
+    <center>
+        <VBox alignment="CENTER" spacing="10">
+            <Label id="content" text="Q-bitz is a game about building a pattern.">
+                <VBox.margin>
+                    <Insets top="80"></Insets>
+                </VBox.margin>
+            </Label>
+            <Label id="content" text= "The patterns are chosen randomly from a pile of cards and players try to match">
+            </Label>
+            <Label id="content" text= "the pattern using cubes. Cubes are identical to each other but each face of a cube">
+            </Label>
+            <Label id="content" text= "is different from its other faces. Depending on the specifics of the current round">
+            </Label>
+            <Label id="content" text= "the player who builds the correct pattern fastest or the player who gets closest">
+            </Label>
+            <Label id="content" text= "to the correct pattern wins the round. Player with the most rounds wins the game.">
+            </Label>
+
+        </VBox>
+    </center>
+
+    <bottom>
+        <VBox alignment="BOTTOM_RIGHT" spacing="30">
+            <Button text="Main Menu" fx:id="MainMenu" onAction="#backToMainMenu">
+                <VBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"></Insets>
+                </VBox.margin>
+
+            </Button>
+        </VBox>
+    </bottom>
+</BorderPane>
