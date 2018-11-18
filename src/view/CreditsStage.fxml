@@ -6,9 +6,34 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="controller.CreditsController"
             prefHeight="400.0" prefWidth="600.0">
+    <top>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="CreditsLabel" text="Credits">
+                <VBox.margin>
+                    <Insets top="20"></Insets>
+                </VBox.margin>
+            </Label>
+            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
+        </VBox>
+    </top>
 
-</AnchorPane>
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+            <Label id="isimler" text="Mert Duman" >
+            </Label>
+            <Label id="isimler" text="Burak Yaşar">
+            </Label>
+            <Label id="isimler" text="Mertalp Taytak">
+            </Label>
+            <Label id="isimler" text="Görkem Yılmaz">
+            </Label>
+            <Label id="isimler" text="Hikmet Demir">
+            </Label>
+        </VBox>
+    </center>
+</BorderPane>

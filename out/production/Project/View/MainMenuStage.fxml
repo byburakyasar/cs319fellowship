@@ -26,7 +26,7 @@
             <Button fx:id="levelSelectBtn" text="Level Select"/>
             <Button fx:id="howToPlayBtn" text="How to Play"/>
             <Button fx:id="settingsBtn" text="Settings"/>
-            <Button fx:id="creditsBtn" text="Credits"/>
+            <Button fx:id="creditsBtn" text="Credits" onAction="#creditsBtnClicked"/>
             <Button fx:id="exitBtn" text="Exit" onAction="#exit"/>
         </VBox>
     </center>
