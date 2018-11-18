@@ -1,0 +1,14 @@
+#LevelButton {
+        -fx-pref-width: 100;
+        -fx-pref-height: 100;
+    }
+
+#LevelsLabel {
+    -fx-font-family: "Cambria Math", sans-serif;
+    -fx-font-size: 45px;
+    }
+
+#MainMenuButton {
+            -fx-pref-width: 50;
+            -fx-pref-height: 20;
+}

@@ -1,18 +1,20 @@
 package cube;
 
 import javafx.application.Application;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Camera;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -20,6 +22,10 @@ import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
+import jfxtras.labs.scene.control.window.Window;
+import jfxtras.labs.scene.layout.ScalableContentPane;
+import jfxtras.labs.util.event.MouseControlUtil;
+import org.fxyz3d.geometry.Point3D;
 import org.fxyz3d.shapes.primitives.CuboidMesh;
 
 
@@ -30,9 +36,26 @@ public class Main extends Application {
 
     @Override
     public void start(Stage mainStage) {
-        CuboidMesh cuboid = new CuboidMesh(100, 100, 100);
+
+
+        /*
+        ScalableContentPane scaledPane = new ScalableContentPane();
+
+        Pane rootPane = scaledPane.getContentPane();
+        rootPane.setStyle("-fx-background-color: darkblue");
+        */
+
+        // cuboid is like open form of a cube
+        CuboidMesh cuboid = new CuboidMesh(50f, 50f, 50f);
+
+        // Point3D point = new Point3D(0,0,0);
+        // cuboid.setCenter(point);
+        MouseControlUtil.makeDraggable(cuboid);
+
+        // cube is covered with the material
         PhongMaterial mat = new PhongMaterial();
 
+        // faces of a cube
         Image img1 = new Image(getClass().getResourceAsStream("/face1.jpeg"));
         Image img2 = new Image(getClass().getResourceAsStream("/face2.jpeg"));
         Image img3 = new Image(getClass().getResourceAsStream("/face3.jpeg"));
@@ -40,20 +63,10 @@ public class Main extends Application {
         Image img5 = new Image(getClass().getResourceAsStream("/face5.jpeg"));
         Image img6 = new Image(getClass().getResourceAsStream("/face6.jpeg"));
 
-        Image net = generateNet(img1,img2,img3,img4,img5,img6);
-        mat.setDiffuseMap(net);
+        //
+        Image faces = generateFaces(img1,img2,img3,img4,img5,img6);
+        mat.setDiffuseMap(faces);
         cuboid.setMaterial(mat);
-
-        /*
-        //Create box
-        Box myBox = new Box(40, 40, 40);
-        myBox.setMaterial(material);
-
-        Image img = new Image(getClass().getResourceAsStream("/dice.jpeg"));
-        PhongMaterial material = new PhongMaterial();
-        material.setDiffuseMap(img);
-
-        */
 
         //Prepare transformable Group container
         SmartGroup group = new SmartGroup();
@@ -73,75 +86,79 @@ public class Main extends Application {
         mainStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case E:
-                    group.rotateByZ(20);
+                    group.rotateByZ(60);
                     break;
                 case Q:
-                    group.rotateByZ(-20);
+                    group.rotateByZ(-60);
                     break;
                 case S:
-                    group.rotateByX(20);
+                    group.rotateByX(60);
                     break;
                 case W:
-                    group.rotateByX(-20);
+                    group.rotateByX(-60);
                     break;
                 case A:
-                    group.rotateByY(20);
+                    group.rotateByY(60);
                     break;
                 case D:
-                    group.rotateByY(-20);
+                    group.rotateByY(-60);
                     break;
             }
         });
 
+
+
         mainStage.setTitle("Qbitz");
         mainStage.setScene(myScene);
         mainStage.show();
+
     }
 
-    private Image generateNet(Image face1, Image face2, Image face3, Image face4, Image face5, Image face6) {
+    private Image generateFaces(Image face1, Image face2, Image face3, Image face4, Image face5, Image face6) {
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
 
-        ImageView label1 = new ImageView(face1);
-        label1.setRotate(90);
-        label1.setFitHeight(200);
-        label1.setFitWidth(200);
+        ImageView imageView1 = new ImageView(face1);
+        imageView1.setRotate(90);
+        imageView1.setFitHeight(200);
+        imageView1.setFitWidth(200);
+        GridPane.setHalignment(imageView1, HPos.CENTER);
+
         //label1.fitHeightProperty().bind(grid.getColumnConstraints().get(0).maxWidthProperty());
-        GridPane.setHalignment(label1, HPos.CENTER);
 
-        ImageView label2 = new ImageView(face2);
-        label2.setFitHeight(200);
-        label2.setFitWidth(200);
-        GridPane.setHalignment(label2, HPos.CENTER);
+        ImageView imageView2 = new ImageView(face2);
+        imageView2.setFitHeight(200);
+        imageView2.setFitWidth(200);
+        GridPane.setHalignment(imageView2, HPos.CENTER);
 
-        ImageView label3 = new ImageView(face3);
-        label3.setFitHeight(200);
-        label3.setFitWidth(200);
-        GridPane.setHalignment(label3, HPos.CENTER);
+        ImageView imageView3 = new ImageView(face3);
+        imageView3.setFitHeight(200);
+        imageView3.setFitWidth(200);
+        GridPane.setHalignment(imageView3, HPos.CENTER);
 
-        ImageView label4 = new ImageView(face4);
-        label4.setFitHeight(200);
-        label4.setFitWidth(200);
-        GridPane.setHalignment(label4, HPos.CENTER);
+        ImageView imageView4 = new ImageView(face4);
+        imageView4.setFitHeight(200);
+        imageView4.setFitWidth(200);
+        GridPane.setHalignment(imageView4, HPos.CENTER);
 
-        ImageView label5 = new ImageView(face5);
-        label5.setFitHeight(200);
-        label5.setFitWidth(200);
-        GridPane.setHalignment(label5, HPos.CENTER);
+        ImageView imageView5 = new ImageView(face5);
+        imageView5.setFitHeight(200);
+        imageView5.setFitWidth(200);
+        GridPane.setHalignment(imageView5, HPos.CENTER);
 
-        ImageView label6 = new ImageView(face6);
-        label6.setFitHeight(200);
-        label6.setFitWidth(200);
-        label6.setRotate(90);
-        GridPane.setHalignment(label6, HPos.CENTER);
+        ImageView imageView6 = new ImageView(face6);
+        imageView6.setFitHeight(200);
+        imageView6.setFitWidth(200);
+        imageView6.setRotate(90);
+        GridPane.setHalignment(imageView6, HPos.CENTER);
 
-        grid.add(label1, 1, 0);
-        grid.add(label2, 0, 1);
-        grid.add(label3, 1, 1);
-        grid.add(label4, 2, 1);
-        grid.add(label5, 3, 1);
-        grid.add(label6, 1, 2);
+        grid.add(imageView1, 1, 0);
+        grid.add(imageView2, 0, 1);
+        grid.add(imageView3, 1, 1);
+        grid.add(imageView4, 2, 1);
+        grid.add(imageView5, 3, 1);
+        grid.add(imageView6, 1, 2);
 
         grid.setGridLinesVisible(true);
 
