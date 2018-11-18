@@ -1,11 +1,7 @@
-.button {
-    -fx-pref-width: 120;
-    -fx-pref-height: 120;
-}
 
 #cubeButtonsGrid .button {
-    -fx-pref-width: 50;
-    -fx-pref-height: 50;
+    -fx-min-width: 50;
+    -fx-min-height: 50;
     -fx-border-style: solid;
     -fx-border-color: black;
     -fx-border-width: 1px;

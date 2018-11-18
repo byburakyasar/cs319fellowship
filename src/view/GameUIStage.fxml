@@ -13,7 +13,7 @@
             xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css"
             >
     <left>
-        <VBox spacing="120">
+        <VBox spacing="80">
             <!--<ImageView>
                 <Image url="/pattern_1/pattern1.jpeg"/>
             </ImageView>-->
@@ -29,9 +29,9 @@
             </GridPane>
 
             <Button id="backToMenuBtn" text="Main Menu" onAction="#backToMainMenu">
-                <VBox.margin>
-                    
-                </VBox.margin>
+            <VBox.margin>
+                <Insets left="30"/>
+            </VBox.margin>
             </Button>
         </VBox>
     </left>
