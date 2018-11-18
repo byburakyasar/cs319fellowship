@@ -61,7 +61,7 @@ public class ResourceLoader {
 
     /**
      * Locates and returns the root of the resources directory.
-     * @return Root of the resources directory. If an exception occured returns null instead.
+     * @return Root of the resources directory. If an exception occurred returns null instead.
      */
     private static File rootLocator() {
 
@@ -150,7 +150,7 @@ public class ResourceLoader {
                         }
                     });
                 } catch (IOException e) {
-                    System.err.println("ResourceLoader: An error occured in filtering process.");
+                    System.err.println("ResourceLoader: An error occurred in filtering process.");
                     e.printStackTrace();
                 }
                 break;
@@ -169,13 +169,35 @@ public class ResourceLoader {
                         }
                     });
                 } catch (IOException e) {
-                    System.err.println("ResourceLoader: An error occured in filtering process.");
+                    System.err.println("ResourceLoader: An error occurred in filtering process.");
                     e.printStackTrace();
                 }
-        };
-
+        }
     }
 
+    /**
+     * Taken from https://stackoverflow.com/a/990492/8980631
+     */
+    public static String removeExtension(String s) {
+
+        String separator = System.getProperty("file.separator");
+        String filename;
+
+        // Remove the path upto the filename.
+        int lastSeparatorIndex = s.lastIndexOf(separator);
+        if (lastSeparatorIndex == -1) {
+            filename = s;
+        } else {
+            filename = s.substring(lastSeparatorIndex + 1);
+        }
+
+        // Remove the extension.
+        int extensionIndex = filename.lastIndexOf(".");
+        if (extensionIndex == -1)
+            return filename;
+
+        return filename.substring(0, extensionIndex);
+    }
 
     /*
         INNER CLASSES

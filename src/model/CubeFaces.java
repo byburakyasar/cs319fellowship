@@ -9,5 +9,5 @@ public enum CubeFaces {
     FACE_LEFT,
     FACE_RIGHT,
     FACE_FRONT,
-    FACE_BACKs
+    FACE_BACK
 }

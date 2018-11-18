@@ -48,17 +48,17 @@ public class GameUIController {
     }
 
     private void loadImagesToCubes(Image[] imgs) {
-        cubeBtn1.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_1.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn1.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/up.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn2.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_2.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn2.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/left.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn3.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_3.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn3.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/right.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn4.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_4.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn4.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/down.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn5.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_5.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn5.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/front.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn6.setBackground(new Background(new BackgroundImage(new Image("/patterns/cube1/pattern1_6.jpeg"), BackgroundRepeat.NO_REPEAT,
+        cubeBtn6.setBackground(new Background(new BackgroundImage(new Image("/pattern_1/back.jpeg"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
     }
 
@@ -66,7 +66,7 @@ public class GameUIController {
         Button[] buttons = {cubeBtn1, cubeBtn2, cubeBtn3, cubeBtn4, cubeBtn5, cubeBtn6};
         for (int i = 0; i < buttons.length; i++) {
             Button btn = buttons[i];
-            String str = "/patterns/cube1/pattern1_" + (i+1) + ".jpeg";
+            String str = "/pattern_1/pattern1_" + (i+1) + ".jpeg";
             System.out.println(str);
             Image img = new Image(str);
             System.out.println(img);
