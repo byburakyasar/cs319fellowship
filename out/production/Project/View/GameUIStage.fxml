@@ -12,10 +12,11 @@
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
     <left>
-        <VBox spacing="150">
-            <ImageView>
+        <VBox spacing="120">
+            <!--<ImageView>
                 <Image url="/pattern_1/pattern1.jpeg"/>
-            </ImageView>
+            </ImageView>-->
+            <GridPane fx:id="solutionGrid" style="-fx-background-color: cornflowerblue"/>
 
             <GridPane id="cubeButtonsGrid" alignment="CENTER" hgap="10" vgap="10">
                 <Button fx:id="cubeBtn1" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
@@ -33,6 +34,7 @@
             </Button>
         </VBox>
     </left>
+
     <center>
         <GridPane fx:id="boardPane" gridLinesVisible="true" alignment="CENTER" minWidth="400" minHeight="400">
         </GridPane>

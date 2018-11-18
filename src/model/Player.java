@@ -44,7 +44,7 @@ public class Player {
 
         Player otherP = (Player) other;
 
-        return (this.name == otherP.name && this.solutionGrid == otherP.solutionGrid);
+        return (this.name.equals(otherP.name) && this.solutionGrid == otherP.solutionGrid);
     }
 
     /**
@@ -112,5 +112,10 @@ public class Player {
      */
     public boolean getEndResult() {
         return didWin;
+    }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + " Did win: " + didWin;
     }
 }

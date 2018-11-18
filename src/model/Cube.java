@@ -24,7 +24,6 @@ public class Cube {
     // ATTRIBUTES
 
     private final EnumMap<CubeFaces, Image> faceMap;
-
     // CONSTRUCTORS
 
     /**
