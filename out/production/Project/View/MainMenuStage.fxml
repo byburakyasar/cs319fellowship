@@ -8,7 +8,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.layout.HBox?>
 <BorderPane fx:controller="controller.MainMenuController"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/MenuStage.css"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/MainMenu.css"
             fx:id="mainBorderPane" id="mainBorderPane">
     <top>
         <VBox alignment="CENTER" spacing="20">
@@ -23,10 +23,10 @@
     <center>
         <VBox alignment="CENTER" spacing="20">
             <Button fx:id="playBtn" text="Play" onAction="#playBtnClicked"/>
-            <Button fx:id="levelSelectBtn" text="Level Select"/>
+            <Button fx:id="levelSelectBtn" text="Level Select" onAction="#levelSelectBtnClicked"/>
             <Button fx:id="howToPlayBtn" text="How to Play"/>
             <Button fx:id="settingsBtn" text="Settings"/>
-            <Button fx:id="creditsBtn" text="Credits"/>
+            <Button fx:id="creditsBtn" text="Credits" onAction="#creditsBtnClicked"/>
             <Button fx:id="exitBtn" text="Exit" onAction="#exit"/>
         </VBox>
     </center>
