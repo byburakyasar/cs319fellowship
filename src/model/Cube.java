@@ -8,7 +8,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 /**
- * The class to model a cube by mapping faces to images.
+ * Class to model a cube by mapping faces to images.
  */
 public class Cube {
 

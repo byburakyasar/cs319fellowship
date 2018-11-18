@@ -77,7 +77,7 @@ public class GameUIController {
         for (int i = 0; i < buttons.length; i++) {
             Button btn = buttons[i];
             Image img = faceImages[i];
-            System.out.println(img);
+
             btn.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {

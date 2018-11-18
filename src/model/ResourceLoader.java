@@ -80,7 +80,7 @@ public class ResourceLoader {
             e.printStackTrace();
         } finally {
             if (returnF != null) {
-                System.out.println("ResourcesLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
+                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
             }
             return returnF;
         }
@@ -181,7 +181,7 @@ public class ResourceLoader {
     /**
      * Taken from https://stackoverflow.com/a/990492/8980631
      */
-    public static String removeExtension(String s) {
+    static String removeExtension(String s) {
 
         String separator = System.getProperty("file.separator");
         String filename;
