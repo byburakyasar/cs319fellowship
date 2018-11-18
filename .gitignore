@@ -1,2 +1,3 @@
-# ignore the file literally named foo[01].txt
 .idea\workspace.xml
+deneme.txt
+workspace.xml
