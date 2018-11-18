@@ -40,6 +40,24 @@ public class MainMenuController {
     }
 
     @FXML
+    public void settingsBtnClicked() throws IOException{
+        Stage current = (Stage) creditsBtn.getScene().getWindow();
+        BorderPane root = FXMLLoader.load(getClass().getResource("../view/SettingsStage.fxml"));
+        Scene scene = new Scene(root, 800, 600);
+
+        current.setScene(scene);
+    }
+
+    @FXML
+    public void howToPlayBtnClicked() throws IOException{
+        Stage current = (Stage) creditsBtn.getScene().getWindow();
+        BorderPane root = FXMLLoader.load(getClass().getResource("../view/HowToPlayStage.fxml"));
+        Scene scene = new Scene(root, 800, 600);
+
+        current.setScene(scene);
+    }
+
+    @FXML
     public void creditsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/CreditsStage.fxml"));

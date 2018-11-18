@@ -37,7 +37,6 @@ public class Main extends Application {
     @Override
     public void start(Stage mainStage) {
 
-
         /*
         ScalableContentPane scaledPane = new ScalableContentPane();
 
@@ -81,6 +80,8 @@ public class Main extends Application {
         group.translateXProperty().set(WIDTH / 2);
         group.translateYProperty().set(HEIGHT / 2);
         group.translateZProperty().set(-1000);
+
+
 
         //Add keyboard control.
         mainStage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
