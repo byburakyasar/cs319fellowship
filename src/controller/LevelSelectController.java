@@ -14,13 +14,13 @@ import java.io.IOException;
  * @version 17.11.2018
  */
 public class LevelSelectController {
-    @FXML Button BackButton;
+    @FXML Button mainMenuBtn;
 
     @FXML
     public void backToMainMenu() throws IOException {
-        Stage current = (Stage) BackButton.getScene().getWindow();
+        Stage current = (Stage) mainMenuBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }

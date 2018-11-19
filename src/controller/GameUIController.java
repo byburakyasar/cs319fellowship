@@ -56,7 +56,7 @@ public class GameUIController {
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) cubeBtn1.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -144,6 +144,9 @@ public class GameUIController {
                         event.consume();
                     }
                 });
+
+                pane.setBackground(new Background(new BackgroundImage(new Image("/wood.png"), BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(120,120,false,false,false,false))));
                 boardPane.add(pane, i, j);
             }
         }
@@ -184,7 +187,7 @@ public class GameUIController {
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
         BorderPane root = loader.load();
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }

@@ -34,7 +34,7 @@ public class MainMenuController {
     public void playBtnClicked() throws IOException {
         Stage current = (Stage) playBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -43,7 +43,7 @@ public class MainMenuController {
     public void settingsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/SettingsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -52,7 +52,7 @@ public class MainMenuController {
     public void howToPlayBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/HowToPlayStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -61,7 +61,7 @@ public class MainMenuController {
     public void creditsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/CreditsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -70,7 +70,7 @@ public class MainMenuController {
     public void levelSelectBtnClicked() throws IOException{
         Stage current = (Stage) levelSelectBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/LevelSelectStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
+        Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
     }
@@ -90,9 +90,10 @@ public class MainMenuController {
 
     private void setClips(Button[] btnArr) {
         for (int i = 0; i < 6; i++) {
-            btnArr[i].setTranslateX(-300);
-            Rectangle clip = new Rectangle(210, 40);
-            clip.translateXProperty().bind( btnArr[i].translateXProperty().negate());
+            btnArr[i].setTranslateX(-600);
+            Rectangle clip = new Rectangle(410, 100);
+            clip.translateXProperty().bind( btnArr[i].translateXProperty().negate().subtract(5));
+            clip.setTranslateY(-5);
             btnArr[i].setClip(clip);
         }
     }

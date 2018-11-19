@@ -1,12 +1,34 @@
 #mainBorderPane {
     -fx-font-family: "Cambria Math", sans-serif;
-    -fx-font-size: 20px;
+    -fx-font-size: 25px;
+    -fx-background-color: linear-gradient(to bottom right, #f5ffff 25%, #AAB3FF 100%);
 }
 
 #gameOptionsLabel {
-    -fx-font-size: 50px;
+    -fx-font-size: 100px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #AAB3FF 40%, #000000 40%);
 }
 
 .label {
-    -fx-font-size: 25px;
+    -fx-font-size: 35px;
+}
+
+.combo-box, .radio-button .radio, .combo-box .list-cell {
+    -fx-background-color: #AAB3FF;
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: #8282fa;
+}
+
+/* combo-box-popup .list-view is inside combo-box .list-view */
+.combo-box .list-view {
+    -fx-background-color: #AAB3FF;
+}
+
+.combo-box-popup .list-view {
+    -fx-border-style: solid;
+    -fx-border-radius: 1px;
+    -fx-border-color: black;
 }
