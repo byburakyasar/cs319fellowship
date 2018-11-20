@@ -1,13 +1,34 @@
+#mainBorderPane {
+    -fx-font-family: "Cambria Math", sans-serif;
+    -fx-font-size: 20px;
+    -fx-background-color: linear-gradient(to bottom right, #f5ffff 25%, #AAB3FF 100%);
+}
 
-#cubeButtonsGrid .button {
-    -fx-min-width: 50;
-    -fx-min-height: 50;
+#cubeFacesGrid .pane {
     -fx-border-style: solid;
     -fx-border-color: black;
     -fx-border-width: 1px;
 }
 
+#boardAnchorPane, #solutionAnchorPane {
+    -fx-border-style: solid;
+    -fx-border-color: black;
+    -fx-border-width: 1px;
+}
+
+#boardPane {
+    /*-fx-background-color: #5b2605;*/
+}
+
+#solutionGrid {
+
+}
+
 #backToMenuBtn {
-    -fx-pref-width: 100;
-    -fx-pref-height: 20;
+    -fx-pref-width: 400;
+    -fx-pref-height: 70;
+    -fx-font-size: 35px;
+    -fx-background-radius: 20px;
+    -fx-background-color: #AAB3FF;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);
 }

@@ -4,9 +4,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -19,20 +17,22 @@ import java.io.IOException;
  * @version 17.11.2018
  */
 public class GameUIController {
-    @FXML Button cubeBtn1;
-    @FXML Button cubeBtn2;
-    @FXML Button cubeBtn3;
-    @FXML Button cubeBtn4;
-    @FXML Button cubeBtn5;
-    @FXML Button cubeBtn6;
-    @FXML GridPane boardPane;
-    @FXML GridPane solutionGrid;
+    @FXML private GridPane boardPane;
+    @FXML private GridPane solutionGrid;
+    @FXML private GridPane cubeFacesGrid;
+    @FXML private AnchorPane boardAnchorPane;
+    @FXML private AnchorPane solutionAnchorPane;
 
-    int difficulty;
-    int playerCount;
-    Cube cube;
-    Pattern pattern;
-    Game game;
+    private Pane[] cubeFacePanes = new Pane[6];
+
+    private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
+            CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
+
+    private int difficulty;
+    private int playerCount;
+    private Cube cube;
+    private Pattern pattern;
+    private Game game;
 
     public GameUIController(int difficulty, int playerCount) {
         this.difficulty = difficulty;
@@ -47,14 +47,15 @@ public class GameUIController {
         game.startGame();
 
         drawSolutionPattern();
-        loadImagesToCubes(null);
+
+        createCubeFaces();
         bindDragToCubes();
         loadBoardAndBindDrag();
     }
 
     @FXML
     public void backToMainMenu() throws IOException {
-        Stage current = (Stage) cubeBtn1.getScene().getWindow();
+        Stage current = (Stage) boardPane.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
         Scene scene = new Scene(root, 1920, 1000);
 
@@ -63,49 +64,61 @@ public class GameUIController {
 
     private void drawSolutionPattern() {
         CubeFaces[][] solutionFaces = pattern.getPatternGrid();
+        final int SOLUTION_SIZE = 150;
 
         for(int i = 0; i < difficulty; i++) {
             for(int j = 0; j < difficulty; j++) {
                 Image img = cube.get(solutionFaces[i][j]);
 
-                ImageView view = new ImageView(cube.get(solutionFaces[i][j]));
-                view.setFitWidth(50);
-                view.setFitHeight(50);
-                solutionGrid.add(view, j, i);
+                Pane pane = new Pane();
+                pane.setPrefSize(SOLUTION_SIZE, SOLUTION_SIZE);
+                pane.getStyleClass().add("pane");
+
+                pane.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(SOLUTION_SIZE, SOLUTION_SIZE, false, false, false, false))));
+
+                solutionGrid.add(pane, j, i);
+            }
+        }
+
+        solutionAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
+    }
+
+    private void createCubeFaces() {
+        final int FACE_SIZE = 120;
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 3; j++) {
+                Pane pane = new Pane();
+                pane.setPrefSize(FACE_SIZE, FACE_SIZE);
+                pane.setMinSize(FACE_SIZE, FACE_SIZE);
+                pane.getStyleClass().add("pane");
+
+                cubeFacePanes[(i*3)+j] = pane;
+
+                pane.setBackground(new Background(new BackgroundImage(cube.get(cubeFaces[(i*3)+j]), BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(FACE_SIZE, FACE_SIZE, false, false, false, false))));
+
+                cubeFacesGrid.add(pane, j, i);
             }
         }
     }
 
-    private void loadImagesToCubes(Image[] imgs) {
-        cubeBtn1.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_UP), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn2.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_LEFT), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn3.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_FRONT), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn4.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_DOWN), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn5.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_RIGHT), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-        cubeBtn6.setBackground(new Background(new BackgroundImage(cube.get(CubeFaces.FACE_BACK), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(50, 50, false, false, false, false))));
-    }
-
     private void bindDragToCubes() {
-        Button[] buttons = {cubeBtn1, cubeBtn2, cubeBtn3, cubeBtn4, cubeBtn5, cubeBtn6};
         Image[] faceImages = {
                 cube.get(CubeFaces.FACE_UP), cube.get(CubeFaces.FACE_LEFT), cube.get(CubeFaces.FACE_FRONT),
                 cube.get(CubeFaces.FACE_DOWN), cube.get(CubeFaces.FACE_RIGHT), cube.get(CubeFaces.FACE_BACK)
         };
 
-        for (int i = 0; i < buttons.length; i++) {
-            Button btn = buttons[i];
+        for (int i = 0; i < cubeFacePanes.length; i++) {
+            Pane pane = cubeFacePanes[i];
             Image img = faceImages[i];
             int imageLoc = i;
-            btn.setOnDragDetected(new EventHandler<MouseEvent>() {
+            pane.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    Dragboard db = btn.startDragAndDrop(TransferMode.ANY);
+                    Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
                     ClipboardContent content = new ClipboardContent();
                     content.putImage(img);
                     content.putString(imageLoc+"");
@@ -119,10 +132,12 @@ public class GameUIController {
     }
 
     private void loadBoardAndBindDrag() {
+        final int BOARD_PANE_SIZE = 150;
         for(int i = 0; i < difficulty; i++) {
             for(int j = 0; j < difficulty; j++) {
                 Pane pane = new Pane();
-                pane.setPrefSize(100, 100);
+                pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
+                pane.getStyleClass().add("pane");
 
                 pane.setOnDragOver(new EventHandler<DragEvent>() {
                     @Override
@@ -137,7 +152,7 @@ public class GameUIController {
                     public void handle(DragEvent event) {
                         Dragboard db = event.getDragboard();
                         pane.setBackground(new Background(new BackgroundImage(db.getImage(), BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(120,120,false,false,false,false))));
+                                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,false,false))));
 
                         playerPlayed(pane, Integer.parseInt(db.getString()));
                         event.setDropCompleted(true);
@@ -145,19 +160,19 @@ public class GameUIController {
                     }
                 });
 
-                pane.setBackground(new Background(new BackgroundImage(new Image("/wood.png"), BackgroundRepeat.NO_REPEAT,
-                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(120,120,false,false,false,false))));
+                /*pane.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(150,150,false,false,false,false))));*/
                 boardPane.add(pane, i, j);
             }
         }
+
+        boardPane.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
+        boardAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
     }
 
     private void playerPlayed(Pane pane, int imageLoc) {
-        CubeFaces[] cubeFaces = {
-                CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
-                CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK
-        };
-
         int row = boardPane.getRowIndex(pane);
         int col = boardPane.getColumnIndex(pane);
         game.playerMove("Player 1", row, col, cubeFaces[imageLoc]);
@@ -179,7 +194,7 @@ public class GameUIController {
     }
 
     private void loadEndStage(long winTime, Player winner) throws IOException {
-        Stage current = (Stage)cubeBtn1.getScene().getWindow();
+        Stage current = (Stage)boardPane.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
         EndController endC = new EndController(difficulty, playerCount, winTime, winner);
