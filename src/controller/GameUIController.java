@@ -139,6 +139,28 @@ public class GameUIController {
                 pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
                 pane.getStyleClass().add("pane");
 
+                /*pane.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent content = new ClipboardContent();
+                        Image img = pane.getBackground().getImages().get(0).getImage();
+                        if (img != null) {
+                            content.putImage(img);
+                            content.putString((String)pane.getUserData());
+                            db.setDragView(img);
+                            db.setContent(content);
+                            pane.setBackground(null);
+
+                            int row = boardPane.getRowIndex(pane);
+                            int col = boardPane.getColumnIndex(pane);
+                            game.playerMove("Player 1", row, col, null);
+                        }
+
+                        event.consume();
+                    }
+                });*/
+
                 pane.setOnDragOver(new EventHandler<DragEvent>() {
                     @Override
                     public void handle(DragEvent event) {
@@ -160,8 +182,6 @@ public class GameUIController {
                     }
                 });
 
-                /*pane.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
-                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(150,150,false,false,false,false))));*/
                 boardPane.add(pane, i, j);
             }
         }

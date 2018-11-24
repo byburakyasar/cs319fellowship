@@ -6,28 +6,26 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Button?>
-<BorderPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx" id="mainBorderPane"
             xmlns:fx="http://javafx.com/fxml" fx:id="mainBorderPane"
-            stylesheets="@styles/End.css">
+            stylesheets="@styles/End.css, @styles/Buttons.css">
 
     <top>
-        <VBox alignment="CENTER" spacing="20">
+        <VBox alignment="CENTER">
             <Label id="endGameLabel" text="CONGRATULATIONS">
                 <VBox.margin>
-                    <Insets top="20"/>
+                    <Insets top="75"/>
                 </VBox.margin>
             </Label>
-            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
         </VBox>
     </top>
 
     <center>
         <VBox alignment="CENTER" spacing="30">
-            <Label fx:id="finishedText" text="You finished in: "/>
+            <Label fx:id="finishedText" id="finishedText" text="You finished in: "/>
             <Button fx:id="restartBtn" text="Restart" onAction="#restart"/>
             <Button fx:id="gameOptionsBtn" text="Game Options" onAction="#loadGameOptions"/>
             <Button fx:id="backToMenuBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
         </VBox>
     </center>
-
 </BorderPane>
