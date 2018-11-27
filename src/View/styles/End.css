@@ -7,7 +7,7 @@
 #endGameLabel {
     -fx-font-size: 100px;
     -fx-font-weight: bold;
-    -fx-text-fill: linear-gradient(to right, rgba(167, 60, 0, 0.6) 10%, #000000 25%);
+    -fx-text-fill: linear-gradient(to right, rgba(167, 60, 0, 0.6) 7%, #000000 7%);
 }
 
 #finishedText {

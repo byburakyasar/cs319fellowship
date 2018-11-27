@@ -139,7 +139,7 @@ public class GameUIController {
                 pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
                 pane.getStyleClass().add("pane");
 
-                /*pane.setOnDragDetected(new EventHandler<MouseEvent>() {
+                pane.setOnDragDetected(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
@@ -148,6 +148,7 @@ public class GameUIController {
                         if (img != null) {
                             content.putImage(img);
                             content.putString((String)pane.getUserData());
+
                             db.setDragView(img);
                             db.setContent(content);
                             pane.setBackground(null);
@@ -159,7 +160,7 @@ public class GameUIController {
 
                         event.consume();
                     }
-                });*/
+                });
 
                 pane.setOnDragOver(new EventHandler<DragEvent>() {
                     @Override
@@ -176,6 +177,7 @@ public class GameUIController {
                         pane.setBackground(new Background(new BackgroundImage(db.getImage(), BackgroundRepeat.NO_REPEAT,
                                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,false,false))));
 
+                        pane.setUserData(db.getString());
                         playerPlayed(pane, Integer.parseInt(db.getString()));
                         event.setDropCompleted(true);
                         event.consume();
