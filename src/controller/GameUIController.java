@@ -3,10 +3,15 @@ package controller;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.scene.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
 import javafx.stage.Stage;
 import model.*;
 
@@ -17,6 +22,7 @@ import java.io.IOException;
  * @version 17.11.2018
  */
 public class GameUIController {
+    @FXML private BorderPane mainBorderPane;
     @FXML private GridPane boardPane;
     @FXML private GridPane solutionGrid;
     @FXML private GridPane cubeFacesGrid;
@@ -24,9 +30,8 @@ public class GameUIController {
     @FXML private AnchorPane solutionAnchorPane;
 
     private Pane[] cubeFacePanes = new Pane[6];
-
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
-            CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
+                                        CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
     private int difficulty;
     private int playerCount;
@@ -51,6 +56,7 @@ public class GameUIController {
         createCubeFaces();
         bindDragToCubes();
         loadBoardAndBindDrag();
+        load3DCube();
     }
 
     @FXML
@@ -60,6 +66,52 @@ public class GameUIController {
         Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
+    }
+
+    private void load3DCube() {
+        SmartBox box = new SmartBox(100, 100, 100);
+        PhongMaterial boxMaterial = new PhongMaterial();
+        Image img = generateFaces(cube.get(CubeFaces.FACE_UP), cube.get(CubeFaces.FACE_LEFT), cube.get(CubeFaces.FACE_FRONT),
+                                  cube.get(CubeFaces.FACE_DOWN), cube.get(CubeFaces.FACE_RIGHT), cube.get(CubeFaces.FACE_BACK));
+        boxMaterial.setDiffuseMap(img);
+        box.setMaterial(boxMaterial);
+
+        SmartBox selection = new SmartBox( 105, 105, 1);
+        PhongMaterial selectionMaterial = new PhongMaterial();
+        selectionMaterial.setDiffuseColor(Color.YELLOW);
+        selectionMaterial.setSelfIlluminationMap(new Image(getClass().getResourceAsStream("/yellow.png")));
+        selection.setMaterial(selectionMaterial);
+
+        box.setDepthTest(DepthTest.ENABLE);
+        selection.setDepthTest(DepthTest.ENABLE);
+
+        Camera camera = new PerspectiveCamera();
+
+        Group group = new Group();
+        group.getChildren().add(box);
+        group.getChildren().add(selection);
+
+        SubScene scene = new SubScene(group, 400, 400, true, SceneAntialiasing.BALANCED);
+        scene.setFill(Color.TRANSPARENT);
+        scene.setCamera(camera);
+
+        box.translateXProperty().bind(scene.widthProperty().divide(2));
+        box.translateYProperty().bind(scene.heightProperty().divide(2));
+        box.translateZProperty().set(-300);
+
+        selection.translateXProperty().bind(scene.widthProperty().divide(2));
+        selection.translateYProperty().bind(scene.heightProperty().divide(2));
+        selection.translateZProperty().bind(box.translateZProperty().add(-48));
+
+        MouseControl mc = new MouseControl(box, selection, scene);
+
+        box.setOnMouseClicked(event -> {
+            if(event.getClickCount() == 2) {
+                System.out.println(mc.getSelectionXY()[0] + " " + mc.getSelectionXY()[1]);
+            }
+        });
+
+        mainBorderPane.setCenter(scene);
     }
 
     private void drawSolutionPattern() {
@@ -106,14 +158,9 @@ public class GameUIController {
     }
 
     private void bindDragToCubes() {
-        Image[] faceImages = {
-                cube.get(CubeFaces.FACE_UP), cube.get(CubeFaces.FACE_LEFT), cube.get(CubeFaces.FACE_FRONT),
-                cube.get(CubeFaces.FACE_DOWN), cube.get(CubeFaces.FACE_RIGHT), cube.get(CubeFaces.FACE_BACK)
-        };
-
         for (int i = 0; i < cubeFacePanes.length; i++) {
             Pane pane = cubeFacePanes[i];
-            Image img = faceImages[i];
+            Image img = cube.get(cubeFaces[i]);
             int imageLoc = i;
             pane.setOnDragDetected(new EventHandler<MouseEvent>() {
                 @Override
@@ -227,6 +274,79 @@ public class GameUIController {
         Scene scene = new Scene(root, 1920, 1000);
 
         current.setScene(scene);
+    }
+
+    private Image generateFaces(Image face1, Image face2, Image face3, Image face4, Image face5, Image face6) {
+
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+
+        ImageView imageView1 = new ImageView(face1);
+        imageView1.setRotate(90);
+        imageView1.setFitHeight(200);
+        imageView1.setFitWidth(200);
+        GridPane.setHalignment(imageView1, HPos.CENTER);
+
+        //label1.fitHeightProperty().bind(grid.getColumnConstraints().get(0).maxWidthProperty());
+
+        ImageView imageView2 = new ImageView(face2);
+        imageView2.setFitHeight(200);
+        imageView2.setFitWidth(200);
+        GridPane.setHalignment(imageView2, HPos.CENTER);
+
+        ImageView imageView3 = new ImageView(face3);
+        imageView3.setFitHeight(200);
+        imageView3.setFitWidth(200);
+        GridPane.setHalignment(imageView3, HPos.CENTER);
+
+        ImageView imageView4 = new ImageView(face4);
+        imageView4.setFitHeight(200);
+        imageView4.setFitWidth(200);
+        GridPane.setHalignment(imageView4, HPos.CENTER);
+
+        ImageView imageView5 = new ImageView(face5);
+        imageView5.setFitHeight(200);
+        imageView5.setFitWidth(200);
+        GridPane.setHalignment(imageView5, HPos.CENTER);
+
+        ImageView imageView6 = new ImageView(face6);
+        imageView6.setFitHeight(200);
+        imageView6.setFitWidth(200);
+        imageView6.setRotate(90);
+        GridPane.setHalignment(imageView6, HPos.CENTER);
+
+        grid.add(imageView1, 1, 0);
+        grid.add(imageView2, 0, 1);
+        grid.add(imageView3, 1, 1);
+        grid.add(imageView4, 2, 1);
+        grid.add(imageView5, 3, 1);
+        grid.add(imageView6, 1, 2);
+
+        grid.setGridLinesVisible(true);
+
+        ColumnConstraints col1 = new ColumnConstraints();
+        col1.setPercentWidth(25);
+        ColumnConstraints col2 = new ColumnConstraints();
+        col2.setPercentWidth(25);
+        ColumnConstraints col3 = new ColumnConstraints();
+        col3.setPercentWidth(25);
+        ColumnConstraints col4 = new ColumnConstraints();
+        col4.setPercentWidth(25);
+        grid.getColumnConstraints().addAll(col1, col2, col3, col4);
+
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(33.33);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(33.33);
+        RowConstraints row3 = new RowConstraints();
+        row3.setPercentHeight(33.33);
+        grid.getRowConstraints().addAll(row1, row2, row3);
+        grid.setPrefSize(600, 450);
+
+        Scene tmpScene = new Scene(grid);
+        //tmpScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+        return grid.snapshot(null, null);
     }
 
     public int getDifficulty() {

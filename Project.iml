@@ -19,5 +19,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="fxyz3d-0.4.01" level="project" />
   </component>
 </module>

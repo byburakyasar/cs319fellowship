@@ -4,7 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
-<BorderPane xmlns="http://javafx.com/javafx" id="mainBorderPane"
+<BorderPane xmlns="http://javafx.com/javafx" id="mainBorderPane" fx:id="mainBorderPane"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
     <left>
         <VBox spacing="180" alignment="CENTER">

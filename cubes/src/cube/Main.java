@@ -1,7 +1,6 @@
 package cube;
 
 import javafx.application.Application;
-import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Camera;
@@ -11,21 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import javafx.stage.Stage;
-import jfxtras.labs.scene.control.window.Window;
-import jfxtras.labs.scene.layout.ScalableContentPane;
-import jfxtras.labs.util.event.MouseControlUtil;
-import org.fxyz3d.geometry.Point3D;
 import org.fxyz3d.shapes.primitives.CuboidMesh;
 
 
@@ -49,7 +41,6 @@ public class Main extends Application {
 
         // Point3D point = new Point3D(0,0,0);
         // cuboid.setCenter(point);
-        MouseControlUtil.makeDraggable(cuboid);
 
         // cube is covered with the material
         PhongMaterial mat = new PhongMaterial();
