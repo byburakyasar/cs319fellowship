@@ -14,18 +14,20 @@ public class MouseControl {
     private double anchorY = 0;
     private double oldAngleX = 0;
     private double oldAngleY = 0;
+    private double strictOldAngleX = 0;
+    private double strictOldAngleY = 0;
     private DoubleProperty angleX;
     private DoubleProperty angleY;
 
     private SmartBox box;
-    private SmartBox selection;
-    private int selectionX = 0;
-    private int selectionY = 0;
+    private SmartBox selectionBox;
     private SubScene scene;
+    private CubeFaces cubeface = CubeFaces.FACE_FRONT;
+    private int imageLoc = 2;
 
-    public MouseControl(SmartBox box, SmartBox selection, SubScene scene) {
+    public MouseControl(SmartBox box, SmartBox selectionBox, SubScene scene) {
         this.box = box;
-        this.selection = selection;
+        this.selectionBox = selectionBox;
         this.scene = scene;
 
         angleX = new SimpleDoubleProperty(0);
@@ -46,7 +48,7 @@ public class MouseControl {
                 x, y
         );
 
-        selection.getTransforms().addAll(
+        selectionBox.getTransforms().addAll(
                 selectionX, selectionY, extraY, extraX
         );
 
@@ -61,41 +63,88 @@ public class MouseControl {
                 anchorY = event.getSceneY();
                 oldAngleX = angleX.get();
                 oldAngleY = angleY.get();
+                strictOldAngleX = angleX.get();
+                strictOldAngleY = angleY.get();
             }
         });
 
         scene.setOnMouseDragged(event -> {
             if(event.getButton() == MouseButton.PRIMARY) {
-                double angleXtoSet = oldAngleX - ((anchorY - event.getSceneY()) / 4);
-                double angleYtoSet;
+                double angleXtoSet = 0;
+                double angleYtoSet = 0;
 
-                angleXtoSet = angleXtoSet % 360;
+                double dragAmountY = (anchorY - event.getSceneY()) / 4; // changes angleX
+                double dragAmountX = (anchorX - event.getSceneX()) / 4; // changes angleY
 
-                if (Math.abs(oldAngleX) >= 90 && Math.abs(oldAngleX) <= 270) {  // -270 -- -90
-                    angleYtoSet = oldAngleY - ((anchorX - event.getSceneX()) / 4);
-                } else {
-                    angleYtoSet = oldAngleY + ((anchorX - event.getSceneX()) / 4);
+                angleXtoSet = oldAngleX - dragAmountY;
+
+                if(angleX.get() > 180) {
+                    oldAngleX = -180;
+                    anchorY = event.getSceneY();
+                }
+                if(angleX.get() < -180) {
+                    oldAngleX = 180;
+                    anchorY = event.getSceneY();
                 }
 
-                angleYtoSet = angleYtoSet % 360;
+                if (Math.abs(strictOldAngleX) >= 90) {
+                    angleYtoSet = oldAngleY - dragAmountX;
+                } else {
+                    angleYtoSet = oldAngleY + dragAmountX;
+                }
+
+                if(angleY.get() > 180) {
+                    oldAngleY = -180;
+                    anchorX = event.getSceneX();
+                }
+                if(angleY.get() < -180) {
+                    oldAngleY = 180;
+                    anchorX = event.getSceneX();
+                }
 
                 angleX.set(angleXtoSet);
                 angleY.set(angleYtoSet);
 
-                System.out.println(box.getTransforms().get(0));
-                System.out.println(box.getTransforms().get(1));
+                Rotate rX = (Rotate) box.getTransforms().get(0);
+                Rotate rY = (Rotate) box.getTransforms().get(1);
+                //System.out.println(rX.getAngle() + "\t" + rY.getAngle());
 
                 int addX = ((int) (angleXtoSet / Math.abs(angleXtoSet))) * 45;
                 int addY = ((int) (angleYtoSet / Math.abs(angleYtoSet))) * 45;
-                angleXtoSet = angleXtoSet % 315;
-                angleYtoSet = angleYtoSet % 315;
                 int extraXRotation = (int)((angleXtoSet + addX) / 90) * 90;
                 int extraYRotation = (int)((angleYtoSet + addY) / 90) * 90;
 
                 extraX.setAngle(-extraXRotation);
                 extraY.setAngle(-extraYRotation);
 
-                setSelectionXY(extraXRotation, extraYRotation);
+                int locX = extraXRotation / 90;
+                int locY = extraYRotation / 90;
+                //System.out.println(locX + " " + locY);
+                if((Math.abs(locX) == 0 && Math.abs(locY) == 0) || (Math.abs(locX) == 2 && Math.abs(locY) == 2)) {
+                    System.out.println("front");
+                    cubeface = CubeFaces.FACE_FRONT;
+                    imageLoc = 2;
+                } else if((Math.abs(locX) == 0 && Math.abs(locY) == 2) || (Math.abs(locX) == 2 && Math.abs(locY) == 0)) {
+                    System.out.println("back");
+                    cubeface = CubeFaces.FACE_BACK;
+                    imageLoc = 5;
+                } else if((Math.abs(locX) == 0 && locY == 1) || (Math.abs(locX) == 2 && locY == 1)) {
+                    System.out.println("right");
+                    cubeface = CubeFaces.FACE_RIGHT;
+                    imageLoc = 4;
+                } else if((Math.abs(locX) == 0 && locY == -1) || (Math.abs(locX) == 2 && locY == -1)) {
+                    System.out.println("left");
+                    cubeface = CubeFaces.FACE_LEFT;
+                    imageLoc = 1;
+                } else if(locX == 1) {
+                    System.out.println("up");
+                    cubeface = CubeFaces.FACE_UP;
+                    imageLoc = 0;
+                } else if(locX == -1) {
+                    System.out.println("down");
+                    cubeface = CubeFaces.FACE_DOWN;
+                    imageLoc = 3;
+                }
             }
         });
 
@@ -104,22 +153,11 @@ public class MouseControl {
         });
     }
 
-    private void setSelectionXY(int extraXRotation, int extraYRotation) {
-        if(extraXRotation < 0) {
-            selectionX = -extraXRotation;
-        } else {
-            selectionX = extraXRotation;
-        }
-
-        if(extraYRotation < 0) {
-            selectionY = -extraYRotation;
-        } else {
-            selectionY = extraYRotation;
-        }
+    public CubeFaces getCubeFace() {
+        return cubeface;
     }
 
-    public int[] getSelectionXY() {
-        return new int[]{selectionX, selectionY};
+    public int getImageLoc() {
+        return imageLoc;
     }
-
 }

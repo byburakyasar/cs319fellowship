@@ -71,8 +71,8 @@ public class GameUIController {
     private void load3DCube() {
         SmartBox box = new SmartBox(100, 100, 100);
         PhongMaterial boxMaterial = new PhongMaterial();
-        Image img = generateFaces(cube.get(CubeFaces.FACE_UP), cube.get(CubeFaces.FACE_LEFT), cube.get(CubeFaces.FACE_FRONT),
-                                  cube.get(CubeFaces.FACE_DOWN), cube.get(CubeFaces.FACE_RIGHT), cube.get(CubeFaces.FACE_BACK));
+        Image img = generateFaces(cube.get(CubeFaces.FACE_UP), cube.get(CubeFaces.FACE_RIGHT), cube.get(CubeFaces.FACE_BACK),
+                                  cube.get(CubeFaces.FACE_LEFT), cube.get(CubeFaces.FACE_FRONT), cube.get(CubeFaces.FACE_DOWN));
         boxMaterial.setDiffuseMap(img);
         box.setMaterial(boxMaterial);
 
@@ -107,7 +107,25 @@ public class GameUIController {
 
         box.setOnMouseClicked(event -> {
             if(event.getClickCount() == 2) {
-                System.out.println(mc.getSelectionXY()[0] + " " + mc.getSelectionXY()[1]);
+                System.out.println(mc.getCubeFace());
+            }
+        });
+
+        box.setOnDragDetected(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getButton() == MouseButton.SECONDARY) {
+                    Dragboard db = box.startDragAndDrop(TransferMode.ANY);
+                    ClipboardContent content = new ClipboardContent();
+                    CubeFaces cubeface = mc.getCubeFace();
+                    int imageLoc = mc.getImageLoc();
+
+                    content.putImage(cube.get(cubeface));
+                    content.putString(imageLoc+"");
+
+                    db.setDragView(cube.get(cubeface));
+                    db.setContent(content);
+                }
             }
         });
 
@@ -191,7 +209,9 @@ public class GameUIController {
                     public void handle(MouseEvent event) {
                         Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
                         ClipboardContent content = new ClipboardContent();
-                        Image img = pane.getBackground().getImages().get(0).getImage();
+
+                        Background bg = pane.getBackground();
+                        Image img = bg != null ? bg.getImages().get(0).getImage() : null;
                         if (img != null) {
                             content.putImage(img);
                             content.putString((String)pane.getUserData());

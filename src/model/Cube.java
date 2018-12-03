@@ -36,7 +36,7 @@ public class Cube {
     public Cube (List<File> images) throws MalformedURLException, IllegalArgumentException {
 
         // Construct the storage structure.
-        this.faceMap = new EnumMap(CubeFaces.class);
+        this.faceMap = new EnumMap<>(CubeFaces.class);
 
         // Map the images to faces.
         String fileName;
