@@ -43,7 +43,7 @@ public class Cube {
         Image image;
         for (File f : images) {
             fileName = ResourceLoader.removeExtension(f.getName());
-            image = new Image(f.toURI().toURL().toString());
+            image = new Image(f.toURI().toURL().toString(), 150, 150, true, true);
             switch (fileName) {
                 default:
                     // Do nothing.

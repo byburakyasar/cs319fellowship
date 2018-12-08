@@ -128,11 +128,11 @@ public class MouseControl {
                     System.out.println("back");
                     cubeface = CubeFaces.FACE_BACK;
                     imageLoc = 5;
-                } else if((Math.abs(locX) == 0 && locY == 1) || (Math.abs(locX) == 2 && locY == 1)) {
+                } else if((Math.abs(locX) == 0 && locY == 1) || (Math.abs(locX) == 2 && locY == -1)) {
                     System.out.println("right");
                     cubeface = CubeFaces.FACE_RIGHT;
                     imageLoc = 4;
-                } else if((Math.abs(locX) == 0 && locY == -1) || (Math.abs(locX) == 2 && locY == -1)) {
+                } else if((Math.abs(locX) == 0 && locY == -1) || (Math.abs(locX) == 2 && locY == 1)) {
                     System.out.println("left");
                     cubeface = CubeFaces.FACE_LEFT;
                     imageLoc = 1;

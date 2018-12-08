@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import model.Player;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Mert Duman
@@ -20,19 +22,33 @@ public class EndController {
     @FXML Button restartBtn;
     @FXML Button gameOptionsBtn;
     @FXML Button backToMenuBtn;
+
     private int lastDifficulty;
     private int lastPlayerCount;
+    private int lastCubeDimension;
     private long lastGameTime;
     private Player lastWinner;
+    private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
+    private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(int lastDifficulty, int lastPlayerCount, long lastGameTime, Player lastWinner) {
+    public EndController(int lastDifficulty, int lastPlayerCount, int lastCubeDimension, long lastGameTime, Player lastWinner) {
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
+        this.lastCubeDimension = lastCubeDimension;
         this.lastGameTime = lastGameTime;
         this.lastWinner = lastWinner;
     }
+
     public void initialize() {
-        finishedText.setText("You finished in: " + lastGameTime/1000 + " seconds!");
+        if (!dateFormatM.format(lastGameTime).equals("0")) {
+            if (dateFormatM.format(lastGameTime).equals("1")) {
+                finishedText.setText("You finished in: " + dateFormatM.format(lastGameTime)+ " minute and " + dateFormatS.format(lastGameTime) + " seconds!");
+            } else {
+                finishedText.setText("You finished in: " + dateFormatM.format(lastGameTime)+ " minutes and " + dateFormatS.format(lastGameTime) + " seconds!");
+            }
+        } else {
+            finishedText.setText("You finished in: " + dateFormatS.format(lastGameTime) + " seconds!");
+        }
     }
 
     @FXML
@@ -40,7 +56,7 @@ public class EndController {
         Stage current = (Stage) restartBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(lastDifficulty, lastPlayerCount);
+        GameUIController gui = new GameUIController(lastDifficulty, lastPlayerCount, lastCubeDimension);
         loader.setController(gui);
         loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 

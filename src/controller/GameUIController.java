@@ -1,11 +1,17 @@
 package controller;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.*;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -13,9 +19,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.*;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * @author Mert Duman
@@ -28,37 +37,63 @@ public class GameUIController {
     @FXML private GridPane cubeFacesGrid;
     @FXML private AnchorPane boardAnchorPane;
     @FXML private AnchorPane solutionAnchorPane;
+    @FXML private Label timeLabel;
+    @FXML private Label numOfMovesLabel;
 
-    private Pane[] cubeFacePanes = new Pane[6];
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
                                         CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
+    private IntegerProperty numOfMoves = new SimpleIntegerProperty(0);
+    private long curGameTime = 0;
+    private DateFormat dateFormat = new SimpleDateFormat( "mm:ss.SSS");
+
     private int difficulty;
     private int playerCount;
+    private int cubeDimension;
     private Cube cube;
     private Pattern pattern;
     private Game game;
+    private CubeFaces[][] solutionFaces;
 
-    public GameUIController(int difficulty, int playerCount) {
+    public GameUIController(int difficulty, int playerCount, int cubeDimension) {
         this.difficulty = difficulty;
         this.playerCount = playerCount;
+        this.cubeDimension = cubeDimension;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
+        solutionFaces = this.pattern.getPatternGrid();
     }
 
     public void initialize() {
         game.addPlayer("Player 1");
         game.startGame();
 
-        drawSolutionPattern();
+        if (cubeDimension == 2) {
+            load2DCube();
+        } else if (cubeDimension == 3) {
+            load3DCube();
+        }
 
-        createCubeFaces();
-        bindDragToCubes();
-        loadBoardAndBindDrag();
-        load3DCube();
+        loadSolutionPattern();
+        loadBoard();
+
+        /* This counts time and sets its label */
+        Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+            curGameTime = System.currentTimeMillis() - game.getStartTime();
+            timeLabel.setText( dateFormat.format(curGameTime));
+        }));
+        keepTime.setCycleCount(Animation.INDEFINITE);
+        keepTime.play();
+
+        /* This sets the number of moves label */
+        numOfMovesLabel.textProperty().bind(numOfMoves.asString());
     }
 
+    /**
+     * Loads the main menu scene onto the current stage.
+     * @throws IOException May throw exception if the corresponding fxml is not found.
+     */
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) boardPane.getScene().getWindow();
@@ -68,6 +103,12 @@ public class GameUIController {
         current.setScene(scene);
     }
 
+    /**
+     * Loads the 3DCube and its selectionBox onto a SubScene and makes that a
+     * child of the mainBorderPane (BorderPane with id=mainBorderPane).
+     * Also creates a perspective camera for the 3DCube and creates all of its (3DCube)
+     * mouse control settings and drag events.
+     */
     private void load3DCube() {
         SmartBox box = new SmartBox(100, 100, 100);
         PhongMaterial boxMaterial = new PhongMaterial();
@@ -78,8 +119,7 @@ public class GameUIController {
 
         SmartBox selection = new SmartBox( 105, 105, 1);
         PhongMaterial selectionMaterial = new PhongMaterial();
-        selectionMaterial.setDiffuseColor(Color.YELLOW);
-        selectionMaterial.setSelfIlluminationMap(new Image(getClass().getResourceAsStream("/yellow.png")));
+        selectionMaterial.setDiffuseColor(Color.rgb(255, 87, 0));
         selection.setMaterial(selectionMaterial);
 
         box.setDepthTest(DepthTest.ENABLE);
@@ -132,12 +172,57 @@ public class GameUIController {
         mainBorderPane.setCenter(scene);
     }
 
-    private void drawSolutionPattern() {
-        CubeFaces[][] solutionFaces = pattern.getPatternGrid();
+    /**
+     * Loads the 2DCube faces and adds them as the children of cubeFacesGrid (GridPane with id=cubeFacesGrid).
+     * Gets the corresponding backgrounds for those faces from the Cube class and sets them.
+     * Sets on drag events for each cube face.
+     */
+    private void load2DCube() {
+        final int FACE_SIZE = 120;
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 2; j++) {
+                Pane pane = new Pane();
+                pane.setPrefSize(FACE_SIZE, FACE_SIZE);
+                pane.setMinSize(FACE_SIZE, FACE_SIZE);
+                pane.getStyleClass().add("pane");
+
+                int imageLoc = (i*2)+j;
+                Image img = cube.get(cubeFaces[imageLoc]);
+
+                pane.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
+                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(FACE_SIZE, FACE_SIZE, false, false, false, false))));
+
+                cubeFacesGrid.add(pane, j, i);
+
+                pane.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
+                        ClipboardContent content = new ClipboardContent();
+                        content.putImage(img);
+                        content.putString(imageLoc+"");
+                        db.setDragView(img);
+                        db.setContent(content);
+
+                        event.consume();
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Gets the current random pattern from the Pattern class and creates a
+     * Pane for each pattern face (of size difficulty by difficulty).
+     * Gets the corresponding backgrounds for those faces from the Cube class and sets them.
+     * Sets the background for the solution board.
+     */
+    private void loadSolutionPattern() {
         final int SOLUTION_SIZE = 150;
 
-        for(int i = 0; i < difficulty; i++) {
-            for(int j = 0; j < difficulty; j++) {
+        for (int i = 0; i < difficulty; i++) {
+            for (int j = 0; j < difficulty; j++) {
                 Image img = cube.get(solutionFaces[i][j]);
 
                 Pane pane = new Pane();
@@ -155,48 +240,13 @@ public class GameUIController {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
     }
 
-    private void createCubeFaces() {
-        final int FACE_SIZE = 120;
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 3; j++) {
-                Pane pane = new Pane();
-                pane.setPrefSize(FACE_SIZE, FACE_SIZE);
-                pane.setMinSize(FACE_SIZE, FACE_SIZE);
-                pane.getStyleClass().add("pane");
-
-                cubeFacePanes[(i*3)+j] = pane;
-
-                pane.setBackground(new Background(new BackgroundImage(cube.get(cubeFaces[(i*3)+j]), BackgroundRepeat.NO_REPEAT,
-                        BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(FACE_SIZE, FACE_SIZE, false, false, false, false))));
-
-                cubeFacesGrid.add(pane, j, i);
-            }
-        }
-    }
-
-    private void bindDragToCubes() {
-        for (int i = 0; i < cubeFacePanes.length; i++) {
-            Pane pane = cubeFacePanes[i];
-            Image img = cube.get(cubeFaces[i]);
-            int imageLoc = i;
-            pane.setOnDragDetected(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Dragboard db = pane.startDragAndDrop(TransferMode.ANY);
-                    ClipboardContent content = new ClipboardContent();
-                    content.putImage(img);
-                    content.putString(imageLoc+"");
-                    db.setDragView(img);
-                    db.setContent(content);
-
-                    event.consume();
-                }
-            });
-        }
-    }
-
-    private void loadBoardAndBindDrag() {
+    /**
+     * Creates a pane for each pattern face (of size difficulty by difficulty)
+     * and adds them to boardPane (BoardPane with id=boardPane).
+     * Sets all of the drag bindings for the board faces. This includes
+     * dropping an image onto the board from 2DCube, 3DCube or another face of the board.
+     */
+    private void loadBoard() {
         final int BOARD_PANE_SIZE = 150;
         for(int i = 0; i < difficulty; i++) {
             for(int j = 0; j < difficulty; j++) {
@@ -248,6 +298,8 @@ public class GameUIController {
                         playerPlayed(pane, Integer.parseInt(db.getString()));
                         event.setDropCompleted(true);
                         event.consume();
+
+                        numOfMoves.set(numOfMoves.get() + 1);
                     }
                 });
 
@@ -261,6 +313,12 @@ public class GameUIController {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
     }
 
+    /**
+     * Calls Game.playerMove(..) and checks if there are any winners.
+     * If there are any winners, loads the EndScene.
+     * @param pane The pane of the game board on which the player drag-dropped an image.
+     * @param imageLoc The location of the image in the cubeFaces array.
+     */
     private void playerPlayed(Pane pane, int imageLoc) {
         int row = boardPane.getRowIndex(pane);
         int col = boardPane.getColumnIndex(pane);
@@ -271,22 +329,25 @@ public class GameUIController {
             Player winner = game.getWinner();
             long winTime = winner.getEndTime() - game.getStartTime();
 
-            System.out.println(winner);
-            System.out.println(winTime/1000.0 + " seconds.");
-
             try {
-                loadEndStage(winTime, winner);
+                loadEndScene(winTime, winner);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void loadEndStage(long winTime, Player winner) throws IOException {
+    /**
+     * Loads the end scene onto the current stage.
+     * @param winTime The time it took for a player to win the game.
+     * @param winner The winning player.
+     * @throws IOException May throw exception if the corresponding fxml is not found.
+     */
+    private void loadEndScene(long winTime, Player winner) throws IOException {
         Stage current = (Stage)boardPane.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(difficulty, playerCount, winTime, winner);
+        EndController endC = new EndController(difficulty, playerCount, cubeDimension, winTime, winner);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
@@ -296,6 +357,17 @@ public class GameUIController {
         current.setScene(scene);
     }
 
+    /**
+     * Generates a grid with the input images in the shape of an open cube.
+     * Then takes a snapshot of the full image and returns it.
+     * @param face1
+     * @param face2
+     * @param face3
+     * @param face4
+     * @param face5
+     * @param face6
+     * @return Snapshot of the full image.
+     */
     private Image generateFaces(Image face1, Image face2, Image face3, Image face4, Image face5, Image face6) {
 
         GridPane grid = new GridPane();
@@ -367,9 +439,5 @@ public class GameUIController {
         //tmpScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 
         return grid.snapshot(null, null);
-    }
-
-    public int getDifficulty() {
-        return difficulty;
     }
 }

@@ -11,6 +11,7 @@
     <fx:define>
         <ToggleGroup fx:id="difficultyGroup"/>
         <ToggleGroup fx:id="playerGroup"/>
+        <ToggleGroup fx:id="dimensionGroup"/>
     </fx:define>
     <top>
         <VBox alignment="TOP_CENTER">
@@ -36,10 +37,15 @@
             </HBox>
             <HBox fx:id="playersHBox" spacing="40" alignment="CENTER">
                 <Label text="Players: "/>
-                <RadioButton text="1" toggleGroup="$playerGroup" selected="true"/>
-                <RadioButton text="2" toggleGroup="$playerGroup"/>
-                <RadioButton text="3" toggleGroup="$playerGroup"/>
-                <RadioButton text="4" toggleGroup="$playerGroup"/>
+                <RadioButton text="1" userData="1" toggleGroup="$playerGroup" selected="true"/>
+                <RadioButton text="2" userData="2" toggleGroup="$playerGroup"/>
+                <RadioButton text="3" userData="3" toggleGroup="$playerGroup"/>
+                <RadioButton text="4" userData="4" toggleGroup="$playerGroup"/>
+            </HBox>
+            <HBox spacing="40" alignment="CENTER">
+                <Label text="Cube: "/>
+                <RadioButton text="3D Cube" userData="3" toggleGroup="$dimensionGroup" selected="true"/>
+                <RadioButton text="2D Cube" userData="2" toggleGroup="$dimensionGroup"/>
             </HBox>
             <HBox spacing="40" alignment="CENTER">
                 <Label text="Game Mode: "/>

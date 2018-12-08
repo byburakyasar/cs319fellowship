@@ -5,10 +5,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -28,16 +25,32 @@ public class GameOptionsController {
     @FXML ComboBox<String> gameModesComboBox;
     @FXML ToggleGroup difficultyGroup;
     @FXML ToggleGroup playerGroup;
+    @FXML ToggleGroup dimensionGroup;
 
 
     private int difficulty = 4;
     private int playerCount = 1;
+    private int cubeDimension = 3;
 
     public void initialize() {
         difficultyGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
                 difficulty = Integer.parseInt(difficultyGroup.getSelectedToggle().getUserData().toString());
+            }
+        });
+
+        playerGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                playerCount = Integer.parseInt(playerGroup.getSelectedToggle().getUserData().toString());
+            }
+        });
+
+        dimensionGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                cubeDimension = Integer.parseInt(dimensionGroup.getSelectedToggle().getUserData().toString());
             }
         });
 
@@ -65,7 +78,7 @@ public class GameOptionsController {
         Stage current = (Stage) startBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(getDifficulty(), 1);
+        GameUIController gui = new GameUIController(difficulty, playerCount, cubeDimension);
         loader.setController(gui);
         loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 
@@ -74,9 +87,5 @@ public class GameOptionsController {
 
         current.setScene(scene);
 
-    }
-
-    public int getDifficulty() {
-        return difficulty;
     }
 }

@@ -2,17 +2,21 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Line?>
 <BorderPane xmlns="http://javafx.com/javafx" id="mainBorderPane" fx:id="mainBorderPane"
             xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameUI.css">
     <left>
-        <VBox spacing="180" alignment="CENTER">
+        <VBox spacing="65" alignment="CENTER">
             <BorderPane.margin>
-                <Insets left="70" bottom="20"/>
+                <Insets left="70"/>
             </BorderPane.margin>
 
             <AnchorPane fx:id="solutionAnchorPane" id="solutionAnchorPane" maxWidth="700" maxHeight="700">
+                <VBox.margin>
+                    <Insets top="115"/>
+                </VBox.margin>
                 <Line startX="0" startY="0" endX="700" endY="700"/>
                 <Line startX="700" startY="0" endX="0" endY="700"/>
 
@@ -30,13 +34,27 @@
         </VBox>
     </left>
 
+    <center>
+        <GridPane fx:id="cubeFacesGrid" id="cubeFacesGrid" alignment="CENTER" hgap="10" vgap="10"/>
+    </center>
+
     <right>
         <VBox alignment="CENTER" spacing="20">
             <BorderPane.margin>
                 <Insets right="70"/>
             </BorderPane.margin>
 
+            <HBox alignment="CENTER">
+                <Label text="Time: "/>
+                <Label fx:id="timeLabel"/>
+                <Label text="                  Moves: "/>
+                <Label fx:id="numOfMovesLabel"/>
+            </HBox>
+
             <AnchorPane fx:id="boardAnchorPane" id="boardAnchorPane" maxWidth="700" maxHeight="700">
+                <VBox.margin>
+                    <Insets bottom="70"/>
+                </VBox.margin>
                 <Line startX="0" startY="0" endX="700" endY="700"/>
                 <Line startX="700" startY="0" endX="0" endY="700"/>
 
@@ -46,7 +64,6 @@
                     <GridPane fx:id="boardPane" id="boardPane" gridLinesVisible="true" alignment="CENTER"/>
                 </HBox>
             </AnchorPane>
-            <GridPane fx:id="cubeFacesGrid" id="cubeFacesGrid" alignment="CENTER" hgap="10" vgap="10"/>
         </VBox>
     </right>
 </BorderPane>
