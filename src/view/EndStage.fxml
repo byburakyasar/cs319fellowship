@@ -25,7 +25,7 @@
             <Label fx:id="finishedText" id="finishedText" text="You finished in: "/>
             <Button fx:id="restartBtn" text="Restart" onAction="#restart"/>
             <Button fx:id="gameOptionsBtn" text="Game Options" onAction="#loadGameOptions"/>
-            <Button fx:id="backToMenuBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
+            <Button fx:id="mainMenuBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
         </VBox>
     </center>
 </BorderPane>

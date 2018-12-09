@@ -120,13 +120,13 @@ public class MainMenuController {
     }
 
     private void playTransition(Button btn) {
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1000), btn);
+        TranslateTransition tt = new TranslateTransition(Duration.millis(600), btn);
         tt.setToX(0);
         tt.setInterpolator(Interpolator.EASE_BOTH);
         tt.play();
 
         btn.setOpacity(0);
-        FadeTransition ft = new FadeTransition(Duration.millis(1700), btn);
+        FadeTransition ft = new FadeTransition(Duration.millis(900), btn);
         ft.setToValue(1);
         ft.setInterpolator(Interpolator.EASE_IN);
         ft.play();

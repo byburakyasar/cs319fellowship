@@ -21,7 +21,7 @@ public class EndController {
     @FXML Label finishedText;
     @FXML Button restartBtn;
     @FXML Button gameOptionsBtn;
-    @FXML Button backToMenuBtn;
+    @FXML Button mainMenuBtn;
 
     private int lastDifficulty;
     private int lastPlayerCount;
