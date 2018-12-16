@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Class used to model a pattern by creating a grid of cube faces.
  */
-public class Pattern {
+public class Pattern implements Serializable {
 
     // ATTRIBUTES
     private final CubeFaces[][] patternGrid;

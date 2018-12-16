@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Class used to model a player.
  */
-public class Player {
+public class Player implements Serializable {
 
     // ATTRIBUTES
     private final String name;

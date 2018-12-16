@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
@@ -34,45 +33,40 @@ public class MainMenuController {
     public void playBtnClicked() throws IOException {
         Stage current = (Stage) playBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void settingsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/SettingsStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void howToPlayBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/HowToPlayStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void creditsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/CreditsStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void levelSelectBtnClicked() throws IOException{
         Stage current = (Stage) levelSelectBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/LevelSelectStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML

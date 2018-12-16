@@ -1,17 +1,25 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.Client;
+import model.Game;
+import model.Player;
+import model.Server;
 
 import java.io.IOException;
+import java.util.UUID;
 
 /**
  * @author Mert Duman
@@ -27,6 +35,8 @@ public class GameOptionsController {
     @FXML ToggleGroup playerGroup;
     @FXML ToggleGroup dimensionGroup;
 
+    Client client;
+    Server server;
 
     private int difficulty = 4;
     private int playerCount = 1;
@@ -68,24 +78,99 @@ public class GameOptionsController {
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) startBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void startGame() throws IOException {
         Stage current = (Stage) startBtn.getScene().getWindow();
+        Player player = new Player(UUID.randomUUID().toString(), difficulty);
 
-        FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(difficulty, playerCount, cubeDimension);
-        loader.setController(gui);
-        loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+        if (playerCount == 1) {
+            FXMLLoader loader = new FXMLLoader();
+            GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension);
+            loader.setController(gui);
+            loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+            BorderPane root = loader.load();
 
-        BorderPane root = loader.load();
-        Scene scene = new Scene(root, 1920, 1000);
+            current.getScene().setRoot(root);
+            return;
+        }
 
-        current.setScene(scene);
+        startBtn.setText("Looking for players...");
+        startBtn.setDisable(true);
 
+        client = new Client("localhost", 8000);
+        boolean foundServer = client.joinServer();
+
+        if (foundServer) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    client.sendPlayerName(player.getName());
+                    String serverMessage = client.waitUntilGameReady();
+                    System.out.println("Client ready with no: " + serverMessage);
+                    System.out.println("Client was ready at: " + System.currentTimeMillis());
+                    client.requestClientPlayerNames();
+
+                    Game obj = client.readObjectBlocked();
+                    if (serverMessage != null) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    FXMLLoader loader = new FXMLLoader();
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, client, obj);
+                                    loader.setController(gui);
+                                    loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+                                    BorderPane root = loader.load();
+
+                                    current.getScene().setRoot(root);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }
+            }).start();
+        } else {
+            server = new Server(8000, playerCount);
+            client.joinServer();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    client.sendPlayerName(player.getName());
+                    String serverMessage = client.waitUntilGameReady(); // make it so that everyone exits at the same time
+                    System.out.println("Client ready with no: " + serverMessage);
+                    System.out.println("Client was ready at: " + System.currentTimeMillis());
+                    client.requestClientPlayerNames();
+
+                    Game game = Game.createRandomGame(playerCount, difficulty);
+                    Game obj = client.sendObjectBlocked(game);
+                    if (serverMessage != null) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    FXMLLoader loader = new FXMLLoader();
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, server, client, obj);
+                                    loader.setController(gui);
+                                    loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+
+                                    BorderPane root = loader.load();
+
+                                    current.getScene().setRoot(root);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                }
+            }).start();
+        }
     }
 }

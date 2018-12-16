@@ -2,7 +2,6 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -23,6 +22,7 @@ public class EndController {
     @FXML Button gameOptionsBtn;
     @FXML Button mainMenuBtn;
 
+    private Player lastPlayer;
     private int lastDifficulty;
     private int lastPlayerCount;
     private int lastCubeDimension;
@@ -31,7 +31,8 @@ public class EndController {
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(int lastDifficulty, int lastPlayerCount, int lastCubeDimension, long lastGameTime, Player lastWinner) {
+    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, long lastGameTime, Player lastWinner) {
+        this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
         this.lastCubeDimension = lastCubeDimension;
@@ -56,31 +57,28 @@ public class EndController {
         Stage current = (Stage) restartBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(lastDifficulty, lastPlayerCount, lastCubeDimension);
+        GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension);
         loader.setController(gui);
         loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 
         BorderPane root = loader.load();
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void loadGameOptions() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 }

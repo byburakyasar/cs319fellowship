@@ -32,13 +32,15 @@ import java.text.SimpleDateFormat;
  */
 public class GameUIController {
     @FXML private BorderPane mainBorderPane;
-    @FXML private GridPane boardPane;
+    @FXML private GridPane boardGrid;
     @FXML private GridPane solutionGrid;
     @FXML private GridPane cubeFacesGrid;
     @FXML private AnchorPane boardAnchorPane;
     @FXML private AnchorPane solutionAnchorPane;
     @FXML private Label timeLabel;
     @FXML private Label numOfMovesLabel;
+    @FXML private VBox centerVBox;
+    @FXML private HBox multiplayerHBox;
 
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
                                         CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
@@ -55,14 +57,46 @@ public class GameUIController {
     private Game game;
     private CubeFaces[][] solutionFaces;
 
-    public GameUIController(int difficulty, int playerCount, int cubeDimension) {
+    private Player player;
+    private Server server;
+    private Client client;
+
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension) {
+        this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
-        solutionFaces = this.pattern.getPatternGrid();
+        this.solutionFaces = this.pattern.getPatternGrid();
+    }
+
+    // Client
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, Client client, Game game) {
+        this.player = player;
+        this.difficulty = difficulty;
+        this.playerCount = playerCount;
+        this.cubeDimension = cubeDimension;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.game = game;
+        this.pattern = game.getPattern();
+        this.client = client;
+        this.solutionFaces = this.pattern.getPatternGrid();
+    }
+
+    // Server
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, Server server, Client client, Game game) {
+        this.player = player;
+        this.difficulty = difficulty;
+        this.playerCount = playerCount;
+        this.cubeDimension = cubeDimension;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.game = game;
+        this.pattern = game.getPattern();
+        this.server = server;
+        this.client = client;
+        this.solutionFaces = this.pattern.getPatternGrid();
     }
 
     public void initialize() {
@@ -88,6 +122,19 @@ public class GameUIController {
 
         /* This sets the number of moves label */
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
+
+        if (playerCount != 1) {
+            client.setGameUIController(this);
+            client.readMessageNonBlockedAlways();
+
+            centerVBox.setAlignment(Pos.TOP_CENTER);
+
+            for (String name : client.getClientPlayerNames()) {
+                if (!name.equals(player.getName())) {
+                    loadMultiplayerBoards(name);
+                }
+            }
+        }
     }
 
     /**
@@ -96,11 +143,10 @@ public class GameUIController {
      */
     @FXML
     public void backToMainMenu() throws IOException {
-        Stage current = (Stage) boardPane.getScene().getWindow();
+        Stage current = (Stage) boardGrid.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     /**
@@ -169,7 +215,7 @@ public class GameUIController {
             }
         });
 
-        mainBorderPane.setCenter(scene);
+        centerVBox.getChildren().add(2, scene);
     }
 
     /**
@@ -219,7 +265,7 @@ public class GameUIController {
      * Sets the background for the solution board.
      */
     private void loadSolutionPattern() {
-        final int SOLUTION_SIZE = 150;
+        final int SOLUTION_SIZE = 120;
 
         for (int i = 0; i < difficulty; i++) {
             for (int j = 0; j < difficulty; j++) {
@@ -236,18 +282,19 @@ public class GameUIController {
             }
         }
 
-        solutionAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
+//        solutionAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100,100,true,true,true,true))));
+
     }
 
     /**
      * Creates a pane for each pattern face (of size difficulty by difficulty)
-     * and adds them to boardPane (BoardPane with id=boardPane).
+     * and adds them to boardGrid (BoardPane with id=boardGrid).
      * Sets all of the drag bindings for the board faces. This includes
      * dropping an image onto the board from 2DCube, 3DCube or another face of the board.
      */
     private void loadBoard() {
-        final int BOARD_PANE_SIZE = 150;
+        final int BOARD_PANE_SIZE = 120;
         for(int i = 0; i < difficulty; i++) {
             for(int j = 0; j < difficulty; j++) {
                 Pane pane = new Pane();
@@ -270,9 +317,9 @@ public class GameUIController {
                             db.setContent(content);
                             pane.setBackground(null);
 
-                            int row = boardPane.getRowIndex(pane);
-                            int col = boardPane.getColumnIndex(pane);
-                            game.playerMove("Player 1", row, col, null);
+                            int row = boardGrid.getRowIndex(pane);
+                            int col = boardGrid.getColumnIndex(pane);
+                            game.playerMove(player.getName(), row, col, null);
                         }
 
                         event.consume();
@@ -292,38 +339,65 @@ public class GameUIController {
                     public void handle(DragEvent event) {
                         Dragboard db = event.getDragboard();
                         pane.setBackground(new Background(new BackgroundImage(db.getImage(), BackgroundRepeat.NO_REPEAT,
-                                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,false,false))));
+                                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,true,false))));
 
                         pane.setUserData(db.getString());
-                        playerPlayed(pane, Integer.parseInt(db.getString()));
+
+
+                        int row = GridPane.getRowIndex(pane);
+                        int col = GridPane.getColumnIndex(pane);
+                        CubeFaces cubeFace = cubeFaces[Integer.parseInt(db.getString())];
+                        playerPlayed(row, col, cubeFace);
                         event.setDropCompleted(true);
                         event.consume();
 
                         numOfMoves.set(numOfMoves.get() + 1);
+                        client.sendPlayerMove(player.getName(), row, col, cubeFace);
                     }
                 });
 
-                boardPane.add(pane, i, j);
+                boardGrid.add(pane, i, j);
             }
         }
 
-        boardPane.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
-        boardAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
+        boardGrid.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+//        boardAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
+//                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
+    }
+
+    private void loadMultiplayerBoards(String playerName) {
+        final int BOARD_PANE_SIZE = 50;
+        GridPane multiplayerBoard = new GridPane();
+        multiplayerBoard.setGridLinesVisible(true);
+        multiplayerBoard.setAlignment(Pos.CENTER);
+        for(int i = 0; i < difficulty; i++) {
+            for(int j = 0; j < difficulty; j++) {
+                Pane pane = new Pane();
+                pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
+                pane.getStyleClass().add("pane");
+
+                multiplayerBoard.add(pane, i, j);
+            }
+        }
+
+        multiplayerBoard.setId(playerName+"");
+        multiplayerBoard.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
+        System.out.println("#"+multiplayerBoard.getId());
+        multiplayerHBox.getChildren().add(multiplayerBoard);
     }
 
     /**
      * Calls Game.playerMove(..) and checks if there are any winners.
      * If there are any winners, loads the EndScene.
-     * @param pane The pane of the game board on which the player drag-dropped an image.
-     * @param imageLoc The location of the image in the cubeFaces array.
+     * @param row The row of the game board on which the player drag-dropped an image.
+     * @param col The col of the game board on which the player drag-dropped an image.
+     * @param cubeFace The cube face the player dropped.
      */
-    private void playerPlayed(Pane pane, int imageLoc) {
-        int row = boardPane.getRowIndex(pane);
-        int col = boardPane.getColumnIndex(pane);
-        game.playerMove("Player 1", row, col, cubeFaces[imageLoc]);
-        System.out.println(row + " " + col + " " + cubeFaces[imageLoc]);
+    private void playerPlayed(int row, int col, CubeFaces cubeFace) {
+        game.playerMove("Player 1", row, col, cubeFace);
+        System.out.println(row + " " + col + " " + cubeFace);
 
         if(game.hasWinner()) {
             Player winner = game.getWinner();
@@ -337,6 +411,19 @@ public class GameUIController {
         }
     }
 
+    public void setBoardFace(String playerName, int row, int col, CubeFaces cubeFace, int clientNo) {
+        Scene scene = multiplayerHBox.getScene();
+        System.out.println("looking for id: #" + playerName);
+        GridPane multiPane = (GridPane)scene.lookup("#"+playerName);
+        Pane pane = (Pane)multiPane.getChildren().get(col*difficulty + row + 1);
+        if (pane != null) {
+            pane.setBackground(new Background(new BackgroundImage(cube.get(cubeFace), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100,100,true,true,true,false))));
+
+            playerPlayed(row, col, cubeFace);
+        }
+    }
+
     /**
      * Loads the end scene onto the current stage.
      * @param winTime The time it took for a player to win the game.
@@ -344,17 +431,16 @@ public class GameUIController {
      * @throws IOException May throw exception if the corresponding fxml is not found.
      */
     private void loadEndScene(long winTime, Player winner) throws IOException {
-        Stage current = (Stage)boardPane.getScene().getWindow();
+        Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(difficulty, playerCount, cubeDimension, winTime, winner);
+        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, winTime, winner);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
         BorderPane root = loader.load();
-        Scene scene = new Scene(root, 1920, 1000);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     /**

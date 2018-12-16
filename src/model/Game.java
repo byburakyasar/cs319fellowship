@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class to model a round of the game.
  */
-public class Game {
+public class Game implements Serializable {
 
     // ATTRIBUTES
 
@@ -37,7 +38,6 @@ public class Game {
         Game game = new Game(maxPlayers, dimensions);
         game.pattern = Pattern.createRandomPattern(dimensions);
 
-        System.out.println(game.pattern);
         return game;
     }
 
