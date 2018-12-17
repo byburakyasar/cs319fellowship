@@ -2,7 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * @author Mert Duman
@@ -10,44 +10,32 @@ import java.util.ArrayList;
  */
 public class Server {
     private ServerSocket serverSocket;
-    private ArrayList<ClientHandler> clientHandlers;
-    private ArrayList<String> playerNames;
+    private Vector<ClientHandler> clientHandlers;
+    private Vector<Player> players;
     private int serverMaxSize;
+    private int serverDifficulty;
+    private int serverCubeDimension;
     private int curClients;
     private Object object;
     private Object[] data;
 
-    public Object getObject() {
-        return object;
-    }
-
-    public void setObject(Object object) {
-        this.object = object;
-    }
-
-    public Object[] getData() {
-        return data;
-    }
-
-    public void setData(Object[] data) {
-        this.data = data;
-    }
-
-    public Server(int port, int serverMaxSize) {
+    public Server(int port, int serverMaxSize, int serverDifficulty, int serverCubeDimension) {
         this.serverMaxSize = serverMaxSize;
+        this.serverDifficulty = serverDifficulty;
+        this.serverCubeDimension = serverCubeDimension;
         this.curClients = 0;
-        this.playerNames = new ArrayList<>();
+        this.players = new Vector<>();
 
         try {
             serverSocket = new ServerSocket(port);
             System.out.println("Server running.");
 
-            clientHandlers = new ArrayList<>();
+            clientHandlers = new Vector<>();
 
             Thread actualServer = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    while (true) {
+                    while (clientHandlers.size() < serverMaxSize) {
                         try {
                             ClientHandler clientHandler = new ClientHandler(serverSocket.accept(), Server.this, ++curClients);
                             clientHandlers.add(clientHandler);
@@ -66,12 +54,8 @@ public class Server {
         }
     }
 
-    public ArrayList<ClientHandler> getClientHandlers() {
+    public Vector<ClientHandler> getClientHandlers() {
         return clientHandlers;
-    }
-
-    public ArrayList<String> getPlayerNames() {
-        return playerNames;
     }
 
     public int getServerMaxSize() {
@@ -82,7 +66,13 @@ public class Server {
         return clientHandlers.size();
     }
 
-    public int getPlayerNamesSize() { return playerNames.size(); }
+    public Vector<Player> getPlayers() {
+        return players;
+    }
+
+    public int getPlayersSize() {
+        return players.size();
+    }
 
     public void alertAllClientsButSelf(ClientHandler.ServerCodes code, ClientHandler caller) {
         for (ClientHandler ch : clientHandlers) {
@@ -96,6 +86,22 @@ public class Server {
         for (ClientHandler ch : clientHandlers) {
             ch.handleClientRequest(code);
         }
+    }
+
+    public Object getObject() {
+        return object;
+    }
+
+    public void setObject(Object object) {
+        this.object = object;
+    }
+
+    public Object[] getData() {
+        return data;
+    }
+
+    public void setData(Object[] data) {
+        this.data = data;
     }
 
     public void close() {

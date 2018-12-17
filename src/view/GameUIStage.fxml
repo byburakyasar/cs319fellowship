@@ -17,27 +17,15 @@
     <left>
         <VBox alignment="CENTER" spacing="65" styleClass="bordered">
             <BorderPane.margin>
-                <Insets left="70" />
+                <Insets left="60" />
             </BorderPane.margin>
 
-            <!--<AnchorPane id="solutionAnchorPane" fx:id="solutionAnchorPane" styleClass="bordered">-->
-                <!--<VBox.margin>-->
-                    <!--<Insets top="115.0" />-->
-                <!--</VBox.margin>-->
-
-                <!--<HBox alignment="CENTER" fillHeight="false" styleClass="bordered">-->
-                      <!--AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50"-->
-                    <GridPane fx:id="solutionGrid" alignment="CENTER" gridLinesVisible="true" styleClass="bordered"/>
-                <!--</HBox>-->
-            <!--</AnchorPane>-->
+            <GridPane fx:id="solutionGrid" alignment="CENTER" gridLinesVisible="true" styleClass="bordered"/>
         </VBox>
     </left>
 
     <bottom>
         <Button id="backToMenuBtn" onAction="#backToMainMenu" text="Main Menu">
-            <!--<BorderPane.margin>-->
-                <!--<Insets left="10" bottom="10"/>-->
-            <!--</BorderPane.margin>-->
         </Button>
     </bottom>
 
@@ -60,21 +48,10 @@
     <right>
         <VBox alignment="CENTER" spacing="20" styleClass="bordered">
             <BorderPane.margin>
-                <Insets right="70" />
+                <Insets right="60" />
             </BorderPane.margin>
 
-            <!--<AnchorPane id="boardAnchorPane" fx:id="boardAnchorPane" maxHeight="700" maxWidth="700" styleClass="bordered">-->
-                <!--<VBox.margin>-->
-                    <!--<Insets bottom="70" />-->
-                <!--</VBox.margin>-->
-
-                <!--HBox here so that Gridpane doesn't stretch-->
-                <!--<HBox alignment="CENTER" fillHeight="false" styleClass="bordered">-->
-                      <!--AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="50" AnchorPane.rightAnchor="50" AnchorPane.topAnchor="50"-->
-
-                    <GridPane id="boardGrid" fx:id="boardGrid" alignment="CENTER" gridLinesVisible="true" styleClass="bordered"/>
-                <!--</HBox>-->
-            <!--</AnchorPane>-->
+            <GridPane id="boardGrid" fx:id="boardGrid" alignment="CENTER" gridLinesVisible="true" styleClass="bordered"/>
         </VBox>
     </right>
 </BorderPane>

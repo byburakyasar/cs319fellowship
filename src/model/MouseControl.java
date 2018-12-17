@@ -121,27 +121,21 @@ public class MouseControl {
                 int locY = extraYRotation / 90;
                 //System.out.println(locX + " " + locY);
                 if((Math.abs(locX) == 0 && Math.abs(locY) == 0) || (Math.abs(locX) == 2 && Math.abs(locY) == 2)) {
-                    System.out.println("front");
                     cubeface = CubeFaces.FACE_FRONT;
                     imageLoc = 2;
                 } else if((Math.abs(locX) == 0 && Math.abs(locY) == 2) || (Math.abs(locX) == 2 && Math.abs(locY) == 0)) {
-                    System.out.println("back");
                     cubeface = CubeFaces.FACE_BACK;
                     imageLoc = 5;
                 } else if((Math.abs(locX) == 0 && locY == 1) || (Math.abs(locX) == 2 && locY == -1)) {
-                    System.out.println("right");
                     cubeface = CubeFaces.FACE_RIGHT;
                     imageLoc = 4;
                 } else if((Math.abs(locX) == 0 && locY == -1) || (Math.abs(locX) == 2 && locY == 1)) {
-                    System.out.println("left");
                     cubeface = CubeFaces.FACE_LEFT;
                     imageLoc = 1;
                 } else if(locX == 1) {
-                    System.out.println("up");
                     cubeface = CubeFaces.FACE_UP;
                     imageLoc = 0;
                 } else if(locX == -1) {
-                    System.out.println("down");
                     cubeface = CubeFaces.FACE_DOWN;
                     imageLoc = 3;
                 }

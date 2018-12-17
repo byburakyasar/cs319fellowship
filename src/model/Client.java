@@ -1,10 +1,11 @@
 package model;
 
 import controller.GameUIController;
+import javafx.application.Platform;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * @author Mert Duman
@@ -17,7 +18,10 @@ public class Client {
     private String host;
     private int port;
     private int clientNo;
-    private ArrayList<String> clientPlayerNames;
+    private Vector<Player> clientPlayers;
+
+    private ObjectInputStream inObj;
+    private ObjectOutputStream outObj;
 
     private GameUIController gameUIController;
 
@@ -33,8 +37,14 @@ public class Client {
     public boolean joinServer() {
         try {
             client = new Socket(host, port);
+
+
+
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true);
+
+            inObj = new ObjectInputStream(client.getInputStream());
+            outObj = new ObjectOutputStream(client.getOutputStream());
         } catch (IOException e) {
             return false;
         }
@@ -44,6 +54,7 @@ public class Client {
 
     public void alertServerForAction(String msg) {
         out.println(msg);
+        out.flush();
     }
 
     public boolean sendReceiveMessageBlocked(String msg) {
@@ -69,7 +80,6 @@ public class Client {
 
     public <T> T readObjectBlocked() {
         try {
-            ObjectInputStream inObj = new ObjectInputStream(client.getInputStream());
             T obj = (T)inObj.readObject();
             return obj;
         } catch (ClassNotFoundException | IOException e) {
@@ -86,10 +96,9 @@ public class Client {
 
     public <T> T sendObjectBlocked(T obj) {
         try {
-            alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_OBJECT));
-            ObjectOutputStream objOut = new ObjectOutputStream(client.getOutputStream());
-            objOut.writeObject(obj);
-            objOut.flush();
+            alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_GAME));
+            outObj.writeObject(obj);
+            outObj.flush();
             return obj;
         } catch (IOException e) {
             e.printStackTrace();
@@ -106,9 +115,19 @@ public class Client {
         out.println(clientNo);
     }
 
-    public void sendPlayerName(String playerName) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER_NAME));
-        out.println(playerName);
+    public void sendPlayer(Player player) {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER));
+        try {
+            outObj.writeObject(player);
+            outObj.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendPlayerEndTime(long endTime) {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_ENDTIME));
+        out.println(endTime);
     }
 
     public String waitUntilGameReady() {
@@ -118,20 +137,23 @@ public class Client {
         return in;
     }
 
-    public void requestClientPlayerNames() {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.SEND_PLAYER_NAMES));
-        ArrayList<String> names = readObjectBlocked();
-        System.out.println(names);
-        clientPlayerNames = names;
+    public void requestClientPlayers() {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.SEND_PLAYERS));
+        Vector<Player> players = readObjectBlocked();
+        System.out.println(players);
+        clientPlayers = players;
     }
 
     public void readMessageNonBlockedAlways() {
-        new Thread(new Runnable() {
+        Thread clientThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
                     try {
                         ClientCodes code = Enum.valueOf(ClientCodes.class, in.readLine());
+                        if (code == ClientCodes.CLOSE) {
+                            break;
+                        }
                         switch (code) {
                             case RECEIVE_TEXT:
                                 break;
@@ -142,9 +164,17 @@ public class Client {
                                     String playerName = in.readLine();
                                     int row = Integer.parseInt(in.readLine());
                                     int col = Integer.parseInt(in.readLine());
-                                    CubeFaces cubeFace = Enum.valueOf(CubeFaces.class, in.readLine());
+                                    String cubeFaceStr = in.readLine();
+                                    CubeFaces cubeFace = cubeFaceStr.equals("null") ? null : Enum.valueOf(CubeFaces.class, cubeFaceStr);
                                     int clientNo = Integer.parseInt(in.readLine());
-                                    gameUIController.setBoardFace(playerName, row, col, cubeFace, clientNo);
+
+                                    Platform.runLater(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            gameUIController.setBoardFace(playerName, row, col, cubeFace, clientNo);
+                                            gameUIController.playerPlayed(playerName, row, col, cubeFace);
+                                        }
+                                    });
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
@@ -155,17 +185,16 @@ public class Client {
                     }
                 }
             }
-        }).start();
+        });
+        clientThread.start();
     }
 
     public boolean close() {
         try {
-            in.close();
-            out.close();
             client.close();
-
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -173,7 +202,8 @@ public class Client {
     public enum ClientCodes {
         RECEIVE_TEXT,
         RECEIVE_OBJECT,
-        RECEIVE_MOVE
+        RECEIVE_MOVE,
+        CLOSE
     }
 
     public int getClientNo() {
@@ -184,7 +214,7 @@ public class Client {
         this.clientNo = clientNo;
     }
 
-    public ArrayList<String> getClientPlayerNames() {
-        return clientPlayerNames;
+    public Vector<Player> getClientPlayers() {
+        return clientPlayers;
     }
 }

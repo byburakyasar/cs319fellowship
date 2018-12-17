@@ -9,6 +9,7 @@ public class Player implements Serializable {
 
     // ATTRIBUTES
     private final String name;
+    private String visibleName;
     private final CubeFaces[][] solutionGrid;
     private long endTime;
     private boolean didWin;
@@ -55,6 +56,22 @@ public class Player implements Serializable {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the visible name of the player.
+     * @return Visible name of the player.
+     */
+    public String getVisibleName() {
+        return visibleName;
+    }
+
+    /**
+     * Sets the visible name of the player.
+     * @param visibleName Visible name of the player to set.
+     */
+    public void setVisibleName(String visibleName) {
+        this.visibleName = visibleName;
     }
 
     /**

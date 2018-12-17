@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
  * @version 17.11.2018
  */
 public class EndController {
+    @FXML Label endGameLabel;
     @FXML Label finishedText;
     @FXML Button restartBtn;
     @FXML Button gameOptionsBtn;
@@ -41,14 +42,21 @@ public class EndController {
     }
 
     public void initialize() {
+        endGameLabel.setText("YOU LOST");
+        String winner = lastWinner.getVisibleName();
+        if (lastPlayer.getName().equals(lastWinner.getName())) {
+            winner = "You";
+            endGameLabel.setText("CONGRATULATIONS");
+        }
+
         if (!dateFormatM.format(lastGameTime).equals("0")) {
             if (dateFormatM.format(lastGameTime).equals("1")) {
-                finishedText.setText("You finished in: " + dateFormatM.format(lastGameTime)+ " minute and " + dateFormatS.format(lastGameTime) + " seconds!");
+                finishedText.setText(winner + " finished in: " + dateFormatM.format(lastGameTime)+ " minute and " + dateFormatS.format(lastGameTime) + " seconds!");
             } else {
-                finishedText.setText("You finished in: " + dateFormatM.format(lastGameTime)+ " minutes and " + dateFormatS.format(lastGameTime) + " seconds!");
+                finishedText.setText(winner + " finished in: " + dateFormatM.format(lastGameTime)+ " minutes and " + dateFormatS.format(lastGameTime) + " seconds!");
             }
         } else {
-            finishedText.setText("You finished in: " + dateFormatS.format(lastGameTime) + " seconds!");
+            finishedText.setText(winner + " finished in: " + dateFormatS.format(lastGameTime) + " seconds!");
         }
     }
 

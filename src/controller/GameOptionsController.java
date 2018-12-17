@@ -5,10 +5,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Toggle;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -19,6 +16,7 @@ import model.Player;
 import model.Server;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -87,6 +85,16 @@ public class GameOptionsController {
         Stage current = (Stage) startBtn.getScene().getWindow();
         Player player = new Player(UUID.randomUUID().toString(), difficulty);
 
+        TextInputDialog dialog = new TextInputDialog("Player");
+        dialog.setTitle(null);
+        dialog.setHeaderText(null);
+        dialog.setGraphic(null);
+        dialog.setContentText("Pick a username:");
+        dialog.getDialogPane().lookupButton(ButtonType.CANCEL).setManaged(false);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(player::setVisibleName);
+
         if (playerCount == 1) {
             FXMLLoader loader = new FXMLLoader();
             GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension);
@@ -108,11 +116,11 @@ public class GameOptionsController {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayerName(player.getName());
+                    client.sendPlayer(player);
                     String serverMessage = client.waitUntilGameReady();
                     System.out.println("Client ready with no: " + serverMessage);
                     System.out.println("Client was ready at: " + System.currentTimeMillis());
-                    client.requestClientPlayerNames();
+                    client.requestClientPlayers();
 
                     Game obj = client.readObjectBlocked();
                     if (serverMessage != null) {
@@ -136,17 +144,17 @@ public class GameOptionsController {
                 }
             }).start();
         } else {
-            server = new Server(8000, playerCount);
+            server = new Server(8000, playerCount, difficulty, cubeDimension);
             client.joinServer();
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayerName(player.getName());
+                    client.sendPlayer(player);
                     String serverMessage = client.waitUntilGameReady(); // make it so that everyone exits at the same time
                     System.out.println("Client ready with no: " + serverMessage);
                     System.out.println("Client was ready at: " + System.currentTimeMillis());
-                    client.requestClientPlayerNames();
+                    client.requestClientPlayers();
 
                     Game game = Game.createRandomGame(playerCount, difficulty);
                     Game obj = client.sendObjectBlocked(game);
@@ -172,5 +180,9 @@ public class GameOptionsController {
                 }
             }).start();
         }
+    }
+
+    public void startClientSideThread() {
+
     }
 }

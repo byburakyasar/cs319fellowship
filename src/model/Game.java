@@ -70,6 +70,19 @@ public class Game implements Serializable {
     }
 
     /**
+     * Adds a player to the game if it is not already full.
+     * @param newP New player to add.
+     * @throws IllegalStateException When number of players matches the maximum number allowed.
+     */
+    public void addPlayer(Player newP) throws IllegalStateException {
+        if (players.size() >= maxPlayers) {
+            throw new IllegalStateException("Game is full.");
+        }
+
+        players.add(players.size(), newP);
+    }
+
+    /**
      * Saves the starting time of the game.
      */
     public void startGame() {
@@ -156,5 +169,9 @@ public class Game implements Serializable {
 
     public long getStartTime() {
         return startTimeMillis;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }
