@@ -62,6 +62,8 @@ public class GameUIController {
     private Server server;
     private Client client;
 
+    private final int PATTERN_NO = 1;
+
     /**
      * Constructs a GameUIController object for single player use.
      * @param player The player will play the game.
@@ -74,7 +76,7 @@ public class GameUIController {
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
@@ -94,7 +96,7 @@ public class GameUIController {
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
         this.client = client;
@@ -116,7 +118,7 @@ public class GameUIController {
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(1).getCube();
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
         this.server = server;
@@ -348,7 +350,9 @@ public class GameUIController {
 
                             int row = boardGrid.getRowIndex(pane);
                             int col = boardGrid.getColumnIndex(pane);
-                            client.sendPlayerMove(player.getName(), row, col, null);
+                            if (client != null) {
+                                client.sendPlayerMove(player.getName(), row, col, null);
+                            }
                             game.playerMove(player.getName(), row, col, null);
                         }
 
@@ -379,7 +383,9 @@ public class GameUIController {
                         CubeFaces cubeFace = cubeFaces[Integer.parseInt(db.getString())];
 
                         numOfMoves.set(numOfMoves.get() + 1);
-                        client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                        if (client != null) {
+                            client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                        }
                         playerPlayed(player.getName(), row, col, cubeFace);
 
                         event.setDropCompleted(true);
@@ -393,8 +399,6 @@ public class GameUIController {
 
         boardGrid.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
-//        boardAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
-//                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(705,705,false,false,false,false))));
     }
 
     /**

@@ -38,8 +38,6 @@ public class Client {
         try {
             client = new Socket(host, port);
 
-
-
             in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             out = new PrintWriter(new OutputStreamWriter(client.getOutputStream()), true);
 

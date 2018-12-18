@@ -16,7 +16,7 @@ public class Main extends Application {
 
         Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
         primaryStage.setTitle("QBitz");
-        primaryStage.setScene(new Scene(root, 1920, 1080));
+        primaryStage.setScene(new Scene(root));
         primaryStage.getIcons().add(ResourceLoader.getInstance().getGameIcon());
 
         primaryStage.setX(bounds.getMinX());

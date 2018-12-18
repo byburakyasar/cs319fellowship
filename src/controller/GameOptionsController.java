@@ -39,6 +39,7 @@ public class GameOptionsController {
     private int difficulty = 4;
     private int playerCount = 1;
     private int cubeDimension = 3;
+    // private GameMode gameMode;
 
     public void initialize() {
         difficultyGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
