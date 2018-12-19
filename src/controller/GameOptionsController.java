@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class GameOptionsController {
     @FXML Button startBtn;
     @FXML Button backToMenuBtn;
@@ -186,7 +183,7 @@ public class GameOptionsController {
     public enum GameModes{
         PATTERN_MATCHING,
         RACING_AND_ROLLING,
-        FROM_MEMORY_IN_TEN,
+        FROM_MEMORY,
         MAXIMUM_PATTERNS,
         AGAINST_TIME,
         DIFFERENT_CUBES,

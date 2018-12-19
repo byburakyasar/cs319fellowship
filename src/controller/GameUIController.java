@@ -147,7 +147,7 @@ public class GameUIController {
             case RACING_AND_ROLLING:
                 // something like loadRacingAndRolling();
                 break;
-            case FROM_MEMORY_IN_TEN:
+            case FROM_MEMORY:
                 loadPatternMatching(true);
                 break;
             case MAXIMUM_PATTERNS:
