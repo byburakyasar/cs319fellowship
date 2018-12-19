@@ -13,6 +13,7 @@ public class Player implements Serializable {
     private final CubeFaces[][] solutionGrid;
     private long endTime;
     private boolean didWin;
+    private boolean didGiveUp;
 
     // CONSTRUCTORS
 
@@ -131,6 +132,14 @@ public class Player implements Serializable {
      */
     public boolean getEndResult() {
         return didWin;
+    }
+
+    public boolean didGiveUp() {
+        return didGiveUp;
+    }
+
+    public void setDidGiveUp(boolean didGiveUp) {
+        this.didGiveUp = didGiveUp;
     }
 
     @Override

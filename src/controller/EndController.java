@@ -44,6 +44,11 @@ public class EndController {
     }
 
     public void initialize() {
+        if (lastWinner == null) {
+            endGameLabel.setText("YOU GAVE UP");
+            return;
+        }
+
         endGameLabel.setText("YOU LOST");
         String winner = lastWinner.getVisibleName();
         if (lastPlayer.getName().equals(lastWinner.getName())) {

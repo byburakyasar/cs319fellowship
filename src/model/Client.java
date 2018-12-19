@@ -5,6 +5,7 @@ import javafx.application.Platform;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Vector;
 
 /**
@@ -128,6 +129,11 @@ public class Client {
         out.println(endTime);
     }
 
+    public void sendPlayerGiveUp(String playerName) {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER_GIVE_UP));
+        out.println(playerName);
+    }
+
     public String waitUntilGameReady() {
         alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RESPOND_GAME_READY));
         String in = readMessageBlocked();
@@ -148,7 +154,11 @@ public class Client {
             public void run() {
                 while (true) {
                     try {
-                        ClientCodes code = Enum.valueOf(ClientCodes.class, in.readLine());
+                        String codeStr = in.readLine();
+                        if (codeStr == null) {
+                            break;
+                        }
+                        ClientCodes code = Enum.valueOf(ClientCodes.class, codeStr);
                         if (code == ClientCodes.CLOSE) {
                             break;
                         }
@@ -177,9 +187,45 @@ public class Client {
                                     e.printStackTrace();
                                 }
                                 break;
+                            case RECEIVE_PLAYER_GIVE_UP:
+                                try {
+                                    String playerName = in.readLine();
+                                    boolean everyoneGaveUp = true;
+
+                                    for (Player p : clientPlayers) {
+                                        if (p.getName().equals(playerName)) {
+                                            p.setDidGiveUp(true);
+                                        }
+                                        if (!p.didGiveUp()) {
+                                            everyoneGaveUp = false;
+                                        }
+                                    }
+
+                                    if (everyoneGaveUp) {
+                                        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.CLOSE_SERVER));
+
+                                        // CLIENT CLOSES BEFORE SERVER.
+                                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                gameUIController.handleGameEndMultiplayer(0, null);
+                                            }
+                                        });
+                                    }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                System.out.println("RECEIVED GIVE UP");
+                                break;
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (SocketException e) {
+                        System.out.println("SOCKET EXCEPTION");
+                        break;
+                    }
+                    catch (IOException e) {
                         e.printStackTrace();
+                        break;
                     }
                 }
             }
@@ -201,6 +247,7 @@ public class Client {
         RECEIVE_TEXT,
         RECEIVE_OBJECT,
         RECEIVE_MOVE,
+        RECEIVE_PLAYER_GIVE_UP,
         CLOSE
     }
 

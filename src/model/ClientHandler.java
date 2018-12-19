@@ -110,6 +110,16 @@ public class ClientHandler extends Thread {
                     e.printStackTrace();
                 }
                 break;
+            case RECEIVE_PLAYER_GIVE_UP:
+                try {
+                    String playerName = in.readLine();
+                    System.out.println("Player gave up: "+ playerName);
+                    server.setObject(playerName);
+                    server.alertAllClientsButSelf(ServerCodes.SEND_PLAYER_GIVE_UP, this);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             case SEND_TEXT:
                 break;
             case SEND_OBJECT:
@@ -140,6 +150,11 @@ public class ClientHandler extends Thread {
                 out.println(String.valueOf(Client.ClientCodes.CLOSE));
                 out.println(server.getObject());
                 break;
+            case SEND_PLAYER_GIVE_UP:
+                out.println(String.valueOf(Client.ClientCodes.RECEIVE_PLAYER_GIVE_UP));
+                System.out.println("Sent: " + server.getObject());
+                out.println(server.getObject());
+                break;
             case RESPOND_GAME_READY:
                 int serverSize = -1;
                 while (serverSize < server.getServerMaxSize()) {
@@ -153,8 +168,10 @@ public class ClientHandler extends Thread {
                     }
                 }
                 break;
-
-
+            case CLOSE_SERVER:
+                System.out.println("CLOSING SERVER...");
+                server.close();
+                break;
         }
     }
 
@@ -164,11 +181,14 @@ public class ClientHandler extends Thread {
         RECEIVE_MOVE,
         RECEIVE_PLAYER,
         RECEIVE_ENDTIME,
+        RECEIVE_PLAYER_GIVE_UP,
         SEND_OBJECT,
         SEND_TEXT,
         SEND_MOVE,
         SEND_PLAYERS,
         SEND_ENDTIME,
-        RESPOND_GAME_READY
+        SEND_PLAYER_GIVE_UP,
+        RESPOND_GAME_READY,
+        CLOSE_SERVER
     }
 }
