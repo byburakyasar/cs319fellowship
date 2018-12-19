@@ -39,7 +39,7 @@ public class GameOptionsController {
     private int difficulty = 4;
     private int playerCount = 1;
     private int cubeDimension = 3;
-    // private GameMode gameMode;
+    private GameModes gameMode = GameModes.PATTERN_MATCHING;
 
     public void initialize() {
         difficultyGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
@@ -67,8 +67,9 @@ public class GameOptionsController {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 Text text = new Text(newValue);
-                gameModesComboBox.setMaxWidth(text.getLayoutBounds().getWidth() + 250);
-                System.out.println(text.getLayoutBounds().getWidth() + 250);
+
+                gameMode = Enum.valueOf(GameModes.class, newValue.toUpperCase().replace(' ', '_').replace('İ', 'I'));
+                System.out.println(gameMode);
             }
         });
     }
@@ -98,7 +99,7 @@ public class GameOptionsController {
 
         if (playerCount == 1) {
             FXMLLoader loader = new FXMLLoader();
-            GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension);
+            GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode);
             loader.setController(gui);
             loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
             BorderPane root = loader.load();
@@ -130,7 +131,7 @@ public class GameOptionsController {
                             public void run() {
                                 try {
                                     FXMLLoader loader = new FXMLLoader();
-                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, client, obj);
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, client, obj);
                                     loader.setController(gui);
                                     loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
                                     BorderPane root = loader.load();
@@ -145,7 +146,7 @@ public class GameOptionsController {
                 }
             }).start();
         } else {
-            server = new Server(8000, playerCount, difficulty, cubeDimension);
+            server = new Server(8000, playerCount, difficulty, cubeDimension, gameMode);
             client.joinServer();
 
             new Thread(new Runnable() {
@@ -165,7 +166,7 @@ public class GameOptionsController {
                             public void run() {
                                 try {
                                     FXMLLoader loader = new FXMLLoader();
-                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, server, client, obj);
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, server, client, obj);
                                     loader.setController(gui);
                                     loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 
@@ -181,6 +182,16 @@ public class GameOptionsController {
                 }
             }).start();
         }
+    }
+    public enum GameModes{
+        PATTERN_MATCHING,
+        RACING_AND_ROLLING,
+        FROM_MEMORY_IN_TEN,
+        MAXIMUM_PATTERNS,
+        AGAINST_TIME,
+        DIFFERENT_CUBES,
+        PAINTING_PUZZLE,
+        TWO_VS_TWO;
     }
 
     public void startClientSideThread() {

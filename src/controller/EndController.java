@@ -27,16 +27,18 @@ public class EndController {
     private int lastDifficulty;
     private int lastPlayerCount;
     private int lastCubeDimension;
+    private GameOptionsController.GameModes lastGameMode;
     private long lastGameTime;
     private Player lastWinner;
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, long lastGameTime, Player lastWinner) {
+    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner) {
         this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
         this.lastCubeDimension = lastCubeDimension;
+        this.lastGameMode = lastGameMode;
         this.lastGameTime = lastGameTime;
         this.lastWinner = lastWinner;
     }
@@ -65,7 +67,7 @@ public class EndController {
         Stage current = (Stage) restartBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension);
+        GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension, lastGameMode);
         loader.setController(gui);
         loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
 

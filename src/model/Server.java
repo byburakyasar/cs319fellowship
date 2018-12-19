@@ -1,5 +1,7 @@
 package model;
 
+import controller.GameOptionsController;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Vector;
@@ -15,14 +17,16 @@ public class Server {
     private int serverMaxSize;
     private int serverDifficulty;
     private int serverCubeDimension;
+    private GameOptionsController.GameModes gameMode;
     private int curClients;
     private Object object;
     private Object[] data;
 
-    public Server(int port, int serverMaxSize, int serverDifficulty, int serverCubeDimension) {
+    public Server(int port, int serverMaxSize, int serverDifficulty, int serverCubeDimension, GameOptionsController.GameModes gameMode) {
         this.serverMaxSize = serverMaxSize;
         this.serverDifficulty = serverDifficulty;
         this.serverCubeDimension = serverCubeDimension;
+        this.gameMode = gameMode;
         this.curClients = 0;
         this.players = new Vector<>();
 

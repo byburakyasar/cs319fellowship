@@ -53,6 +53,7 @@ public class GameUIController {
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
+    private GameOptionsController.GameModes gameMode;
     private Cube cube;
     private Pattern pattern;
     private Game game;
@@ -71,11 +72,12 @@ public class GameUIController {
      * @param playerCount The number of players in the game.
      * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
+        this.gameMode = gameMode;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
@@ -91,11 +93,12 @@ public class GameUIController {
      * @param client The client that will play the game.
      * @param game The game object shared between all people in the server.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, Client client, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, Client client, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
+        this.gameMode = gameMode;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
@@ -113,11 +116,12 @@ public class GameUIController {
      * @param client The client that will play the game.
      * @param game The game object shared between all people in the server.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, Server server, Client client, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, Server server, Client client, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
+        this.gameMode = gameMode;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
@@ -127,6 +131,32 @@ public class GameUIController {
     }
 
     public void initialize() {
+        switch (gameMode)
+        {
+            case PATTERN_MATCHING:
+                loadPatternMatching();
+                break;
+            case RACING_AND_ROLLING:
+                // something like loadRacingAndRolling();
+                break;
+            case FROM_MEMORY_IN_TEN:
+                //fromMemoryInTen();
+                break;
+            case MAXIMUM_PATTERNS:
+                break;
+            case AGAINST_TIME:
+                break;
+            case PAINTING_PUZZLE:
+                break;
+            case DIFFERENT_CUBES:
+                break;
+            case TWO_VS_TWO:
+                break;
+        }
+
+    }
+
+    private void loadPatternMatching() {
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
             load2DCube();
@@ -536,7 +566,7 @@ public class GameUIController {
         Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, winTime, winner);
+        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
