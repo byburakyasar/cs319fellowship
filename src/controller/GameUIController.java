@@ -57,7 +57,7 @@ public class GameUIController {
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
-    private int againstTimeLimit = 225000;
+    private int againstTimeLimit = 3000;
     private GameOptionsController.GameModes gameMode;
     private Cube cube;
     private Pattern pattern;
@@ -221,7 +221,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime();
+        bindGameTime("PatternMatching");
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -682,7 +682,7 @@ public class GameUIController {
         Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner);
+        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner,againstTimeLimit);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
@@ -710,7 +710,7 @@ public class GameUIController {
     private void endGame(){
         try {
             player.lostAgainstTime();
-            loadEndScene(againstTimeLimit, player);
+            loadEndScene(curGameTime, player);
         } catch (IOException e) {
             e.printStackTrace();
         }

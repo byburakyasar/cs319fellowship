@@ -25,7 +25,10 @@
     </left>
 
     <bottom>
-        <Button id="backToMenuBtn" onAction="#backToMainMenu" text="Main Menu">
+        <Button id="giveUpBtn" onAction="#giveUp" text="Give Up">
+            <BorderPane.margin>
+                <Insets bottom="10" left="10"/>
+            </BorderPane.margin>
         </Button>
     </bottom>
 
