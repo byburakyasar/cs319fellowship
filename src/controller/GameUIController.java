@@ -696,11 +696,17 @@ public class GameUIController {
      */
     private void bindGameTime() {
         Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
-            curGameTime = System.currentTimeMillis() - game.getStartTime();
-            timeLabel.setText( dateFormat.format(curGameTime));
+            if (GameOptionsController.GameModes.AGAINST_TIME == gameMode){
+                curGameTime = againstTimeLimit - ( System.currentTimeMillis() - game.getStartTime() );
+                timeLabel.setText( dateFormat.format(curGameTime));
 
-            if ( GameOptionsController.GameModes.AGAINST_TIME == gameMode && curGameTime > againstTimeLimit){
-                endGame();
+                if( curGameTime > againstTimeLimit){
+                    endGame();
+                }
+            }
+            else{
+                curGameTime = System.currentTimeMillis() - game.getStartTime();
+                timeLabel.setText( dateFormat.format(curGameTime));
             }
         }));
         keepTime.setCycleCount(Animation.INDEFINITE);
