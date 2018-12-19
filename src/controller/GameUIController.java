@@ -57,7 +57,7 @@ public class GameUIController {
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
-    private int againstTimeLimit = 3000;
+    private int againstTimeLimit = 30000;
     private GameOptionsController.GameModes gameMode;
     private Cube cube;
     private Pattern pattern;
@@ -179,7 +179,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime("Against Time");
+        bindGameTime(gameMode);
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -221,7 +221,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime("PatternMatching");
+        bindGameTime(gameMode);
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -694,12 +694,12 @@ public class GameUIController {
     /**
      * Bind the timeLabel with the game time.
      */
-    private void bindGameTime(String mode) {
+    private void bindGameTime(GameOptionsController.GameModes mode) {
         Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
             curGameTime = System.currentTimeMillis() - game.getStartTime();
             timeLabel.setText( dateFormat.format(curGameTime));
 
-            if ( mode.equals("Against Time") && curGameTime > againstTimeLimit){
+            if ( GameOptionsController.GameModes.AGAINST_TIME == mode && curGameTime > againstTimeLimit){
                 endGame();
             }
         }));
