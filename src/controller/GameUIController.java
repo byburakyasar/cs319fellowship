@@ -697,8 +697,8 @@ public class GameUIController {
     private void bindGameTime() {
         Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
             if (GameOptionsController.GameModes.AGAINST_TIME == gameMode){
-                curGameTime = againstTimeLimit - ( System.currentTimeMillis() - game.getStartTime() );
-                timeLabel.setText( dateFormat.format(curGameTime));
+                curGameTime = System.currentTimeMillis() - game.getStartTime();
+                timeLabel.setText( dateFormat.format( againstTimeLimit - curGameTime));
 
                 if( curGameTime > againstTimeLimit){
                     endGame();
