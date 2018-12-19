@@ -39,6 +39,7 @@ public class ClientHandler extends Thread {
                 String codeStr = in.readLine();
                 System.out.println("READ CODE: " + codeStr);
                 if (codeStr == null) {
+                    System.out.println("Closing thread for client: " + clientNo);
                     break;
                 }
                 ServerCodes code = Enum.valueOf(ServerCodes.class, codeStr);
@@ -76,7 +77,7 @@ public class ClientHandler extends Thread {
                 break;
             case RECEIVE_GAME:
                 try {
-                    System.out.println("receiving object for client: " + clientNo);
+                    System.out.println("Receiving object for client: " + clientNo);
                     Game obj = (Game)inObj.readObject();
 
                     server.setObject(obj);
@@ -115,7 +116,7 @@ public class ClientHandler extends Thread {
                     String playerName = in.readLine();
                     System.out.println("Player gave up: "+ playerName);
                     server.setObject(playerName);
-                    server.alertAllClientsButSelf(ServerCodes.SEND_PLAYER_GIVE_UP, this);
+                    server.alertAllClients(ServerCodes.SEND_PLAYER_GIVE_UP);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -152,7 +153,6 @@ public class ClientHandler extends Thread {
                 break;
             case SEND_PLAYER_GIVE_UP:
                 out.println(String.valueOf(Client.ClientCodes.RECEIVE_PLAYER_GIVE_UP));
-                System.out.println("Sent: " + server.getObject());
                 out.println(server.getObject());
                 break;
             case RESPOND_GAME_READY:

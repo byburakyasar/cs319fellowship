@@ -25,14 +25,16 @@ public class Client {
     private ObjectOutputStream outObj;
 
     private GameUIController gameUIController;
+    private Player player;
 
     public void setGameUIController(GameUIController gameUIController) {
         this.gameUIController = gameUIController;
     }
 
-    public Client(String host, int port) {
+    public Client(String host, int port, Player player) {
         this.host = host;
         this.port = port;
+        this.player = player;
     }
 
     public boolean joinServer() {
@@ -159,10 +161,10 @@ public class Client {
                             break;
                         }
                         ClientCodes code = Enum.valueOf(ClientCodes.class, codeStr);
-                        if (code == ClientCodes.CLOSE) {
-                            break;
-                        }
+
                         switch (code) {
+                            case CLOSE:
+                                return;
                             case RECEIVE_TEXT:
                                 break;
                             case RECEIVE_OBJECT:
@@ -201,26 +203,45 @@ public class Client {
                                         }
                                     }
 
+                                    // If you are the last person to give up, close the server and exit.
                                     if (everyoneGaveUp) {
                                         alertServerForAction(String.valueOf(ClientHandler.ServerCodes.CLOSE_SERVER));
 
-                                        // CLIENT CLOSES BEFORE SERVER.
                                         Platform.runLater(new Runnable() {
                                             @Override
                                             public void run() {
                                                 gameUIController.handleGameEndMultiplayer(0, null);
                                             }
                                         });
+
+                                        return;
+                                    }
+
+                                    // If you are the person that gave up but you are not the last, close your client and exit.
+                                    if (player.getName().equals(playerName)) {
+                                        close();
+
+                                        Platform.runLater(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                try {
+                                                    gameUIController.loadEndScene(0, null);
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+
+                                        return;
                                     }
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                System.out.println("RECEIVED GIVE UP");
                                 break;
                         }
                     }
                     catch (SocketException e) {
-                        System.out.println("SOCKET EXCEPTION");
+                        e.printStackTrace();
                         break;
                     }
                     catch (IOException e) {
