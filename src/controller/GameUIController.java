@@ -179,7 +179,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime(gameMode);
+        bindGameTime();
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -221,7 +221,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime(gameMode);
+        bindGameTime();
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -694,12 +694,12 @@ public class GameUIController {
     /**
      * Bind the timeLabel with the game time.
      */
-    private void bindGameTime(GameOptionsController.GameModes mode) {
+    private void bindGameTime() {
         Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
             curGameTime = System.currentTimeMillis() - game.getStartTime();
             timeLabel.setText( dateFormat.format(curGameTime));
 
-            if ( GameOptionsController.GameModes.AGAINST_TIME == mode && curGameTime > againstTimeLimit){
+            if ( GameOptionsController.GameModes.AGAINST_TIME == gameMode && curGameTime > againstTimeLimit){
                 endGame();
             }
         }));
