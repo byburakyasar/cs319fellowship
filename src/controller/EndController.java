@@ -61,7 +61,8 @@ public class EndController {
 
         if ( lastGameMode != GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())) {
             winner = "You";
-            endGameLabel.setText("CONGRATULATIONS");
+            endGameFirstLetter.setText("C");
+            endGameLabel.setText("ONGRATULATIONS");
         }
         else if( lastGameMode == GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())
                 && lastGameTime <finishTime){
