@@ -11,11 +11,11 @@
 <?import javafx.scene.shape.Line?>
 
 <BorderPane id="mainBorderPane" fx:id="mainBorderPane"
-            stylesheets="@styles/GameUI.css"
+            stylesheets="@styles/GameUI.css, @styles/Buttons.css"
             xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
             styleClass="bordered">
     <left>
-        <VBox alignment="CENTER" spacing="65" styleClass="bordered">
+        <VBox fx:id="leftVBox" alignment="CENTER" spacing="65" styleClass="bordered">
             <BorderPane.margin>
                 <Insets left="60" />
             </BorderPane.margin>
@@ -46,7 +46,7 @@
     </center>
 
     <right>
-        <VBox alignment="CENTER" spacing="20" styleClass="bordered">
+        <VBox fx:id="rightVBox" alignment="CENTER" spacing="20" styleClass="bordered">
             <BorderPane.margin>
                 <Insets right="60" />
             </BorderPane.margin>

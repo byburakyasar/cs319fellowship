@@ -5,12 +5,14 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.*;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,15 +43,17 @@ public class GameUIController {
     @FXML private Label timeLabel;
     @FXML private Label numOfMovesLabel;
     @FXML private VBox centerVBox;
+    @FXML private VBox leftVBox;
+    @FXML private VBox rightVBox;
     @FXML private HBox multiplayerHBox;
 
-    private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
-                                        CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
-
+    // Technical
     private IntegerProperty numOfMoves = new SimpleIntegerProperty(0);
     private long curGameTime = 0;
     private DateFormat dateFormat = new SimpleDateFormat( "mm:ss.SSS");
 
+    // General
+    private Player player;
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
@@ -58,12 +62,16 @@ public class GameUIController {
     private Pattern pattern;
     private Game game;
     private CubeFaces[][] solutionFaces;
+    private final int PATTERN_NO = 1;
+    private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
+            CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
-    private Player player;
+    // Online related
     private Server server;
     private Client client;
 
-    private final int PATTERN_NO = 1;
+    // From Memory
+    private int remainingReveals = 3;
 
     /**
      * Constructs a GameUIController object for single player use.
@@ -134,13 +142,13 @@ public class GameUIController {
         switch (gameMode)
         {
             case PATTERN_MATCHING:
-                loadPatternMatching();
+                loadPatternMatching(false);
                 break;
             case RACING_AND_ROLLING:
                 // something like loadRacingAndRolling();
                 break;
-            case FROM_MEMORY_IN_TEN:
-                //fromMemoryInTen();
+            case FROM_MEMORY:
+                loadPatternMatching(true);
                 break;
             case MAXIMUM_PATTERNS:
                 break;
@@ -156,7 +164,7 @@ public class GameUIController {
 
     }
 
-    private void loadPatternMatching() {
+    private void loadPatternMatching(boolean isFromMemory) {
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
             load2DCube();
@@ -165,7 +173,7 @@ public class GameUIController {
         }
 
         // Load the game and solution boards
-        loadSolutionPattern();
+        loadSolutionBoard(isFromMemory);
         loadBoard();
 
         // This counts time and sets its label
@@ -196,18 +204,6 @@ public class GameUIController {
         // Add yourself and start
         game.addPlayer(player);
         game.startGame();
-    }
-
-    /**
-     * Loads the main menu scene onto the current stage.
-     * @throws IOException May throw exception if the corresponding fxml is not found.
-     */
-    @FXML
-    public void backToMainMenu() throws IOException {
-        Stage current = (Stage) boardGrid.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-
-        current.getScene().setRoot(root);
     }
 
     /**
@@ -325,7 +321,7 @@ public class GameUIController {
      * Gets the corresponding backgrounds for those faces from the Cube class and sets them.
      * Sets the background for the solution board.
      */
-    private void loadSolutionPattern() {
+    private void loadSolutionBoard(boolean isFromMemory) {
         final int SOLUTION_SIZE = 120;
 
         for (int i = 0; i < difficulty; i++) {
@@ -343,9 +339,76 @@ public class GameUIController {
             }
         }
 
-//        solutionAnchorPane.setBackground(new Background(new BackgroundImage(new Image("/wood5.png"), BackgroundRepeat.NO_REPEAT,
-//                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100,100,true,true,true,true))));
+        if (isFromMemory) {
+            Button button = new Button("Reveal Solution (" + remainingReveals + ")");
+            button.setId("revealBtn");
+            button.setVisible(false);
+            button.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if (remainingReveals > 0) {
+                        setChildenVisibility(solutionGrid, true);
+                        remainingReveals--;
+                        if (remainingReveals == 0) {
+                            button.setText("Give Up");
+                            button.setOnAction(new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
 
+                                }
+                            });
+                        } else {
+                            button.setText("Reveal Solution (" + remainingReveals + ")");
+                        }
+
+                        long timeOnClick = curGameTime / 1000L;
+
+                        Timeline timer = new Timeline();
+                        timer.getKeyFrames().add(new KeyFrame(
+                                Duration.millis(100), new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                long gameTimeSeconds = curGameTime / 1000L;
+                                if (gameTimeSeconds >= timeOnClick + 2) {
+                                    setChildenVisibility(solutionGrid, false);
+                                    timer.stop();
+                                }
+                            }
+                        }));
+
+                        timer.setCycleCount(Animation.INDEFINITE);
+                        timer.play();
+                    }
+                }
+            });
+
+            Timeline timer = new Timeline();
+            timer.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(100), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    long gameTimeSeconds = curGameTime / 1000L;
+
+                    // for 3 --> 10s, 4 --> 20s, 5 --> 40s
+                    if (gameTimeSeconds >= Math.pow(2, difficulty) * (5.0 / 4.0)) {
+                        setChildenVisibility(solutionGrid, false);
+                        button.setVisible(true);
+                        timer.stop();
+                    }
+                }
+            }));
+
+            timer.setCycleCount(Animation.INDEFINITE);
+            timer.play();
+
+            centerVBox.getChildren().add(button);
+        }
+    }
+
+    private void setChildenVisibility(Pane node, boolean visibility) {
+        for (Node n : node.getChildren()) {
+            n.setVisible(visibility);
+        }
     }
 
     /**
@@ -585,6 +648,18 @@ public class GameUIController {
         }));
         keepTime.setCycleCount(Animation.INDEFINITE);
         keepTime.play();
+    }
+
+    /**
+     * Loads the main menu scene onto the current stage.
+     * @throws IOException May throw exception if the corresponding fxml is not found.
+     */
+    @FXML
+    public void backToMainMenu() throws IOException {
+        Stage current = (Stage) boardGrid.getScene().getWindow();
+        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
+
+        current.getScene().setRoot(root);
     }
 
     /**
