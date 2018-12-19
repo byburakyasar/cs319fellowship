@@ -12,7 +12,7 @@
 
     <top>
         <VBox alignment="CENTER">
-            <Label id="endGameLabel" text="CONGRATULATIONS">
+            <Label fx:id="endGameLabel" id="endGameLabel">
                 <VBox.margin>
                     <Insets top="75"/>
                 </VBox.margin>

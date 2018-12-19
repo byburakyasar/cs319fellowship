@@ -51,6 +51,10 @@ public class Player implements Serializable {
         return (this.name.equals(otherP.name) && this.solutionGrid == otherP.solutionGrid);
     }
 
+    public void lostAgainstTime() {
+        this.didWin = false;
+    }
+
     /**
      * Gets the name of the player.
      * @return Name of the player.

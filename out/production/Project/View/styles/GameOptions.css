@@ -28,7 +28,7 @@
 
 /* combo-box-popup .list-view is inside combo-box .list-view */
 .combo-box .list-view {
-    -fx-background-color: rgba(167, 60, 0, 0.6);
+    -fx-background-color: rgb(189, 112, 69);
 }
 
 .combo-box-popup .list-view {

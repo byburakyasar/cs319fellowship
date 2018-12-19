@@ -29,11 +29,12 @@ public class EndController {
     private int lastCubeDimension;
     private GameOptionsController.GameModes lastGameMode;
     private long lastGameTime;
+    private long finishTime;
     private Player lastWinner;
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner) {
+    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner, long finishTime) {
         this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
@@ -41,6 +42,7 @@ public class EndController {
         this.lastGameMode = lastGameMode;
         this.lastGameTime = lastGameTime;
         this.lastWinner = lastWinner;
+        this.finishTime = finishTime;
     }
 
     public void initialize() {
@@ -51,7 +53,14 @@ public class EndController {
 
         endGameLabel.setText("YOU LOST");
         String winner = lastWinner.getVisibleName();
-        if (lastPlayer.getName().equals(lastWinner.getName())) {
+
+
+        if ( lastGameMode != GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())) {
+            winner = "You";
+            endGameLabel.setText("CONGRATULATIONS");
+        }
+        else if( lastGameMode == GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())
+                && lastGameTime <finishTime){
             winner = "You";
             endGameLabel.setText("CONGRATULATIONS");
         }

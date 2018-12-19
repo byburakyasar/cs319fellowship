@@ -57,6 +57,7 @@ public class GameUIController {
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
+    private int againstTimeLimit = 225000;
     private GameOptionsController.GameModes gameMode;
     private Cube cube;
     private Pattern pattern;
@@ -153,6 +154,7 @@ public class GameUIController {
             case MAXIMUM_PATTERNS:
                 break;
             case AGAINST_TIME:
+                loadAgainstTime(false);
                 break;
             case PAINTING_PUZZLE:
                 break;
@@ -162,6 +164,48 @@ public class GameUIController {
                 break;
         }
 
+    }
+
+    private void loadAgainstTime(boolean isFromMemory) {
+        // Load the cube based on dimensions
+        if (cubeDimension == 2) {
+            load2DCube();
+        } else if (cubeDimension == 3) {
+            load3DCube();
+        }
+
+        // Load the game and solution boards
+        loadSolutionBoard(isFromMemory);
+        loadBoard();
+
+        // This counts time and sets its label
+        bindGameTime("Against Time");
+
+        // This sets the number of moves label
+        numOfMovesLabel.textProperty().bind(numOfMoves.asString());
+
+        if (playerCount != 1) {
+            // If this is a multiplayer game, make client ready
+            client.setGameUIController(this);
+            client.readMessageNonBlockedAlways();
+
+            centerVBox.setAlignment(Pos.TOP_CENTER);
+
+            Vector<Player> players = client.getClientPlayers();
+            for (int i = 0; i < players.size(); i++) {
+                if (!players.get(i).getName().equals(player.getName())) {
+                    // Load boards for every other player
+                    loadMultiplayerBoards(players.get(i).getName(), players.get(i).getVisibleName());
+
+                    // Add all other players to the game
+                    game.addPlayer(players.get(i));
+                }
+            }
+        }
+
+        // Add yourself and start
+        game.addPlayer(player);
+        game.startGame();
     }
 
     private void loadPatternMatching(boolean isFromMemory) {
@@ -177,7 +221,7 @@ public class GameUIController {
         loadBoard();
 
         // This counts time and sets its label
-        bindGameTime();
+        bindGameTime("Pattern Matching");
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
@@ -648,7 +692,8 @@ public class GameUIController {
         Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner);
+        System.out.println(gameMode);
+        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, againstTimeLimit);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
@@ -660,13 +705,26 @@ public class GameUIController {
     /**
      * Bind the timeLabel with the game time.
      */
-    private void bindGameTime() {
+    private void bindGameTime(String mode) {
         Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
             curGameTime = System.currentTimeMillis() - game.getStartTime();
             timeLabel.setText( dateFormat.format(curGameTime));
+
+            if ( mode.equals("Against Time") && curGameTime > againstTimeLimit){
+                endGame();
+            }
         }));
         keepTime.setCycleCount(Animation.INDEFINITE);
         keepTime.play();
+    }
+
+    private void endGame(){
+        try {
+            player.lostAgainstTime();
+            loadEndScene(againstTimeLimit, player);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
