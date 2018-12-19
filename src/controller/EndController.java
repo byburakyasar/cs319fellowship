@@ -30,12 +30,12 @@ public class EndController {
     private int lastCubeDimension;
     private GameOptionsController.GameModes lastGameMode;
     private long lastGameTime;
-    private long finishTime;
+    private EndType endType;
     private Player lastWinner;
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner, long finishTime) {
+    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner, EndType endType) {
         this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
@@ -43,31 +43,34 @@ public class EndController {
         this.lastGameMode = lastGameMode;
         this.lastGameTime = lastGameTime;
         this.lastWinner = lastWinner;
-        this.finishTime = finishTime;
+        this.endType = endType;
     }
 
     public void initialize() {
-        if (lastWinner == null) {
-            endGameFirstLetter.setText("Y");
-            endGameLabel.setText("OU GAVE UP");
-            finishedText.setText("");
-            return;
-        }
+        String winner = "";
 
-        endGameFirstLetter.setText("Y");
-        endGameLabel.setText("OU LOST");
-        String winner = lastWinner.getVisibleName();
-
-
-        if ( lastGameMode != GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())) {
-            winner = "You";
-            endGameLabel.setText("CONGRATULATIONS");
-        }
-        else if( lastGameMode == GameOptionsController.GameModes.AGAINST_TIME && lastPlayer.getName().equals(lastWinner.getName())
-                && lastGameTime <finishTime){
-            winner = "You";
-            endGameFirstLetter.setText("C");
-            endGameLabel.setText("ONGRATULATIONS");
+        switch (endType) {
+            case NORMAL:
+                if (lastPlayer.getName().equals(lastWinner.getName())) {
+                    winner = "You";
+                    endGameFirstLetter.setText("C");
+                    endGameLabel.setText("ONGRATULATIONS");
+                } else {
+                    winner = lastWinner.getVisibleName();
+                    endGameFirstLetter.setText("Y");
+                    endGameLabel.setText("OU LOST");
+                }
+                break;
+            case GIVE_UP:
+                endGameFirstLetter.setText("Y");
+                endGameLabel.setText("OU GAVE UP");
+                finishedText.setText("");
+                return;
+            case LOST_AGAINST_TIME:
+                endGameFirstLetter.setText("T");
+                endGameLabel.setText("IME UP");
+                finishedText.setText("");
+                return;
         }
 
         if (!dateFormatM.format(lastGameTime).equals("0")) {
@@ -109,5 +112,11 @@ public class EndController {
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);
+    }
+
+    public enum EndType {
+        NORMAL,
+        GIVE_UP,
+        LOST_AGAINST_TIME
     }
 }

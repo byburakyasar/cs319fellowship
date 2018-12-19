@@ -57,11 +57,11 @@ public class GameUIController {
     private int difficulty;
     private int playerCount;
     private int cubeDimension;
-    private int againstTimeLimit = 30000;
     private GameOptionsController.GameModes gameMode;
     private Cube cube;
     private Pattern pattern;
     private Game game;
+    private MouseControl mc;
     private CubeFaces[][] solutionFaces;
     private final int PATTERN_NO = 1;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
@@ -73,6 +73,9 @@ public class GameUIController {
 
     // From Memory
     private int remainingReveals = 3;
+
+    // Against Time
+    private int againstTimeLimit = 30000;
 
     /**
      * Constructs a GameUIController object for single player use.
@@ -154,7 +157,11 @@ public class GameUIController {
             case MAXIMUM_PATTERNS:
                 break;
             case AGAINST_TIME:
-                loadAgainstTime(false);
+                if (difficulty == 3) againstTimeLimit = 15000;
+                else if (difficulty == 4) againstTimeLimit = 30000;
+                else if (difficulty == 5) againstTimeLimit = 45000;
+
+                loadPatternMatching(false);
                 break;
             case PAINTING_PUZZLE:
                 break;
@@ -166,16 +173,16 @@ public class GameUIController {
 
     }
 
-    private void loadAgainstTime(boolean isFromMemory) {
+    /*private void loadAgainstTime(boolean isFromMemory) {
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
             load2DCube();
         } else if (cubeDimension == 3) {
             load3DCube();
         }
-        if (difficulty == 3) againstTimeLimit = 15000;
-        else if (difficulty == 4) againstTimeLimit = 30000;
-        else if (difficulty == 5) againstTimeLimit = 45000;
+
+
+
         // Load the game and solution boards
         loadSolutionBoard(isFromMemory);
         loadBoard();
@@ -208,7 +215,7 @@ public class GameUIController {
         // Add yourself and start
         game.addPlayer(player);
         game.startGame();
-    }
+    }*/
 
     private void loadPatternMatching(boolean isFromMemory) {
         // Load the cube based on dimensions
@@ -292,7 +299,7 @@ public class GameUIController {
         selection.translateYProperty().bind(scene.heightProperty().divide(2));
         selection.translateZProperty().bind(box.translateZProperty().add(-48));
 
-        MouseControl mc = new MouseControl(box, selection, scene);
+        mc = new MouseControl(box, selection, scene);
 
         box.setOnMouseClicked(event -> {
             if(event.getClickCount() == 2) {
@@ -490,7 +497,7 @@ public class GameUIController {
                         Image img = bg != null ? bg.getImages().get(0).getImage() : null;
                         if (img != null) {
                             content.putImage(img);
-                            content.putString((String)pane.getUserData());
+                            content.putString(String.valueOf(pane.getUserData()));
 
                             db.setDragView(img);
                             db.setContent(content);
@@ -520,7 +527,10 @@ public class GameUIController {
                     @Override
                     public void handle(DragEvent event) {
                         Dragboard db = event.getDragboard();
-                        pane.setBackground(new Background(new BackgroundImage(db.getImage(), BackgroundRepeat.NO_REPEAT,
+                        Image img = db.getImage();
+                        int imageLoc = Integer.parseInt(db.getString());
+
+                        pane.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
                                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,true,false))));
 
                         pane.setUserData(db.getString());
@@ -528,7 +538,7 @@ public class GameUIController {
 
                         int row = GridPane.getRowIndex(pane);
                         int col = GridPane.getColumnIndex(pane);
-                        CubeFaces cubeFace = cubeFaces[Integer.parseInt(db.getString())];
+                        CubeFaces cubeFace = cubeFaces[imageLoc];
 
                         numOfMoves.set(numOfMoves.get() + 1);
                         if (client != null) {
@@ -538,6 +548,31 @@ public class GameUIController {
 
                         event.setDropCompleted(true);
                         event.consume();
+                    }
+                });
+
+                pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        if (event.getClickCount() == 2) {
+                            CubeFaces cubeFace = mc.getCubeFace();
+                            Image img = cube.get(cubeFace);
+                            int imageLoc = mc.getImageLoc();
+
+                            pane.setBackground(new Background(new BackgroundImage(img, BackgroundRepeat.NO_REPEAT,
+                                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(BOARD_PANE_SIZE,BOARD_PANE_SIZE,false,false,true,false))));
+
+                            pane.setUserData(imageLoc);
+
+                            int row = GridPane.getRowIndex(pane);
+                            int col = GridPane.getColumnIndex(pane);
+
+                            numOfMoves.set(numOfMoves.get() + 1);
+                            if (client != null) {
+                                client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                            }
+                            playerPlayed(player.getName(), row, col, cubeFace);
+                        }
                     }
                 });
 
@@ -612,7 +647,7 @@ public class GameUIController {
                 handleGameEndMultiplayer(winTime, winner);
             } else {
                 try {
-                    loadEndScene(winTime, winner);
+                    loadEndScene(winTime, winner, EndController.EndType.NORMAL);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -644,7 +679,7 @@ public class GameUIController {
                 server.close();
             }
 
-            loadEndScene(winTime, winner);
+            loadEndScene(winTime, winner, EndController.EndType.NORMAL);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -680,11 +715,11 @@ public class GameUIController {
      * @param winner The winning player.
      * @throws IOException May throw exception if the corresponding fxml is not found.
      */
-    public void loadEndScene(long winTime, Player winner) throws IOException {
+    public void loadEndScene(long winTime, Player winner, EndController.EndType endType) throws IOException {
         Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner,againstTimeLimit);
+        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, endType);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 
@@ -697,13 +732,15 @@ public class GameUIController {
      * Bind the timeLabel with the game time.
      */
     private void bindGameTime() {
-        Timeline keepTime = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+        Timeline keepTime = new Timeline();
+        keepTime.getKeyFrames().add(new KeyFrame(Duration.millis(10), event -> {
             if (GameOptionsController.GameModes.AGAINST_TIME == gameMode){
                 curGameTime = System.currentTimeMillis() - game.getStartTime();
                 timeLabel.setText( dateFormat.format( againstTimeLimit - curGameTime));
 
                 if( curGameTime > againstTimeLimit){
-                    endGame();
+                    keepTime.stop();
+                    lostAgainstTime();
                 }
             }
             else{
@@ -715,10 +752,13 @@ public class GameUIController {
         keepTime.play();
     }
 
-    private void endGame(){
+    /**
+     *
+     */
+    private void lostAgainstTime(){
         try {
             player.lostAgainstTime();
-            loadEndScene(curGameTime, player);
+            loadEndScene(curGameTime, null, EndController.EndType.LOST_AGAINST_TIME);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -733,7 +773,7 @@ public class GameUIController {
             client.sendPlayerGiveUp(player.getName());
         } else {
             try {
-                loadEndScene(0, null);
+                loadEndScene(0, null, EndController.EndType.GIVE_UP);
             } catch (IOException e) {
                 e.printStackTrace();
             }

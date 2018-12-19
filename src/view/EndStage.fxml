@@ -11,12 +11,11 @@
 
     <top>
         <HBox alignment="CENTER">
+            <BorderPane.margin>
+                <Insets top="75"/>
+            </BorderPane.margin>
             <Label fx:id="endGameFirstLetter" id="endGameFirstLetter"/>
-            <Label fx:id="endGameLabel" id="endGameLabel">
-                <VBox.margin>
-                    <Insets top="75"/>
-                </VBox.margin>
-            </Label>
+            <Label fx:id="endGameLabel" id="endGameLabel"/>
         </HBox>
     </top>
 

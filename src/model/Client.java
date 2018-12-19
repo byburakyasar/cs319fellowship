@@ -1,5 +1,6 @@
 package model;
 
+import controller.EndController;
 import controller.GameUIController;
 import javafx.application.Platform;
 
@@ -225,7 +226,7 @@ public class Client {
                                             @Override
                                             public void run() {
                                                 try {
-                                                    gameUIController.loadEndScene(0, null);
+                                                    gameUIController.loadEndScene(0, null, EndController.EndType.GIVE_UP);
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
