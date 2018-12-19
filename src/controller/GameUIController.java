@@ -173,7 +173,9 @@ public class GameUIController {
         } else if (cubeDimension == 3) {
             load3DCube();
         }
-
+        if (difficulty == 3) againstTimeLimit = 15000;
+        else if (difficulty == 4) againstTimeLimit = 30000;
+        else if (difficulty == 5) againstTimeLimit = 45000;
         // Load the game and solution boards
         loadSolutionBoard(isFromMemory);
         loadBoard();
