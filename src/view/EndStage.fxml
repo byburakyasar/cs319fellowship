@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx" id="mainBorderPane"
             xmlns:fx="http://javafx.com/fxml" fx:id="mainBorderPane"
             stylesheets="@styles/End.css, @styles/Buttons.css">
 
     <top>
-        <VBox alignment="CENTER">
+        <HBox alignment="CENTER">
+            <Label fx:id="endGameFirstLetter" id="endGameFirstLetter"/>
             <Label fx:id="endGameLabel" id="endGameLabel">
                 <VBox.margin>
                     <Insets top="75"/>
                 </VBox.margin>
             </Label>
-        </VBox>
+        </HBox>
     </top>
 
     <center>

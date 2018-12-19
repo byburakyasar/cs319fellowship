@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
  */
 public class EndController {
     @FXML Label endGameLabel;
+    @FXML Label endGameFirstLetter;
     @FXML Label finishedText;
     @FXML Button restartBtn;
     @FXML Button gameOptionsBtn;
@@ -45,15 +46,19 @@ public class EndController {
 
     public void initialize() {
         if (lastWinner == null) {
-            endGameLabel.setText("YOU GAVE UP");
+            endGameFirstLetter.setText("Y");
+            endGameLabel.setText("OU GAVE UP");
+            finishedText.setText("");
             return;
         }
 
-        endGameLabel.setText("YOU LOST");
+        endGameFirstLetter.setText("Y");
+        endGameLabel.setText("OU LOST");
         String winner = lastWinner.getVisibleName();
         if (lastPlayer.getName().equals(lastWinner.getName())) {
             winner = "You";
-            endGameLabel.setText("CONGRATULATIONS");
+            endGameFirstLetter.setText("C");
+            endGameLabel.setText("ONGRATULATIONS");
         }
 
         if (!dateFormatM.format(lastGameTime).equals("0")) {

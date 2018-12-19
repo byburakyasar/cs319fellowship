@@ -164,6 +164,10 @@ public class GameUIController {
 
     }
 
+    /**
+     * Initializes the game ui for the standard pattern matching game mode.
+     * @param isFromMemory If the game mode should be from memory.
+     */
     private void loadPatternMatching(boolean isFromMemory) {
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
@@ -344,6 +348,12 @@ public class GameUIController {
         }
     }
 
+    /**
+     * Handles everything related to from memory game mode, such as:
+     * The solution board disappears after X seconds.
+     * A reveal button now appears.
+     * The player can give up if he can't find the solution.
+     */
     private void loadSolutionForFromMemory() {
         Button button = new Button("Reveal Solution (" + remainingReveals + ")");
         button.setId("revealBtn");
@@ -355,28 +365,7 @@ public class GameUIController {
                     setChildenVisibility(solutionGrid, true);
                     remainingReveals--;
                     if (remainingReveals == 0) {
-                        button.setText("Give Up");
-                        button.setOnAction(new EventHandler<ActionEvent>() {
-                            @Override
-                            public void handle(ActionEvent event) {
-                                if (client != null) {
-                                    client.sendPlayerGiveUp(player.getName());
-                                    client.close();
-                                    try {
-                                        loadEndScene(0, null);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                } else {
-                                    try {
-                                        loadEndScene(0, null);
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                            }
-                        });
+                        button.setVisible(false);
                     } else {
                         button.setText("Reveal Solution (" + remainingReveals + ")");
                     }
@@ -424,6 +413,11 @@ public class GameUIController {
         centerVBox.getChildren().add(button);
     }
 
+    /**
+     * Sets the visibility of all children of node {@param node} to {@param visibility}
+     * @param node The node whose children will be changed.
+     * @param visibility The visibility value to set to.
+     */
     private void setChildenVisibility(Pane node, boolean visibility) {
         for (Node n : node.getChildren()) {
             n.setVisible(visibility);
@@ -585,8 +579,8 @@ public class GameUIController {
     }
 
     /**
-     * Loads the end game scene and sends the end time of the winning player
-     * to other clients.
+     * Loads the end game scene and sends/receives the end time of the winning player
+     * to other clients if there is a winner.
      * Closes the always waiting thread of all other clients.
      * Closes the client and server.
      */
@@ -644,7 +638,7 @@ public class GameUIController {
      * @param winner The winning player.
      * @throws IOException May throw exception if the corresponding fxml is not found.
      */
-    private void loadEndScene(long winTime, Player winner) throws IOException {
+    public void loadEndScene(long winTime, Player winner) throws IOException {
         Stage current = (Stage) boardGrid.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
@@ -670,15 +664,19 @@ public class GameUIController {
     }
 
     /**
-     * Loads the main menu scene onto the current stage.
-     * @throws IOException May throw exception if the corresponding fxml is not found.
+     *
      */
     @FXML
-    public void backToMainMenu() throws IOException {
-        Stage current = (Stage) boardGrid.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
-
-        current.getScene().setRoot(root);
+    public void giveUp() {
+        if (client != null) {
+            client.sendPlayerGiveUp(player.getName());
+        } else {
+            try {
+                loadEndScene(0, null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

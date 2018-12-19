@@ -108,7 +108,7 @@ public class GameOptionsController {
         startBtn.setText("Looking for players...");
         startBtn.setDisable(true);
 
-        client = new Client("localhost", 8000);
+        client = new Client("localhost", 8000, player);
         boolean foundServer = client.joinServer();
 
         if (foundServer) {
@@ -118,10 +118,10 @@ public class GameOptionsController {
                     client.sendPlayer(player);
                     String serverMessage = client.waitUntilGameReady();
                     System.out.println("Client ready with no: " + serverMessage);
-                    System.out.println("Client was ready at: " + System.currentTimeMillis());
                     client.requestClientPlayers();
 
                     Game obj = client.readObjectBlocked();
+
                     if (serverMessage != null) {
                         Platform.runLater(new Runnable() {
                             @Override
@@ -152,7 +152,6 @@ public class GameOptionsController {
                     client.sendPlayer(player);
                     String serverMessage = client.waitUntilGameReady(); // make it so that everyone exits at the same time
                     System.out.println("Client ready with no: " + serverMessage);
-                    System.out.println("Client was ready at: " + System.currentTimeMillis());
                     client.requestClientPlayers();
 
                     Game game = Game.createRandomGame(playerCount, difficulty);
