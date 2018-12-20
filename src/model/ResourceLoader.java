@@ -26,6 +26,7 @@ public class ResourceLoader {
 
     // CONSTANTS
 
+    private static final String RESOURCE_DIR_ROOT = "/res";
     private static final String PATTERN_PACK_PREFIX = "pattern_";
     private static final String GAME_ICON_NAME = "qbitz.png";
 
@@ -67,7 +68,23 @@ public class ResourceLoader {
         File returnF = null;
 
         try {
-            returnF = Paths.get("res").toFile();
+            // Works for IDE with ROOT = "res"
+//            returnF = new File(ResourceLoader.class.getClassLoader().getResource(RESOURCE_DIR_ROOT).toURI());
+
+            // A mess below but works for IDE
+
+            // Get root directory URI
+            String uri = ResourceLoader.class.getResource(RESOURCE_DIR_ROOT).toURI().toString();
+            System.out.println("URI before processing: " + uri);
+            // Remove tags from front, tags are jar:file: or just file:
+            uri = uri.substring(uri.indexOf("/") + 1);
+            System.out.println("URI after processing: " + uri);
+
+            // Convert to file
+            returnF = new File(uri);
+            System.out.println("File: " + returnF);
+            System.out.println("isDir: " + returnF.isDirectory());
+            System.out.println("isFile: " + returnF.isFile());
         } catch (InvalidPathException e) {
             returnF = null;
             System.err.println("ResourceLoader: Could not locate resources directory.");
@@ -76,9 +93,16 @@ public class ResourceLoader {
             returnF = null;
             System.err.println("ResourceLoader: Could not open the resources directory.");
             e.printStackTrace();
+        } catch (Exception e) {
+            returnF = null;
+            System.err.println("ResourceLoader: Unknown error prevented locating resources directory.");
+            e.printStackTrace();
         } finally {
-            if (returnF != null) {
-//                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
+            if (returnF != null && returnF.isDirectory()) {
+                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath());
+            }
+            else {
+                System.err.println("ResourceLoader: Could not locate resources directory.");
             }
             return returnF;
         }
@@ -144,7 +168,6 @@ public class ResourceLoader {
                             }
 
                             String pathName = path.getFileName().toString();
-//                            System.out.println(pathName);
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });

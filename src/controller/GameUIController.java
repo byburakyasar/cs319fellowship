@@ -721,7 +721,7 @@ public class GameUIController {
         FXMLLoader loader = new FXMLLoader();
         EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, endType);
         loader.setController(endC);
-        loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
+        loader.setLocation(getClass().getResource("/view/EndStage.fxml"));
 
         BorderPane root = loader.load();
 

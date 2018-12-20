@@ -74,7 +74,7 @@ public class GameOptionsController {
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) startBtn.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);
     }
@@ -98,7 +98,7 @@ public class GameOptionsController {
             FXMLLoader loader = new FXMLLoader();
             GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode);
             loader.setController(gui);
-            loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+            loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
             BorderPane root = loader.load();
 
             current.getScene().setRoot(root);
@@ -130,7 +130,7 @@ public class GameOptionsController {
                                     FXMLLoader loader = new FXMLLoader();
                                     GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, client, obj);
                                     loader.setController(gui);
-                                    loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+                                    loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
                                     BorderPane root = loader.load();
 
                                     current.getScene().setRoot(root);
@@ -164,7 +164,7 @@ public class GameOptionsController {
                                     FXMLLoader loader = new FXMLLoader();
                                     GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, server, client, obj);
                                     loader.setController(gui);
-                                    loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+                                    loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
 
                                     BorderPane root = loader.load();
 

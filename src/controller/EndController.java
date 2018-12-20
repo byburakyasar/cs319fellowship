@@ -91,7 +91,7 @@ public class EndController {
         FXMLLoader loader = new FXMLLoader();
         GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension, lastGameMode);
         loader.setController(gui);
-        loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+        loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
 
         BorderPane root = loader.load();
 
@@ -101,7 +101,7 @@ public class EndController {
     @FXML
     public void loadGameOptions() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("/view/GameOptionsStage.fxml"));
 
         current.getScene().setRoot(root);
     }
@@ -109,7 +109,7 @@ public class EndController {
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);
     }
