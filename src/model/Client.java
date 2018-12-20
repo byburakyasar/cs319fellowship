@@ -211,7 +211,7 @@ public class Client {
                                         Platform.runLater(new Runnable() {
                                             @Override
                                             public void run() {
-                                                gameUIController.handleGameEndMultiplayer(0, null);
+                                                gameUIController.handleGameEndMultiplayer(0, null, EndController.EndType.GIVE_UP);
                                             }
                                         });
 

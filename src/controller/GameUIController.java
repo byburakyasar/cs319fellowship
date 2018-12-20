@@ -644,7 +644,7 @@ public class GameUIController {
             long winTime = winner.getEndTime() - game.getStartTime();
 
             if (playerCount != 1) {
-                handleGameEndMultiplayer(winTime, winner);
+                handleGameEndMultiplayer(winTime, winner, EndController.EndType.NORMAL);
             } else {
                 try {
                     loadEndScene(winTime, winner, EndController.EndType.NORMAL);
@@ -661,7 +661,7 @@ public class GameUIController {
      * Closes the always waiting thread of all other clients.
      * Closes the client and server.
      */
-    public void handleGameEndMultiplayer(long winTime, Player winner) {
+    public void handleGameEndMultiplayer(long winTime, Player winner, EndController.EndType endType) {
         if (winner == null) {
         }
         else if (winner.getName().equals(player.getName())) {
@@ -679,7 +679,7 @@ public class GameUIController {
                 server.close();
             }
 
-            loadEndScene(winTime, winner, EndController.EndType.NORMAL);
+            loadEndScene(winTime, winner, endType);
         } catch (IOException e) {
             e.printStackTrace();
         }
