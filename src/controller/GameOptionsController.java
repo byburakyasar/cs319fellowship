@@ -180,6 +180,7 @@ public class GameOptionsController {
         }
     }
     public enum GameModes{
+        GENERAL_INFO,
         PATTERN_MATCHING,
         RACING_AND_ROLLING,
         FROM_MEMORY,

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml" id="mainBorderPane"
             fx:controller="controller.HowToPlayController" stylesheets="@styles/HowToPlay.css, @styles/Buttons.css"
@@ -23,18 +22,26 @@
 
     <center>
         <VBox alignment="CENTER" spacing="10" id="contentVBox">
-            <Label text="Q-bitz is a game about building a pattern.">
-            </Label>
-            <Label text= "The  patterns  are  chosen randomly from a pile of cards and  players try  to match">
-            </Label>
-            <Label text= "the pattern using cubes. Cubes are identical to each other but each face of a cube">
-            </Label>
-            <Label text= "is different from  its other faces.  Depending on the specifics of the current round">
-            </Label>
-            <Label text= "the player who  builds the correct  pattern fastest or the player who gets closest">
-            </Label>
-            <Label text= "to  the correct pattern wins the round. Player with the most rounds wins the game.">
-            </Label>
+            <Label fx:id="howToLabel" > </Label>
+
+            <HBox spacing="40" alignment="CENTER">
+                <Label text="Game Mode: "/>
+                <ComboBox fx:id="gameModesComboBox" value="Pattern Maching" maxWidth="400" minWidth="400">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="General Info"/>
+                            <String fx:value="Pattern Matching"/>
+                            <String fx:value="Racing and Rolling"/>
+                            <String fx:value="From Memory"/>
+                            <String fx:value="Maximum Patterns"/>
+                            <String fx:value="Against Time"/>
+                            <String fx:value="Painting Puzzle"/>
+                            <String fx:value="Different Cubes"/>
+                            <String fx:value="Two vs Two"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
         </VBox>
     </center>
 
