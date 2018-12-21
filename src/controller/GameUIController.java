@@ -77,6 +77,9 @@ public class GameUIController {
     // Against Time
     private int againstTimeLimit = 30000;
 
+    // Two vs Two
+    private Player teamLeader;
+
     /**
      * Constructs a GameUIController object for single player use.
      * @param player The player will play the game.
@@ -146,13 +149,13 @@ public class GameUIController {
         switch (gameMode)
         {
             case PATTERN_MATCHING:
-                loadPatternMatching(false);
+                loadPatternMatching(false, false);
                 break;
             case MULTIPLAYER:
                 // something like loadRacingAndRolling();
                 break;
             case FROM_MEMORY:
-                loadPatternMatching(true);
+                loadPatternMatching(true, false);
                 break;
             case MAXIMUM_PATTERNS:
                 break;
@@ -161,63 +164,20 @@ public class GameUIController {
                 else if (difficulty == 4) againstTimeLimit = 30000;
                 else if (difficulty == 5) againstTimeLimit = 45000;
 
-                loadPatternMatching(false);
+                loadPatternMatching(false, false);
                 break;
             case PAINTING_PUZZLE:
                 break;
             case DIFFERENT_CUBES:
                 break;
             case TWO_VS_TWO:
+                loadPatternMatching( false, true);
                 break;
         }
 
     }
 
-    /*private void loadAgainstTime(boolean isFromMemory) {
-        // Load the cube based on dimensions
-        if (cubeDimension == 2) {
-            load2DCube();
-        } else if (cubeDimension == 3) {
-            load3DCube();
-        }
-
-
-
-        // Load the game and solution boards
-        loadSolutionBoard(isFromMemory);
-        loadBoard();
-
-        // This counts time and sets its label
-        bindGameTime();
-
-        // This sets the number of moves label
-        numOfMovesLabel.textProperty().bind(numOfMoves.asString());
-
-        if (playerCount != 1) {
-            // If this is a multiplayer game, make client ready
-            client.setGameUIController(this);
-            client.readMessageNonBlockedAlways();
-
-            centerVBox.setAlignment(Pos.TOP_CENTER);
-
-            Vector<Player> players = client.getClientPlayers();
-            for (int i = 0; i < players.size(); i++) {
-                if (!players.get(i).getName().equals(player.getName())) {
-                    // Load boards for every other player
-                    loadMultiplayerBoards(players.get(i).getName(), players.get(i).getVisibleName());
-
-                    // Add all other players to the game
-                    game.addPlayer(players.get(i));
-                }
-            }
-        }
-
-        // Add yourself and start
-        game.addPlayer(player);
-        game.startGame();
-    }*/
-
-    private void loadPatternMatching(boolean isFromMemory) {
+    private void loadPatternMatching(boolean isFromMemory, boolean twoVsTwo) {
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
             load2DCube();
@@ -236,22 +196,7 @@ public class GameUIController {
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
 
         if (playerCount != 1) {
-            // If this is a multiplayer game, make client ready
-            client.setGameUIController(this);
-            client.readMessageNonBlockedAlways();
-
-            centerVBox.setAlignment(Pos.TOP_CENTER);
-
-            Vector<Player> players = client.getClientPlayers();
-            for (int i = 0; i < players.size(); i++) {
-                if (!players.get(i).getName().equals(player.getName())) {
-                    // Load boards for every other player
-                    loadMultiplayerBoards(players.get(i).getName(), players.get(i).getVisibleName());
-
-                    // Add all other players to the game
-                    game.addPlayer(players.get(i));
-                }
-            }
+            setupForMultiplayer(twoVsTwo);
         }
 
         // Add yourself and start
@@ -505,10 +450,15 @@ public class GameUIController {
 
                             int row = boardGrid.getRowIndex(pane);
                             int col = boardGrid.getColumnIndex(pane);
-                            if (client != null) {
-                                client.sendPlayerMove(player.getName(), row, col, null);
+                            if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
+                                client.sendPlayerMove(teamLeader.getName(), row, col, null);
+                                game.playerMove(teamLeader.getName(), row, col, null);
+                            } else {
+                                if (client != null) {
+                                    client.sendPlayerMove(player.getName(), row, col, null);
+                                }
+                                game.playerMove(player.getName(), row, col, null);
                             }
-                            game.playerMove(player.getName(), row, col, null);
                         }
 
                         event.consume();
@@ -541,10 +491,16 @@ public class GameUIController {
                         CubeFaces cubeFace = cubeFaces[imageLoc];
 
                         numOfMoves.set(numOfMoves.get() + 1);
-                        if (client != null) {
-                            client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                        if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
+                            client.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
+                            playerPlayed(teamLeader.getName(), row, col, cubeFace);
+                        } else {
+                            if (client != null) {
+                                client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                            }
+                            playerPlayed(player.getName(), row, col, cubeFace);
                         }
-                        playerPlayed(player.getName(), row, col, cubeFace);
+
 
                         event.setDropCompleted(true);
                         event.consume();
@@ -568,10 +524,15 @@ public class GameUIController {
                             int col = GridPane.getColumnIndex(pane);
 
                             numOfMoves.set(numOfMoves.get() + 1);
-                            if (client != null) {
-                                client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                            if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
+                                client.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
+                                playerPlayed(teamLeader.getName(), row, col, cubeFace);
+                            } else {
+                                if (client != null) {
+                                    client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                                }
+                                playerPlayed(player.getName(), row, col, cubeFace);
                             }
-                            playerPlayed(player.getName(), row, col, cubeFace);
                         }
                     }
                 });
@@ -584,12 +545,49 @@ public class GameUIController {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
+    private void setupForMultiplayer(boolean twoVsTwo) {
+        // If this is a multiplayer game, make client ready
+        client.setGameUIController(this);
+        client.readMessageNonBlockedAlways();
+
+        centerVBox.setAlignment(Pos.TOP_CENTER);
+
+        Vector<Player> players = client.getClientPlayers();
+
+        if (twoVsTwo) {
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i).getName().equals(player.getName())) {
+                    if (i == 0 || i == 1) {
+                        teamLeader = players.get(0);
+                        loadMultiplayerBoard(players.get(2).getName(), "TEAM 2");
+                    } else {
+                        teamLeader = players.get(2);
+                        loadMultiplayerBoard(players.get(0).getName(), "TEAM 1");
+                    }
+                } else {
+                    // Add all other players to the game
+                    game.addPlayer(players.get(i));
+                }
+            }
+        } else {
+            for (int i = 0; i < players.size(); i++) {
+                if (!players.get(i).getName().equals(player.getName())) {
+                    // Load boards for every other player
+                    loadMultiplayerBoard(players.get(i).getName(), players.get(i).getVisibleName());
+
+                    // Add all other players to the game
+                    game.addPlayer(players.get(i));
+                }
+            }
+        }
+    }
+
     /**
      * Loads the boards of other clients connected to this game.
      * @param playerName The name of the other client
      * @param playerVisibleName The visible (username) name of the other client
      */
-    private void loadMultiplayerBoards(String playerName, String playerVisibleName) {
+    private void loadMultiplayerBoard(String playerName, String playerVisibleName) {
         final int BOARD_PANE_SIZE;
         if (difficulty == 4) {
             BOARD_PANE_SIZE = 50;
@@ -643,14 +641,21 @@ public class GameUIController {
             Player winner = game.getWinner();
             long winTime = winner.getEndTime() - game.getStartTime();
 
+            // Multiplayer game end
             if (playerCount != 1) {
-                handleGameEndMultiplayer(winTime, winner, EndController.EndType.NORMAL);
-            } else {
-                try {
-                    loadEndScene(winTime, winner, EndController.EndType.NORMAL);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
+                    handleGameEndMultiplayer(winTime, winner, EndController.EndType.TWO_VS_TWO);
+                } else {
+                    handleGameEndMultiplayer(winTime, winner, EndController.EndType.NORMAL);
                 }
+                return;
+            }
+
+            // Single player game end
+            try {
+                loadEndScene(winTime, winner, EndController.EndType.NORMAL);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -663,11 +668,11 @@ public class GameUIController {
      */
     public void handleGameEndMultiplayer(long winTime, Player winner, EndController.EndType endType) {
         if (winner == null) {
-        }
-        else if (winner.getName().equals(player.getName())) {
+
+        } else if (winner.getName().equals(player.getName())) {
             // If you are the winner send your end time to others and close their always waiting thread.
             client.sendPlayerEndTime(winTime);
-            long returnedVal = Long.valueOf(client.readMessageBlocked());
+            winTime = Long.valueOf(client.readMessageBlocked());
         } else {
             // If you are not the winner, wait for the winner player's end time.
             winTime = Long.valueOf(client.readMessageBlocked());
@@ -695,10 +700,17 @@ public class GameUIController {
      * @param clientNo No of the client who made the move.
      */
     public void setBoardFace(String playerName, int row, int col, CubeFaces cubeFace, int clientNo) {
-        Scene scene = multiplayerHBox.getScene();
-        GridPane multiPane = (GridPane)scene.lookup("#"+playerName);
-        System.out.println(playerName + " " + row + " " + col + " " + cubeFace);
-        Pane pane = (Pane)multiPane.getChildren().get(col*difficulty + row + 1);
+        Pane pane;
+        // If it was the team leader that made the move, modify your board.
+        if (playerName.equals(teamLeader.getName())) {
+            pane = (Pane)boardGrid.getChildren().get(col*difficulty + row + 1);
+        } else {
+            Scene scene = multiplayerHBox.getScene();
+            GridPane multiPane = (GridPane)scene.lookup("#"+playerName);
+            System.out.println(playerName + " " + row + " " + col + " " + cubeFace);
+            pane = (Pane)multiPane.getChildren().get(col*difficulty + row + 1);
+        }
+
         if (pane != null) {
             if (cubeFace == null) {
                 pane.setBackground(null);
@@ -717,9 +729,15 @@ public class GameUIController {
      */
     public void loadEndScene(long winTime, Player winner, EndController.EndType endType) throws IOException {
         Stage current = (Stage) boardGrid.getScene().getWindow();
+        EndController endC;
+
+        if (endType == EndController.EndType.TWO_VS_TWO && teamLeader.getName().equals(winner.getName())) {
+            endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, player, endType);
+        } else {
+            endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, endType);
+        }
 
         FXMLLoader loader = new FXMLLoader();
-        EndController endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, endType);
         loader.setController(endC);
         loader.setLocation(getClass().getResource("../view/EndStage.fxml"));
 

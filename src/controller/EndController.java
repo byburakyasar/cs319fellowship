@@ -71,6 +71,18 @@ public class EndController {
                 endGameLabel.setText("IME UP");
                 finishedText.setText("");
                 return;
+            case TWO_VS_TWO:
+                if (lastPlayer.getName().equals(lastWinner.getName())) {
+                    winner = "Your team";
+                    endGameFirstLetter.setText("Y");
+                    endGameLabel.setText("OUR TEAM WON");
+                } else {
+                    winner = "Opponents";
+                    endGameFirstLetter.setText("Y");
+                    endGameLabel.setText("OUR TEAM LOST");
+                }
+                break;
+
         }
 
         if (!dateFormatM.format(lastGameTime).equals("0")) {
@@ -117,6 +129,7 @@ public class EndController {
     public enum EndType {
         NORMAL,
         GIVE_UP,
-        LOST_AGAINST_TIME
+        LOST_AGAINST_TIME,
+        TWO_VS_TWO
     }
 }
