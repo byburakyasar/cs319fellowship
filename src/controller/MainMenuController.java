@@ -6,7 +6,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
@@ -34,45 +33,40 @@ public class MainMenuController {
     public void playBtnClicked() throws IOException {
         Stage current = (Stage) playBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void settingsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/SettingsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void howToPlayBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/HowToPlayStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void creditsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/CreditsStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
     public void levelSelectBtnClicked() throws IOException{
         Stage current = (Stage) levelSelectBtn.getScene().getWindow();
         BorderPane root = FXMLLoader.load(getClass().getResource("../view/LevelSelectStage.fxml"));
-        Scene scene = new Scene(root, 800, 600);
 
-        current.setScene(scene);
+        current.getScene().setRoot(root);
     }
 
     @FXML
@@ -90,9 +84,10 @@ public class MainMenuController {
 
     private void setClips(Button[] btnArr) {
         for (int i = 0; i < 6; i++) {
-            btnArr[i].setTranslateX(-300);
-            Rectangle clip = new Rectangle(210, 40);
-            clip.translateXProperty().bind( btnArr[i].translateXProperty().negate());
+            btnArr[i].setTranslateX(-600);
+            Rectangle clip = new Rectangle(410, 100);
+            clip.translateXProperty().bind( btnArr[i].translateXProperty().negate().subtract(5));
+            clip.setTranslateY(-5);
             btnArr[i].setClip(clip);
         }
     }
@@ -119,13 +114,13 @@ public class MainMenuController {
     }
 
     private void playTransition(Button btn) {
-        TranslateTransition tt = new TranslateTransition(Duration.millis(1000), btn);
+        TranslateTransition tt = new TranslateTransition(Duration.millis(600), btn);
         tt.setToX(0);
         tt.setInterpolator(Interpolator.EASE_BOTH);
         tt.play();
 
         btn.setOpacity(0);
-        FadeTransition ft = new FadeTransition(Duration.millis(1700), btn);
+        FadeTransition ft = new FadeTransition(Duration.millis(900), btn);
         ft.setToValue(1);
         ft.setInterpolator(Interpolator.EASE_IN);
         ft.play();

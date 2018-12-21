@@ -1,12 +1,13 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Class to model a round of the game.
  */
-public class Game {
+public class Game implements Serializable {
 
     // ATTRIBUTES
 
@@ -37,7 +38,6 @@ public class Game {
         Game game = new Game(maxPlayers, dimensions);
         game.pattern = Pattern.createRandomPattern(dimensions);
 
-        System.out.println(game.pattern);
         return game;
     }
 
@@ -66,6 +66,19 @@ public class Game {
         }
 
         Player newP = new Player(name, dimensions);
+        players.add(players.size(), newP);
+    }
+
+    /**
+     * Adds a player to the game if it is not already full.
+     * @param newP New player to add.
+     * @throws IllegalStateException When number of players matches the maximum number allowed.
+     */
+    public void addPlayer(Player newP) throws IllegalStateException {
+        if (players.size() >= maxPlayers) {
+            throw new IllegalStateException("Game is full.");
+        }
+
         players.add(players.size(), newP);
     }
 
@@ -156,5 +169,9 @@ public class Game {
 
     public long getStartTime() {
         return startTimeMillis;
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }

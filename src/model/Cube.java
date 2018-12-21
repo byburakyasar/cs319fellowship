@@ -36,14 +36,14 @@ public class Cube {
     public Cube (List<File> images) throws MalformedURLException, IllegalArgumentException {
 
         // Construct the storage structure.
-        this.faceMap = new EnumMap(CubeFaces.class);
+        this.faceMap = new EnumMap<>(CubeFaces.class);
 
         // Map the images to faces.
         String fileName;
         Image image;
         for (File f : images) {
             fileName = ResourceLoader.removeExtension(f.getName());
-            image = new Image(f.toURI().toURL().toString());
+            image = new Image(f.toURI().toURL().toString(), 150, 150, true, true);
             switch (fileName) {
                 default:
                     // Do nothing.

@@ -6,29 +6,30 @@
 <?import javafx.scene.layout.*?>
 <?import java.lang.String?>
 <BorderPane id="mainBorderPane" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameOptions.css"
+            xmlns:fx="http://javafx.com/fxml" stylesheets="@styles/GameOptions.css, @styles/Buttons.css"
             fx:controller="controller.GameOptionsController">
     <fx:define>
         <ToggleGroup fx:id="difficultyGroup"/>
         <ToggleGroup fx:id="playerGroup"/>
+        <ToggleGroup fx:id="dimensionGroup"/>
     </fx:define>
     <top>
-        <VBox alignment="CENTER" spacing="20">
+        <VBox alignment="TOP_CENTER">
             <Label id="gameOptionsLabel" text="Game Options">
                 <VBox.margin>
-                    <Insets top="20"/>
+                    <Insets top="75"/>
                 </VBox.margin>
             </Label>
-            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
         </VBox>
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="100">
+        <VBox alignment="TOP_CENTER" spacing="100">
+            <BorderPane.margin>
+                <Insets top="75"/>
+            </BorderPane.margin>
+
             <HBox spacing="40" alignment="CENTER">
-                <VBox.margin>
-                    <Insets top="50"/>
-                </VBox.margin>
                 <Label text="Difficulty: "/>
                 <RadioButton text="3x3" userData="3" toggleGroup="$difficultyGroup"/>
                 <RadioButton text="4x4" userData="4" toggleGroup="$difficultyGroup" selected="true"/>
@@ -36,30 +37,45 @@
             </HBox>
             <HBox fx:id="playersHBox" spacing="40" alignment="CENTER">
                 <Label text="Players: "/>
-                <RadioButton text="1" toggleGroup="$playerGroup" selected="true"/>
-                <Button fx:id="multiplayerBtn" text="Multiplayer" onAction="#loadPlayerChoices"/>
+                <RadioButton text="1" userData="1" toggleGroup="$playerGroup" selected="true"/>
+                <RadioButton text="2" userData="2" toggleGroup="$playerGroup"/>
+                <RadioButton text="3" userData="3" toggleGroup="$playerGroup"/>
+                <RadioButton text="4" userData="4" toggleGroup="$playerGroup"/>
+            </HBox>
+            <HBox spacing="40" alignment="CENTER">
+                <Label text="Cube: "/>
+                <RadioButton text="3D Cube" userData="3" toggleGroup="$dimensionGroup" selected="true"/>
+                <RadioButton text="2D Cube" userData="2" toggleGroup="$dimensionGroup"/>
             </HBox>
             <HBox spacing="40" alignment="CENTER">
                 <Label text="Game Mode: "/>
-                <ComboBox fx:id="gameModesComboBox" value="Pattern Maching" maxWidth="260">
+                <ComboBox fx:id="gameModesComboBox" value="Pattern Maching" maxWidth="400" minWidth="400">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Pattern Maching"/>
-                            <String fx:value="Racing and Rolling (Multiplayer)"/>
-                            <String fx:value="From Memory in 10"/>
+                            <String fx:value="Pattern Matching"/>
+                            <String fx:value="Racing and Rolling"/>
+                            <String fx:value="From Memory"/>
                             <String fx:value="Maximum Patterns"/>
                             <String fx:value="Against Time"/>
                             <String fx:value="Painting Puzzle"/>
                             <String fx:value="Different Cubes"/>
+                            <String fx:value="Two vs Two"/>
+
                         </FXCollections>
                     </items>
                 </ComboBox>
             </HBox>
-            <HBox spacing="40" alignment="CENTER">
-                <Button fx:id="backToMenuBtn" text="Back To Main Menu" onAction="#backToMainMenu"/>
-                <Button fx:id="startBtn" text="Start" onAction="#startGame"/>
-            </HBox>
         </VBox>
     </center>
+
+    <bottom>
+        <HBox spacing="40" alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="75"/>
+            </BorderPane.margin>
+            <Button fx:id="backToMenuBtn" text="Main Menu" onAction="#backToMainMenu"/>
+            <Button fx:id="startBtn" text="Start" onAction="#startGame"/>
+        </HBox>
+    </bottom>
 
 </BorderPane>

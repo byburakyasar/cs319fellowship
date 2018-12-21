@@ -74,7 +74,7 @@ public class PatternPack {
             }).collect(Collectors.toCollection(ArrayList::new));
 
             cube = new Cube(files);
-            System.out.println("PatternPack: Cube successfully loaded.");
+//            System.out.println("PatternPack: Cube successfully loaded.");
         } catch (MalformedURLException|IllegalArgumentException e) {
             System.err.println("PatternPack: " + e.getMessage());
             e.printStackTrace();

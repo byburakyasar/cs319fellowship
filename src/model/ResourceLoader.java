@@ -64,8 +64,6 @@ public class ResourceLoader {
      * @return Root of the resources directory. If an exception occurred returns null instead.
      */
     private static File rootLocator() {
-
-        System.out.println("ResourceLoader: Locating the resources directory...");
         File returnF = null;
 
         try {
@@ -80,7 +78,7 @@ public class ResourceLoader {
             e.printStackTrace();
         } finally {
             if (returnF != null) {
-                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
+//                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
             }
             return returnF;
         }
@@ -138,7 +136,6 @@ public class ResourceLoader {
 
             case PatternPack:
                 try {
-                    System.out.println(root.toPath());
                     filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
                         @Override
                         public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
@@ -147,7 +144,7 @@ public class ResourceLoader {
                             }
 
                             String pathName = path.getFileName().toString();
-                            System.out.println(pathName);
+//                            System.out.println(pathName);
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });
@@ -159,7 +156,6 @@ public class ResourceLoader {
 
             case GameIcon:
                 try {
-                    System.out.println(root.toPath());
                     filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
                         @Override
                         public boolean test(Path path, BasicFileAttributes basicFileAttributes) {

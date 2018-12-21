@@ -8,45 +8,38 @@
 
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controller.CreditsController" stylesheets="@styles/Credits.css"
-            prefHeight="400.0" prefWidth="600.0">
+            xmlns:fx="http://javafx.com/fxml" id="mainBorderPane"
+            fx:controller="controller.CreditsController" stylesheets="@styles/Credits.css, @styles/Buttons.css">
     <top>
-        <VBox alignment="CENTER" spacing="20">
-            <Label id="CreditsLabel" text="Credits">
+        <VBox alignment="TOP_CENTER">
+            <Label id="creditsLabel" text="Credits">
                 <VBox.margin>
-                    <Insets top="20"></Insets>
+                    <Insets top="75"/>
                 </VBox.margin>
             </Label>
-            <Separator style="-fx-background-radius: 5px; -fx-background-color: black"/>
         </VBox>
     </top>
 
     <center>
-        <VBox alignment="TOP_CENTER" spacing="20">
-            <Label id="names" text="Mert Duman">
-                <VBox.margin>
-                    <Insets top="80"></Insets>
-                </VBox.margin>
-            </Label>
-            <Label id="names" text="Burak Yaşar">
-            </Label>
-            <Label id="names" text="Mertalp Taytak">
-            </Label>
-            <Label id="names" text="Görkem Yılmaz">
-            </Label>
-            <Label id="names" text="Hikmet Demir">
-            </Label>
+        <VBox alignment="TOP_CENTER" spacing="30" id="namesVBox">
+            <BorderPane.margin>
+                <Insets top="80"/>
+            </BorderPane.margin>
+
+            <Label text="Mert Duman"/>
+            <Label text="Burak Yaşar"/>
+            <Label text="Mertalp Taytak"/>
+            <Label text="Görkem Yılmaz"/>
+            <Label text="Hikmet Demir"/>
         </VBox>
     </center>
 
     <bottom>
-        <VBox alignment="BOTTOM_RIGHT" spacing="30">
-            <Button text="Main Menu" fx:id="MainMenu" onAction="#backToMainMenu">
+        <VBox alignment="BOTTOM_LEFT">
+            <Button text="Main Menu" fx:id="mainMenuBtn" onAction="#backToMainMenu">
                 <VBox.margin>
-                    <Insets top="40" left="40" right="40" bottom="40"></Insets>
+                    <Insets top="40" left="40" right="40" bottom="40"/>
                 </VBox.margin>
-
             </Button>
         </VBox>
     </bottom>

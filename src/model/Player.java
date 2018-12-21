@@ -1,15 +1,19 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * Class used to model a player.
  */
-public class Player {
+public class Player implements Serializable {
 
     // ATTRIBUTES
     private final String name;
+    private String visibleName;
     private final CubeFaces[][] solutionGrid;
     private long endTime;
     private boolean didWin;
+    private boolean didGiveUp;
 
     // CONSTRUCTORS
 
@@ -47,12 +51,32 @@ public class Player {
         return (this.name.equals(otherP.name) && this.solutionGrid == otherP.solutionGrid);
     }
 
+    public void lostAgainstTime() {
+        this.didWin = false;
+    }
+
     /**
      * Gets the name of the player.
      * @return Name of the player.
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Gets the visible name of the player.
+     * @return Visible name of the player.
+     */
+    public String getVisibleName() {
+        return visibleName;
+    }
+
+    /**
+     * Sets the visible name of the player.
+     * @param visibleName Visible name of the player to set.
+     */
+    public void setVisibleName(String visibleName) {
+        this.visibleName = visibleName;
     }
 
     /**
@@ -112,6 +136,14 @@ public class Player {
      */
     public boolean getEndResult() {
         return didWin;
+    }
+
+    public boolean didGiveUp() {
+        return didGiveUp;
+    }
+
+    public void setDidGiveUp(boolean didGiveUp) {
+        this.didGiveUp = didGiveUp;
     }
 
     @Override
