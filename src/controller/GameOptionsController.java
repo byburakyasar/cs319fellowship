@@ -182,7 +182,7 @@ public class GameOptionsController {
     public enum GameModes{
         GENERAL_INFO,
         PATTERN_MATCHING,
-        RACING_AND_ROLLING,
+        MULTIPLAYER,
         FROM_MEMORY,
         MAXIMUM_PATTERNS,
         AGAINST_TIME,

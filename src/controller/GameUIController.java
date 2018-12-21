@@ -63,7 +63,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private final int PATTERN_NO = 1;
+    private final int PATTERN_NO = 6;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -148,7 +148,7 @@ public class GameUIController {
             case PATTERN_MATCHING:
                 loadPatternMatching(false);
                 break;
-            case RACING_AND_ROLLING:
+            case MULTIPLAYER:
                 // something like loadRacingAndRolling();
                 break;
             case FROM_MEMORY:
