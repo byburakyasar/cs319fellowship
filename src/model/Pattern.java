@@ -35,6 +35,23 @@ public class Pattern implements Serializable {
     }
 
     /**
+     *
+     * @param patternGrid
+     * @return
+     */
+    public static Pattern createPatternFromPatternGrid(CubeFaces[][] patternGrid) {
+        Pattern pattern = new Pattern(patternGrid.length);
+
+        for (int i = 0; i < patternGrid.length; i++) {
+            for (int j = 0; j < patternGrid[0].length; j++) {
+                pattern.patternGrid[i][j] = patternGrid[i][j];
+            }
+        }
+
+        return pattern;
+    }
+
+    /**
      * Constructor made private.
      * @param dimensions Length of the sides of the square pattern.
      */

@@ -310,6 +310,16 @@ public class GameUIController {
         }
     }
 
+    private int getImageLoc(CubeFaces cubeFace) {
+        for (int i = 0; i < cubeFaces.length; i++) {
+            if (cubeFace == cubeFaces[i]) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     /**
      * Gets the current random pattern from the Pattern class and creates a
      * Pane for each pattern face (of size difficulty by difficulty).
@@ -699,7 +709,7 @@ public class GameUIController {
     public void setBoardFace(String playerName, int row, int col, CubeFaces cubeFace, int clientNo) {
         Pane pane;
         // If it was the team leader that made the move, modify your board.
-        if (playerName.equals(teamLeader.getName())) {
+        if (teamLeader != null && playerName.equals(teamLeader.getName())) {
             pane = (Pane)boardGrid.getChildren().get(col*difficulty + row + 1);
         } else {
             Scene scene = multiplayerHBox.getScene();
@@ -714,6 +724,8 @@ public class GameUIController {
             } else {
                 pane.setBackground(new Background(new BackgroundImage(cube.get(cubeFace), BackgroundRepeat.NO_REPEAT,
                         BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100,100,true,true,true,false))));
+
+                pane.setUserData(getImageLoc(cubeFace));
             }
         }
     }

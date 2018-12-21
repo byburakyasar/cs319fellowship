@@ -75,6 +75,20 @@ public class ClientHandler extends Thread {
                     e.printStackTrace();
                 }
                 break;
+            case RECEIVE_PLAYER_PROPERTIES:
+                try {
+                    String playerName = in.readLine();
+                    String playerVisibleName = in.readLine();
+                    int dimensions = Integer.valueOf(in.readLine());
+                    Player player = new Player(playerName, dimensions);
+                    player.setVisibleName(playerVisibleName);
+
+                    System.out.println("Added player: " + player.getVisibleName());
+                    server.getPlayers().add(player);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
             case RECEIVE_GAME:
                 try {
                     System.out.println("Receiving object for client: " + clientNo);
@@ -168,6 +182,9 @@ public class ClientHandler extends Thread {
                     }
                 }
                 break;
+            case DISTRIBUTE_CLIENT_PLAYERS:
+                server.alertAllClients(ServerCodes.SEND_PLAYERS);
+                break;
             case CLOSE_SERVER:
                 System.out.println("CLOSING SERVER...");
                 server.close();
@@ -180,6 +197,7 @@ public class ClientHandler extends Thread {
         RECEIVE_TEXT,
         RECEIVE_MOVE,
         RECEIVE_PLAYER,
+        RECEIVE_PLAYER_PROPERTIES,
         RECEIVE_ENDTIME,
         RECEIVE_PLAYER_GIVE_UP,
         SEND_OBJECT,
@@ -189,6 +207,7 @@ public class ClientHandler extends Thread {
         SEND_ENDTIME,
         SEND_PLAYER_GIVE_UP,
         RESPOND_GAME_READY,
+        DISTRIBUTE_CLIENT_PLAYERS,
         CLOSE_SERVER
     }
 }

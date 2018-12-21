@@ -127,6 +127,14 @@ public class Client {
         }
     }
 
+    public void sendPlayerProperties(String playerName, String playerVisibleName, int dimensions) {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER_PROPERTIES));
+        out.println(playerName);
+        out.println(playerVisibleName);
+        out.println(dimensions);
+        System.out.println("sent player properties");
+    }
+
     public void sendPlayerEndTime(long endTime) {
         alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_ENDTIME));
         out.println(endTime);
@@ -144,8 +152,14 @@ public class Client {
         return in;
     }
 
-    public void requestClientPlayers() {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.SEND_PLAYERS));
+    public void distributeClientPlayers() {
+        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.DISTRIBUTE_CLIENT_PLAYERS));
+        Vector<Player> players = readObjectBlocked();
+        System.out.println(players);
+        clientPlayers = players;
+    }
+
+    public void waitClientPlayers() {
         Vector<Player> players = readObjectBlocked();
         System.out.println(players);
         clientPlayers = players;

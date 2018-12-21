@@ -42,6 +42,19 @@ public class Game implements Serializable {
     }
 
     /**
+     *
+     * @param maxPlayers
+     * @param patternGrid
+     * @return
+     */
+    public static Game createGameFromPattern(int maxPlayers, CubeFaces[][] patternGrid) {
+        Game game = new Game(maxPlayers, patternGrid.length);
+        game.pattern = Pattern.createPatternFromPatternGrid(patternGrid);
+
+        return game;
+    }
+
+    /**
      * Constructs a game of a pattern with given dimensions and the given limit for maximum number of players.
      * @param maxPlayers Maximum number of players allowed.
      * @param dimensions Dimensions of the pattern in the game.

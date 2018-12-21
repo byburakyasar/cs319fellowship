@@ -146,10 +146,10 @@ public class GameOptionsController {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayer(player);
+                    client.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
                     String serverMessage = client.waitUntilGameReady();
                     System.out.println("Client ready with no: " + serverMessage);
-                    client.requestClientPlayers();
+                    client.waitClientPlayers();
 
                     Game obj = client.readObjectBlocked();
 
@@ -180,10 +180,10 @@ public class GameOptionsController {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayer(player);
+                    client.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
                     String serverMessage = client.waitUntilGameReady(); // make it so that everyone exits at the same time
                     System.out.println("Client ready with no: " + serverMessage);
-                    client.requestClientPlayers();
+                    client.distributeClientPlayers();
 
                     Game game = Game.createRandomGame(playerCount, difficulty);
                     Game obj = client.sendObjectBlocked(game);
