@@ -53,7 +53,6 @@
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Pattern Matching"/>
-                            <String fx:value="Racing and Rolling"/>
                             <String fx:value="From Memory"/>
                             <String fx:value="Maximum Patterns"/>
                             <String fx:value="Against Time"/>
