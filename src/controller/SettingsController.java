@@ -18,6 +18,7 @@ public class SettingsController {
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) mainMenuBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);

@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiPredicate;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +29,7 @@ public class PatternPack {
      */
     public PatternPack(Path path) {
         this.directoryPath = path;
-        this.packName = path.toFile().getName();
+        this.packName = path.getFileName().toString();
     }
 
     // METHODS
@@ -54,11 +52,11 @@ public class PatternPack {
         Cube cube = null;
 
         try {
-            Stream<Path> children = Files.find(directoryPath, 1, new BiPredicate<Path, BasicFileAttributes>() {
+            Stream<Path> children = Files.walk(directoryPath, 2).filter(new Predicate<Path>() {
                 @Override
-                public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
-                    // Reject subdirectories.
-                    if (basicFileAttributes.isDirectory()) {
+                public boolean test(Path path) {
+                    // Reject subdirectories
+                    if (Files.isDirectory(path)) {
                         return false;
                     }
 
@@ -66,15 +64,10 @@ public class PatternPack {
                 }
             });
 
-            List<File> files = children.map(new Function<Path, File>() {
-                @Override
-                public File apply(Path path) {
-                    return path.toFile();
-                }
-            }).collect(Collectors.toCollection(ArrayList::new));
+            List<Path> files = children.collect(Collectors.toCollection(ArrayList::new));
 
             cube = new Cube(files);
-//            System.out.println("PatternPack: Cube successfully loaded.");
+            System.out.println("PatternPack: Cube successfully loaded.");
         } catch (MalformedURLException|IllegalArgumentException e) {
             System.err.println("PatternPack: " + e.getMessage());
             e.printStackTrace();

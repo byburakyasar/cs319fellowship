@@ -32,6 +32,7 @@ public class MainMenuController {
     @FXML
     public void playBtnClicked() throws IOException {
         Stage current = (Stage) playBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/GameOptionsStage.fxml"));
 
         current.getScene().setRoot(root);
@@ -40,6 +41,7 @@ public class MainMenuController {
     @FXML
     public void settingsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/SettingsStage.fxml"));
 
         current.getScene().setRoot(root);
@@ -48,6 +50,7 @@ public class MainMenuController {
     @FXML
     public void howToPlayBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/HowToPlayStage.fxml"));
 
         current.getScene().setRoot(root);
@@ -56,6 +59,7 @@ public class MainMenuController {
     @FXML
     public void creditsBtnClicked() throws IOException{
         Stage current = (Stage) creditsBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/CreditsStage.fxml"));
 
         current.getScene().setRoot(root);
@@ -64,6 +68,7 @@ public class MainMenuController {
     @FXML
     public void levelSelectBtnClicked() throws IOException{
         Stage current = (Stage) levelSelectBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/LevelSelectStage.fxml"));
 
         current.getScene().setRoot(root);

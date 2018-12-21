@@ -74,6 +74,7 @@ public class GameOptionsController {
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) startBtn.getScene().getWindow();
+
         BorderPane root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);

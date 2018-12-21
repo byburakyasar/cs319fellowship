@@ -14,6 +14,7 @@ public class Main extends Application {
         try {
             Screen screen = Screen.getPrimary();
             Rectangle2D bounds = screen.getVisualBounds();
+
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
             primaryStage.setTitle("QBitz");
             primaryStage.setScene(new Scene(root));
