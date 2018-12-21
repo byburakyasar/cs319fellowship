@@ -160,7 +160,7 @@ public class ClientHandler extends Thread {
                 while (serverSize < server.getServerMaxSize()) {
                     serverSize = server.getPlayersSize();
 
-                    System.out.print("");
+                    //System.out.print("");
 
                     if (serverSize >= server.getServerMaxSize()) {
                         out.println(clientNo);

@@ -25,6 +25,8 @@ public class GameOptionsController {
     @FXML Button backToMenuBtn;
     @FXML Button multiplayerBtn;
     @FXML HBox playersHBox;
+    @FXML HBox difficultyHBox;
+    @FXML HBox dimensionsHBox;
     @FXML ComboBox<String> gameModesComboBox;
     @FXML ToggleGroup difficultyGroup;
     @FXML ToggleGroup playerGroup;
@@ -66,7 +68,35 @@ public class GameOptionsController {
                 Text text = new Text(newValue);
 
                 gameMode = Enum.valueOf(GameModes.class, newValue.toUpperCase().replace(' ', '_').replace('İ', 'I'));
-                System.out.println(gameMode);
+                switch (gameMode) {
+                    case TWO_VS_TWO:
+                        for (int i = 0; i < playerGroup.getToggles().size(); i++) {
+                            if (i != 3) {
+                                ((RadioButton) playerGroup.getToggles().get(i)).setDisable(true);
+                            } else {
+                                ((RadioButton) playerGroup.getToggles().get(i)).setDisable(false);
+                                ((RadioButton) playerGroup.getToggles().get(i)).setSelected(true);
+                            }
+                            playerCount = 4;
+                        }
+                        break;
+                    case AGAINST_TIME:
+                        for (int i = 0; i < playerGroup.getToggles().size(); i++) {
+                            if (i != 0) {
+                                ((RadioButton) playerGroup.getToggles().get(i)).setDisable(true);
+                            } else {
+                                ((RadioButton) playerGroup.getToggles().get(i)).setDisable(false);
+                                ((RadioButton) playerGroup.getToggles().get(i)).setSelected(true);
+                            }
+                            playerCount = 1;
+                        }
+                        break;
+                    default:
+                        for (int i = 0; i < playerGroup.getToggles().size(); i++) {
+                            ((RadioButton) playerGroup.getToggles().get(i)).setDisable(false);
+                        }
+                        break;
+                }
             }
         });
     }
@@ -181,7 +211,6 @@ public class GameOptionsController {
     }
     public enum GameModes{
         PATTERN_MATCHING,
-        MULTIPLAYER,
         FROM_MEMORY,
         MAXIMUM_PATTERNS,
         AGAINST_TIME,

@@ -151,9 +151,6 @@ public class GameUIController {
             case PATTERN_MATCHING:
                 loadPatternMatching(false, false);
                 break;
-            case MULTIPLAYER:
-                // something like loadRacingAndRolling();
-                break;
             case FROM_MEMORY:
                 loadPatternMatching(true, false);
                 break;
