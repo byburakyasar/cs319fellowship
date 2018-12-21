@@ -2,18 +2,12 @@ package model;
 
 import javafx.scene.image.Image;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiPredicate;
+import java.net.URI;
+import java.nio.file.*;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,6 +20,7 @@ public class ResourceLoader {
 
     // CONSTANTS
 
+    private static final String RESOURCE_DIR_ROOT = "/res";
     private static final String PATTERN_PACK_PREFIX = "pattern_";
     private static final String GAME_ICON_NAME = "qbitz.png";
 
@@ -35,10 +30,13 @@ public class ResourceLoader {
     private static ResourceLoader loader = new ResourceLoader();
 
     // Root directory of the resources.
-    private static final File root = rootLocator();
+    private static final Path root = rootLocator();
 
     // Streams to hold files being processed.
     private Stream<Path> filteredResources;
+
+    // File system necessary for use in execution from JAR files.
+    private static FileSystem fileSystem = null;
 
     // CONSTRUCTORS
 
@@ -63,24 +61,42 @@ public class ResourceLoader {
      * Locates and returns the root of the resources directory.
      * @return Root of the resources directory. If an exception occurred returns null instead.
      */
-    private static File rootLocator() {
-        File returnF = null;
+    private static Path rootLocator() {
+        Path resPath = null;
 
         try {
-            returnF = Paths.get("res").toFile();
+            URI uri = ResourceLoader.class.getResource(RESOURCE_DIR_ROOT).toURI();
+
+            if (uri.getScheme().equals("jar")) {
+                System.out.println("ResourceLoader: Detected JAR environment.");
+                fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+                resPath = fileSystem.getPath(RESOURCE_DIR_ROOT);
+            }
+            else {
+                System.out.println("ResourceLoader: Detected non-JAR environment.");
+                resPath = Paths.get(uri);
+            }
+
         } catch (InvalidPathException e) {
-            returnF = null;
+            resPath = null;
             System.err.println("ResourceLoader: Could not locate resources directory.");
             e.printStackTrace();
         } catch (UnsupportedOperationException e) {
-            returnF = null;
+            resPath = null;
             System.err.println("ResourceLoader: Could not open the resources directory.");
             e.printStackTrace();
+        } catch (Exception e) {
+            resPath = null;
+            System.err.println("ResourceLoader: Unknown error prevented locating resources directory.");
+            e.printStackTrace();
         } finally {
-            if (returnF != null) {
-//                System.out.println("ResourceLoader: Resources directory successfully located at: " + returnF.toPath().toAbsolutePath());
+            if (resPath != null) {
+                System.out.println("ResourceLoader: Resources directory successfully located at: " + resPath);
             }
-            return returnF;
+            else {
+                System.err.println("ResourceLoader: Could not locate resources directory.");
+            }
+            return resPath;
         }
     }
 
@@ -89,6 +105,8 @@ public class ResourceLoader {
      * @return If successfully found, the Image object containing the game icon. Otherwise, null.
      */
     public Image getGameIcon() {
+        System.out.println("ResourceLoader: Locating the GameIcon.");
+
         filterResourcesBy(ResourceTypes.GameIcon);
         Image icon = null;
 
@@ -100,6 +118,7 @@ public class ResourceLoader {
             e.printStackTrace();
         }
 
+        System.out.println("ResourceLoader: GameIcon located successfully.");
         return icon;
     }
 
@@ -108,8 +127,10 @@ public class ResourceLoader {
      * @return ArrayList of PatternPack objects constructed from the pattern packages found in resources.
      */
     public List<PatternPack> getPatternPacks() {
+        System.out.println("ResourceLoader: Locating the PatternPacks.");
+
         filterResourcesBy(ResourceTypes.PatternPack);
-        List<PatternPack> packs = null;
+        List<PatternPack> packs;
 
         Stream<PatternPack> packStream = filteredResources.map(new Function<Path, PatternPack>() {
             @Override
@@ -118,8 +139,17 @@ public class ResourceLoader {
             }
         });
 
-        packs = packStream.collect(Collectors.toCollection(ArrayList::new));
+        packs = packStream.collect(Collectors.toList());
 
+       // Running from JAR reverses expected naming order
+        packs.sort(new Comparator<PatternPack>() {
+            @Override
+            public int compare(PatternPack o1, PatternPack o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+
+        System.out.println("ResourceLoader: PatternPacks located successfully.");
         return packs;
     }
 
@@ -136,19 +166,18 @@ public class ResourceLoader {
 
             case PatternPack:
                 try {
-                    filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
+                    filteredResources = Files.walk(root, 1).filter(new Predicate<Path>() {
                         @Override
-                        public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
-                            if (!basicFileAttributes.isDirectory()) {
+                        public boolean test(Path path) {
+                            if (!Files.isDirectory(path)) {
                                 return false;
                             }
 
                             String pathName = path.getFileName().toString();
-//                            System.out.println(pathName);
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.err.println("ResourceLoader: An error occurred in filtering process.");
                     e.printStackTrace();
                 }
@@ -156,18 +185,14 @@ public class ResourceLoader {
 
             case GameIcon:
                 try {
-                    filteredResources = Files.find(root.toPath(), 1, new BiPredicate<Path, BasicFileAttributes>() {
+                    filteredResources = Files.walk(root, 1).filter(new Predicate<Path>() {
                         @Override
-                        public boolean test(Path path, BasicFileAttributes basicFileAttributes) {
-                            if(basicFileAttributes.isDirectory()) {
-                                return false;
-                            }
-
+                        public boolean test(Path path) {
                             String pathName = path.getFileName().toString();
                             return pathName.equals(GAME_ICON_NAME);
                         }
                     });
-                } catch (IOException e) {
+                } catch (Exception e) {
                     System.err.println("ResourceLoader: An error occurred in filtering process.");
                     e.printStackTrace();
                 }

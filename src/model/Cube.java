@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Cube {
     // ATTRIBUTES
 
     private final EnumMap<CubeFaces, Image> faceMap;
+
     // CONSTRUCTORS
 
     /**
@@ -33,7 +35,7 @@ public class Cube {
      * @throws MalformedURLException When the located file could not be processed to URL.
      * @throws IllegalArgumentException When files are missing for some faces of the cube.
      */
-    public Cube (List<File> images) throws MalformedURLException, IllegalArgumentException {
+    public Cube (List<Path> images) throws MalformedURLException, IllegalArgumentException {
 
         // Construct the storage structure.
         this.faceMap = new EnumMap<>(CubeFaces.class);
@@ -41,9 +43,9 @@ public class Cube {
         // Map the images to faces.
         String fileName;
         Image image;
-        for (File f : images) {
-            fileName = ResourceLoader.removeExtension(f.getName());
-            image = new Image(f.toURI().toURL().toString(), 150, 150, true, true);
+        for (Path p : images) {
+            fileName = ResourceLoader.removeExtension(p.getFileName().toString());
+            image = new Image(p.toUri().toURL().toString(), 150, 150, true, true);
             switch (fileName) {
                 default:
                     // Do nothing.

@@ -11,18 +11,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Screen screen = Screen.getPrimary();
-        Rectangle2D bounds = screen.getVisualBounds();
+        try {
+            Screen screen = Screen.getPrimary();
+            Rectangle2D bounds = screen.getVisualBounds();
 
-        Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
-        primaryStage.setTitle("QBitz");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.getIcons().add(ResourceLoader.getInstance().getGameIcon());
-
-        primaryStage.setX(bounds.getMinX());
-        primaryStage.setY(bounds.getMinY());
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+            Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
+            primaryStage.setTitle("QBitz");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.getIcons().add(ResourceLoader.getInstance().getGameIcon());
+            primaryStage.setX(bounds.getMinX());
+            primaryStage.setY(bounds.getMinY());
+            primaryStage.setMaximized(true);
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+            stop();
+        }
     }
 
     @Override
