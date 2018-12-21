@@ -10,8 +10,12 @@
     -fx-text-fill: linear-gradient(to right, rgba(167, 60, 0, 0.6) 40%, #000000 40%);
 }
 
-#contentVBox {
+#contentBox {
     -fx-font-size: 30px;
+}
+
+.combo-box {
+    -fx-background-color: rgba(167, 60, 0, 0.6);
 }
 
 .combo-box .list-cell {
@@ -31,4 +35,26 @@
     -fx-border-style: solid;
     -fx-border-radius: 1px;
     -fx-border-color: black;
+}
+
+.text-area {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content .text {
+    -fx-text-alignment: justify;
+    -fx-line-spacing: 5px;
 }

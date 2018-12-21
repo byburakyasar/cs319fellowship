@@ -180,7 +180,6 @@ public class GameOptionsController {
         }
     }
     public enum GameModes{
-        GENERAL_INFO,
         PATTERN_MATCHING,
         MULTIPLAYER,
         FROM_MEMORY,
@@ -188,10 +187,6 @@ public class GameOptionsController {
         AGAINST_TIME,
         DIFFERENT_CUBES,
         PAINTING_PUZZLE,
-        TWO_VS_TWO;
-    }
-
-    public void startClientSideThread() {
-
+        TWO_VS_TWO
     }
 }

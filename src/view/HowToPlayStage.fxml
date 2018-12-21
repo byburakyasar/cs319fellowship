@@ -21,17 +21,33 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="10" id="contentVBox">
-            <Label fx:id="howToLabel" > </Label>
+        <HBox alignment="CENTER">
+            <TextArea fx:id="textArea" id="contentBox" editable="false" wrapText="true">
+                <HBox.margin>
+                    <Insets top="30"/>
+                </HBox.margin>
+            </TextArea>
+        </HBox>
+    </center>
 
-            <HBox spacing="40" alignment="CENTER">
-                <Label text="Game Mode: "/>
-                <ComboBox fx:id="gameModesComboBox" value="Pattern Maching" maxWidth="400" minWidth="400">
+    <bottom>
+        <HBox alignment="BOTTOM_LEFT">
+            <Button text="Main Menu" fx:id="mainMenuBtn" onAction="#backToMainMenu">
+                <HBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"/>
+                </HBox.margin>
+            </Button>
+
+            <Region prefHeight="100" prefWidth="100" HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="20" alignment="CENTER" id="contentBox">
+                <Label text="Info: "/>
+                <ComboBox fx:id="gameModesComboBox" value="General" maxWidth="400" minWidth="400">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="General Info"/>
-                            <String fx:value="Pattern Matching"/>
+                            <String fx:value="General"/>
                             <String fx:value="Multiplayer"/>
+                            <String fx:value="Pattern Matching"/>
                             <String fx:value="From Memory"/>
                             <String fx:value="Maximum Patterns"/>
                             <String fx:value="Against Time"/>
@@ -42,16 +58,8 @@
                     </items>
                 </ComboBox>
             </HBox>
-        </VBox>
-    </center>
 
-    <bottom>
-        <VBox alignment="BOTTOM_LEFT">
-            <Button text="Main Menu" fx:id="mainMenuBtn" onAction="#backToMainMenu">
-                <VBox.margin>
-                    <Insets top="40" left="40" right="40" bottom="40"/>
-                </VBox.margin>
-            </Button>
-        </VBox>
+            <Region prefHeight="100" prefWidth="600" HBox.hgrow="ALWAYS"/>
+        </HBox>
     </bottom>
 </BorderPane>
