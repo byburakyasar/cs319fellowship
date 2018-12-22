@@ -551,7 +551,7 @@ public class GameUIController {
             }
         }
 
-        boardGrid.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+        boardGrid.setBackground(new Background(new BackgroundImage(new Image("/res/wood6.png"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
@@ -622,7 +622,7 @@ public class GameUIController {
         }
 
         multiplayerBoard.setId(playerName+"");
-        multiplayerBoard.setBackground(new Background(new BackgroundImage(new Image("/wood6.png"), BackgroundRepeat.NO_REPEAT,
+        multiplayerBoard.setBackground(new Background(new BackgroundImage(new Image("/res/wood6.png"), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, false))));
 
         Label label = new Label(playerVisibleName);

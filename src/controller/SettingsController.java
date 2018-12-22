@@ -28,7 +28,7 @@ public class SettingsController {
     @FXML CheckBox soundBtn;
 
     public void initialize(){
-        AudioClip music = new AudioClip(getClass().getResource("background_music.wav").toString());
+        AudioClip music = new AudioClip(getClass().getResource("/res/background_music.wav").toString());
 
         EventHandler eventHandler = new EventHandler<ActionEvent>() {
             @Override
