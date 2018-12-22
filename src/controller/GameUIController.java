@@ -145,6 +145,9 @@ public class GameUIController {
         this.solutionFaces = this.pattern.getPatternGrid();
     }
 
+    /**
+     * Initialize the game with the specified Game Mode which is selected in Game Options
+     */
     public void initialize() {
         switch (gameMode)
         {
