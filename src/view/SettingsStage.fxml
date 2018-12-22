@@ -20,7 +20,7 @@
         <VBox alignment="CENTER" spacing="60" id="settingsVBox">
             <HBox alignment="CENTER" spacing="100">
                 <Label text="Music"/>
-                <CheckBox fx:id="musicBtn"/>
+                <CheckBox fx:id="musicBtn" />
             </HBox>
             <HBox alignment="CENTER" spacing="100">
                 <Label text= "Sound"/>

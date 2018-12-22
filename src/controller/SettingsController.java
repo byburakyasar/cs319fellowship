@@ -36,6 +36,7 @@ public class SettingsController {
                 if(event.getSource() instanceof CheckBox){
                     if(musicBtn.isSelected()){
                         music.setCycleCount(INDEFINITE);
+                        music.stop();
                         music.play();
                     }
                     else{

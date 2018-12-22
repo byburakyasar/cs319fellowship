@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<?import javafx.geometry.Insets?>
-<?import com.sun.javafx.scene.control.skin.VirtualFlow?>
+<?import javafx.scene.shape.Box?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml" id="mainBorderPane"
             fx:controller="controller.LevelSelectController" stylesheets="@styles/LevelSelect.css, @styles/Buttons.css">
@@ -22,32 +18,26 @@
         </VBox>
     </top>
     <center>
-        <VBox alignment="CENTER" spacing="40" id="levelsVBox">
-            <HBox alignment="CENTER" spacing="60">
-                <Button text="Level 1"/>
-                <Button text="Level 2"/>
-                <Button text="Level 3"/>
-            </HBox>
-            <HBox alignment="CENTER" spacing="60">
-                <Button text="Level 4"/>
-                <Button text="Level 5"/>
-                <Button text="Level 6"/>
-            </HBox>
-            <HBox alignment="CENTER" spacing="60">
-                <Button text="Level 7"/>
-                <Button text="Level 8"/>
-                <Button text="Level 9"/>
+        <VBox alignment="CENTER" spacing="60" fx:id="levelsVBox" id="levelsVBox">
+            <BorderPane.margin>
+                <Insets top="50"/>
+            </BorderPane.margin>
+
+            <GridPane alignment="CENTER" id="levelsGridPane" fx:id="levelsGridPane" hgap="20" vgap="20"/>
+
+            <HBox alignment="CENTER" spacing="150">
+                <Button text="Previous" fx:id="goLeftBtn"/>
+                <Button text="Next" fx:id="goRightBtn"/>
             </HBox>
         </VBox>
     </center>
-
     <bottom>
-        <VBox alignment="BOTTOM_LEFT">
-            <Button text="Main Menu" fx:id="mainMenuBtn" onAction="#backToMainMenu">
-                <VBox.margin>
-                    <Insets right="40" left="40" bottom="40"></Insets>
-                </VBox.margin>
+        <HBox alignment="BOTTOM_LEFT">
+            <Button text="Main Menu" fx:id="backToMenuBtn" id="backToMenuBtn" onAction="#backToMainMenu">
+                <HBox.margin>
+                    <Insets top="40" left="40" right="40" bottom="40"/>
+                </HBox.margin>
             </Button>
-        </VBox>
+        </HBox>
     </bottom>
 </BorderPane>
