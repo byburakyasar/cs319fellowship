@@ -159,4 +159,8 @@ public class Player implements Serializable {
     public void setBoardDimensions(int rows, int columns) {
         this.solutionGrid = new CubeFaces[rows][columns];
     }
+
+    public int[] getBoardDimensions() {
+        return new int[]{solutionGrid.length, solutionGrid[0].length};
+    }
 }

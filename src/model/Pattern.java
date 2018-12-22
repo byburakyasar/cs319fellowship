@@ -71,18 +71,10 @@ public class Pattern implements Serializable {
      * @throws IllegalArgumentException When solution dimensions do not match pattern dimensions.
      */
     public boolean isCorrect(CubeFaces[][] solution) throws IllegalArgumentException {
-
         // Checking if dimensions are legal. Assuming rectangular grids.
         if (patternGrid.length != solution.length || patternGrid[0].length != solution[0].length) {
             throw new IllegalArgumentException("Pattern and solution dimensions do not match.");
         }
-
-        // Patterns are not square in Painting puzzle mode, hence this is disabled
-//        for (int i = 0; i < patternGrid.length; i++) {
-//            if (patternGrid[i].length != solution[i].length) {
-//                throw new IllegalArgumentException("Pattern and solution dimensions do not match.");
-//            }
-//        }
 
         // Check if solution is correct.
         for (int i = 0; i < patternGrid.length; i++) {

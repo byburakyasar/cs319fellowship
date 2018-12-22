@@ -137,8 +137,8 @@ public class GameUIController {
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
-        this.client = client;
         this.solutionFaces = this.pattern.getPatternGrid();
+        this.client = client;
     }
 
     /**
@@ -160,45 +160,49 @@ public class GameUIController {
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = game;
         this.pattern = game.getPattern();
+        this.solutionFaces = this.pattern.getPatternGrid();
         this.server = server;
         this.client = client;
-        this.solutionFaces = this.pattern.getPatternGrid();
     }
 
     /**
      * Initialize the game with the specified Game Mode which is selected in Game Options
      */
     public void initialize() {
-        switch (gameMode)
+        loadPatternMatching();
+        /*switch (gameMode)
         {
             case PATTERN_MATCHING:
-                loadPatternMatching(false, false);
+                loadPatternMatching();
                 break;
             case FROM_MEMORY:
-                loadPatternMatching(true, false);
+                loadPatternMatching();
                 break;
             case MAXIMUM_PATTERNS:
                 break;
             case AGAINST_TIME:
-                if (difficulty == 3) againstTimeLimit = 15000;
-                else if (difficulty == 4) againstTimeLimit = 30000;
-                else if (difficulty == 5) againstTimeLimit = 45000;
-
-                loadPatternMatching(false, false);
+                loadPatternMatching();
                 break;
             case PAINTING_PUZZLE:
-                loadPatternMatching(false, false);
+                loadPatternMatching();
                 break;
             case DIFFERENT_CUBES:
                 break;
             case TWO_VS_TWO:
-                loadPatternMatching( false, true);
+                loadPatternMatching();
                 break;
-        }
+        }*/
 
     }
 
-    private void loadPatternMatching(boolean isFromMemory, boolean twoVsTwo) {
+    private void loadPatternMatching() {
+        // Change difficulty if against time mode
+        if (gameMode == GameOptionsController.GameModes.AGAINST_TIME) {
+            if (difficulty == 3) againstTimeLimit = 15000;
+            else if (difficulty == 4) againstTimeLimit = 30000;
+            else if (difficulty == 5) againstTimeLimit = 45000;
+        }
+
         // Load the cube based on dimensions
         if (cubeDimension == 2) {
             load2DCube();
@@ -206,57 +210,14 @@ public class GameUIController {
             load3DCube();
         }
 
-        // Default board sizes
-        int rowNum = difficulty;
-        int colNum = difficulty;
-
         // Change Game and Players boards for Painting Puzzle Mode
         if (gameMode == GameOptionsController.GameModes.PAINTING_PUZZLE) {
-            // Behavior depends on the painting used
-            switch (PATTERN_NO) {
-
-                // 2x3 Paintings
-                case -1: // Does not exist, used as a placeholder
-                    rowNum = 2;
-                    rowNum = 3;
-                    this.solutionFaces = new CubeFaces[rowNum][colNum];
-                    solutionFaces[0][0] = CubeFaces.FACE_UP;
-                    solutionFaces[0][1] = CubeFaces.FACE_DOWN;
-                    solutionFaces[0][2] = CubeFaces.FACE_LEFT;
-                    solutionFaces[1][0] = CubeFaces.FACE_RIGHT;
-                    solutionFaces[1][1] = CubeFaces.FACE_FRONT;
-                    solutionFaces[1][2] = CubeFaces.FACE_BACK;
-                    this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
-                    this.game.setPattern(this.pattern);
-                    this.player.setBoardDimensions(rowNum, colNum);
-                    break;
-
-                // 3x2 Paintings
-                case 1: // Mona Lisa is pattern pack at index 1
-                    rowNum = 3;
-                    colNum = 2;
-                    this.solutionFaces = new CubeFaces[rowNum][colNum];
-                    solutionFaces[0][0] = CubeFaces.FACE_UP;
-                    solutionFaces[0][1] = CubeFaces.FACE_DOWN;
-                    solutionFaces[1][0] = CubeFaces.FACE_LEFT;
-                    solutionFaces[1][1] = CubeFaces.FACE_RIGHT;
-                    solutionFaces[2][0] = CubeFaces.FACE_FRONT;
-                    solutionFaces[2][1] = CubeFaces.FACE_BACK;
-                    this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
-                    this.game.setPattern(this.pattern);
-                    this.player.setBoardDimensions(rowNum, colNum);
-                    break;
-
-                // Non-painting pattern, complain in the console but do nothing
-                default:
-                    System.out.println("GameUIController: Encountered non-painting pattern pack in painting mode. Defaulting to pattern matching mode.");
-                    break;
-            }
+            setupForPaintingPuzzle();
         }
 
         // Load the game and solution boards
-        loadSolutionBoard(isFromMemory, rowNum, colNum);
-        loadBoard(rowNum, colNum);
+        loadSolutionBoard();
+        loadBoard();
 
         // This counts time and sets its label
         bindGameTime();
@@ -267,12 +228,75 @@ public class GameUIController {
         modeLabel.setText(gameModeText);
 
         if (playerCount != 1) {
-            setupForMultiplayer(twoVsTwo);
+            setupForMultiplayer();
         }
 
         // Add yourself and start
         game.addPlayer(player);
         game.startGame();
+    }
+
+    /**
+     *
+     */
+    private void setupForPaintingPuzzle() {
+        int rowNum = difficulty;
+        int colNum = difficulty;
+        // Behavior depends on the painting used
+        switch (PATTERN_NO) {
+            // 2x3 Paintings
+            case -1: // Does not exist, used as a placeholder
+                rowNum = 2;
+                colNum = 3;
+                this.solutionFaces = new CubeFaces[rowNum][colNum];
+                solutionFaces[0][0] = CubeFaces.FACE_UP;
+                solutionFaces[0][1] = CubeFaces.FACE_DOWN;
+                solutionFaces[0][2] = CubeFaces.FACE_LEFT;
+                solutionFaces[1][0] = CubeFaces.FACE_RIGHT;
+                solutionFaces[1][1] = CubeFaces.FACE_FRONT;
+                solutionFaces[1][2] = CubeFaces.FACE_BACK;
+                this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
+                this.game.setPattern(this.pattern);
+
+                if (client != null) {
+                    for (Player p : client.getClientPlayers()) {
+                        p.setBoardDimensions(rowNum, colNum);
+                    }
+                    this.player.setBoardDimensions(rowNum, colNum);
+                } else {
+                    this.player.setBoardDimensions(rowNum, colNum);
+                }
+                break;
+
+            // 3x2 Paintings
+            case 1: // Mona Lisa is pattern pack at index 1
+                rowNum = 3;
+                colNum = 2;
+                this.solutionFaces = new CubeFaces[rowNum][colNum];
+                solutionFaces[0][0] = CubeFaces.FACE_UP;
+                solutionFaces[0][1] = CubeFaces.FACE_DOWN;
+                solutionFaces[1][0] = CubeFaces.FACE_LEFT;
+                solutionFaces[1][1] = CubeFaces.FACE_RIGHT;
+                solutionFaces[2][0] = CubeFaces.FACE_FRONT;
+                solutionFaces[2][1] = CubeFaces.FACE_BACK;
+                this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
+                this.game.setPattern(this.pattern);
+
+                if (client != null) {
+                    for (Player p : client.getClientPlayers()) {
+                        p.setBoardDimensions(rowNum, colNum);
+                    }
+                    this.player.setBoardDimensions(rowNum, colNum);
+                } else {
+                    this.player.setBoardDimensions(rowNum, colNum);
+                }
+                break;
+
+            // Non-painting pattern, complain in the console but do nothing
+            default:
+                System.out.println("GameUIController: Encountered non-painting pattern pack in painting mode. Defaulting to pattern matching mode.");
+                break;
+        }
     }
 
     /**
@@ -400,11 +424,11 @@ public class GameUIController {
      * Gets the corresponding backgrounds for those faces from the Cube class and sets them.
      * Sets the background for the solution board.
      */
-    private void loadSolutionBoard(boolean isFromMemory, int rowNum, int colNum) {
+    private void loadSolutionBoard() {
         final int SOLUTION_SIZE = 120;
 
-        for (int i = 0; i < rowNum; i++) {
-            for (int j = 0; j < colNum; j++) {
+        for (int i = 0; i < solutionFaces.length; i++) {
+            for (int j = 0; j < solutionFaces[i].length; j++) {
                 Image img = cube.get(solutionFaces[i][j]);
 
                 Pane pane = new Pane();
@@ -418,7 +442,7 @@ public class GameUIController {
             }
         }
 
-        if (isFromMemory) {
+        if (gameMode == GameOptionsController.GameModes.FROM_MEMORY) {
             loadSolutionForFromMemory();
         }
     }
@@ -505,10 +529,10 @@ public class GameUIController {
      * Sets all of the drag bindings for the board faces. This includes
      * dropping an image onto the board from 2DCube, 3DCube or another face of the board.
      */
-    private void loadBoard(int rowNum, int colNum) {
+    private void loadBoard() {
         final int BOARD_PANE_SIZE = 120;
-        for(int i = 0; i < colNum; i++) {
-            for(int j = 0; j < rowNum; j++) {
+        for(int i = 0; i < solutionFaces.length; i++) {
+            for(int j = 0; j < solutionFaces[i].length; j++) {
                 Pane pane = new Pane();
                 pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
                 pane.getStyleClass().add("pane");
@@ -529,8 +553,8 @@ public class GameUIController {
                             db.setContent(content);
                             pane.setBackground(null);
 
-                            int row = boardGrid.getRowIndex(pane);
-                            int col = boardGrid.getColumnIndex(pane);
+                            int row = GridPane.getRowIndex(pane);
+                            int col = GridPane.getColumnIndex(pane);
                             if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
                                 client.sendPlayerMove(teamLeader.getName(), row, col, null);
                                 game.playerMove(teamLeader.getName(), row, col, null);
@@ -618,7 +642,7 @@ public class GameUIController {
                     }
                 });
 
-                boardGrid.add(pane, i, j);
+                boardGrid.add(pane, j, i);
             }
         }
 
@@ -626,7 +650,7 @@ public class GameUIController {
                 BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
     }
 
-    private void setupForMultiplayer(boolean twoVsTwo) {
+    private void setupForMultiplayer() {
         // If this is a multiplayer game, make client ready
         client.setGameUIController(this);
         client.readMessageNonBlockedAlways();
@@ -635,7 +659,7 @@ public class GameUIController {
 
         Vector<Player> players = client.getClientPlayers();
 
-        if (twoVsTwo) {
+        if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
             for (int i = 0; i < players.size(); i++) {
                 if (players.get(i).getName().equals(player.getName())) {
                     if (i == 0 || i == 1) {
@@ -656,6 +680,7 @@ public class GameUIController {
                     // Load boards for every other player
                     loadMultiplayerBoard(players.get(i).getName(), players.get(i).getVisibleName());
 
+                    System.out.println(players.get(i).getBoardDimensions()[0] + " " + players.get(i).getBoardDimensions()[1]);
                     // Add all other players to the game
                     game.addPlayer(players.get(i));
                 }
@@ -682,19 +707,19 @@ public class GameUIController {
         multiplayerBoard.setAlignment(Pos.CENTER);
         multiplayerBoard.getStyleClass().add("bordered");
 
-        for(int i = 0; i < difficulty; i++) {
-            for(int j = 0; j < difficulty; j++) {
+        for(int i = 0; i < solutionFaces.length; i++) {
+            for(int j = 0; j < solutionFaces[i].length; j++) {
                 Pane pane = new Pane();
                 pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
                 pane.getStyleClass().add("pane");
 
-                multiplayerBoard.add(pane, i, j);
+                multiplayerBoard.add(pane, j, i);
             }
         }
 
         multiplayerBoard.setId(playerName+"");
         multiplayerBoard.setBackground(new Background(new BackgroundImage(new Image("/res/wood6.png"), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(100, 100, true, true, true, false))));
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
         Label label = new Label(playerVisibleName);
 
@@ -784,12 +809,12 @@ public class GameUIController {
         Pane pane;
         // If it was the team leader that made the move, modify your board.
         if (teamLeader != null && playerName.equals(teamLeader.getName())) {
-            pane = (Pane)boardGrid.getChildren().get(col*difficulty + row + 1);
+            pane = (Pane)boardGrid.getChildren().get(row*solutionFaces[0].length + col + 1);
         } else {
             Scene scene = multiplayerHBox.getScene();
             GridPane multiPane = (GridPane)scene.lookup("#"+playerName);
             System.out.println(playerName + " " + row + " " + col + " " + cubeFace);
-            pane = (Pane)multiPane.getChildren().get(col*difficulty + row + 1);
+            pane = (Pane)multiPane.getChildren().get(row*solutionFaces[0].length + col + 1);
         }
 
         if (pane != null) {
