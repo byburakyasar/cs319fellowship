@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private final int PATTERN_NO = 1;
+    private int PATTERN_NO = 1;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -80,6 +80,9 @@ public class GameUIController {
 
     // Two vs Two
     private Player teamLeader;
+
+    // From Level Selection
+    private boolean isFromLevelSelection = false;
 
     /**
      * Constructs a GameUIController object for single player use.
@@ -113,10 +116,12 @@ public class GameUIController {
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
         this.gameMode = gameMode;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(patternNo).getCube();
+        this.PATTERN_NO = patternNo;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
+        this.isFromLevelSelection = true;
     }
 
     /**
@@ -839,10 +844,26 @@ public class GameUIController {
         Stage current = (Stage) boardGrid.getScene().getWindow();
         EndController endC;
 
-        if (endType == EndController.EndType.TWO_VS_TWO && teamLeader.getName().equals(winner.getName())) {
-            endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, player, endType);
-        } else {
-            endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, winTime, winner, endType);
+        switch (endType) {
+            case NORMAL:
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                break;
+            case GIVE_UP:
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                break;
+            case LOST_AGAINST_TIME:
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                break;
+            case TWO_VS_TWO:
+                if (teamLeader.getName().equals(winner.getName())) {
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, player, isFromLevelSelection, client != null, endType);
+                } else {
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                }
+                break;
+            default:
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+
         }
 
         FXMLLoader loader = new FXMLLoader();
