@@ -42,6 +42,7 @@ public class GameUIController {
     @FXML private AnchorPane solutionAnchorPane;
     @FXML private Label timeLabel;
     @FXML private Label numOfMovesLabel;
+    @FXML private Label modeLabel;
     @FXML private VBox centerVBox;
     @FXML private VBox leftVBox;
     @FXML private VBox rightVBox;
@@ -63,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private final int PATTERN_NO = 1;
+    private final int PATTERN_NO = 4;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -94,6 +95,25 @@ public class GameUIController {
         this.cubeDimension = cubeDimension;
         this.gameMode = gameMode;
         this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
+        this.game = Game.createRandomGame(1, difficulty);
+        this.pattern = game.getPattern();
+        this.solutionFaces = this.pattern.getPatternGrid();
+    }
+
+    /**
+     * Constructs a GameUIController object for single player use, with predefined game options and pattern no.
+     * @param player The player will play the game.
+     * @param difficulty The board size (3, 4, 5 for 3x3, 4x4, 5x5).
+     * @param playerCount The number of players in the game.
+     * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
+     */
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, int patternNo) {
+        this.player = player;
+        this.difficulty = difficulty;
+        this.playerCount = playerCount;
+        this.cubeDimension = cubeDimension;
+        this.gameMode = gameMode;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(patternNo).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
@@ -191,6 +211,8 @@ public class GameUIController {
 
         // This sets the number of moves label
         numOfMovesLabel.textProperty().bind(numOfMoves.asString());
+        String gameModeText = String.valueOf(gameMode).toLowerCase().replace('_', ' ').toLowerCase().replace('ı', 'i');
+        modeLabel.setText(gameModeText);
 
         if (playerCount != 1) {
             setupForMultiplayer(twoVsTwo);

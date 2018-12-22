@@ -10,8 +10,33 @@
     -fx-text-fill: linear-gradient(to right, rgba(167, 60, 0, 0.6) 20%, #000000 20%);
 }
 
-#levelsVBox .button {
+#levelsVBox .button, #levelsGridPane .button {
     -fx-font-size: 30px;
     -fx-pref-width: 200;
     -fx-pref-height: 200;
 }
+
+/*#backToMenuBtn {*/
+/*-fx-pref-width: 400;*/
+/*-fx-pref-height: 70;*/
+/*-fx-font-size: 35px;*/
+/*-fx-background-radius: 20px;*/
+/*-fx-background-color: rgba(213, 75, 0, 0.66);*/
+/*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0);*/
+/*}*/
+
+/*#backToMenuBtn:hover {*/
+/*-fx-background-color: rgba(213, 75, 0, 0.8); !*#9696ff;*!*/
+/*-fx-border-radius: 20px;*/
+/*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);*/
+/*}*/
+
+/*#backToMenuBtn:focused {*/
+/*-fx-border-color: black;*/
+/*-fx-border-radius: 20px;*/
+/*}*/
+
+/*#backToMenuBtn:pressed {*/
+/*-fx-background-color: rgba(183, 65, 0, 0.8);!*#8282fa;*!*/
+/*-fx-text-fill: white;*/
+/*}*/

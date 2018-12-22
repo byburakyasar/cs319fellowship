@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
+<?import javafx.scene.layout.StackPane?>
 <BorderPane id="mainBorderPane" fx:id="mainBorderPane"
             stylesheets="@styles/GameUI.css, @styles/Buttons.css"
             xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1"
@@ -33,12 +34,26 @@
     </bottom>
 
     <top>
-        <HBox alignment="CENTER" styleClass="bordered">
-            <Label text="Time: " />
-            <Label fx:id="timeLabel" />
-            <Label text="                  Moves: " />
-            <Label fx:id="numOfMovesLabel" />
-        </HBox>
+        <StackPane styleClass="bordered">
+            <HBox alignment="CENTER_LEFT">
+                <StackPane.margin>
+                    <Insets left="50"/>
+                </StackPane.margin>
+                <Label text="Mode: "/>
+                <Label fx:id="modeLabel"/>
+            </HBox>
+            <HBox alignment="CENTER">
+                <Label text="Time: "/>
+                <Label fx:id="timeLabel"/>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT">
+                <StackPane.margin>
+                    <Insets right="50"/>
+                </StackPane.margin>
+                <Label text="Moves: "/>
+                <Label fx:id="numOfMovesLabel"/>
+            </HBox>
+        </StackPane>
     </top>
 
     <center>
