@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private final int PATTERN_NO = 4;
+    private final int PATTERN_NO = 1;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -187,6 +187,7 @@ public class GameUIController {
                 loadPatternMatching(false, false);
                 break;
             case PAINTING_PUZZLE:
+                loadPatternMatching(false, false);
                 break;
             case DIFFERENT_CUBES:
                 break;
@@ -205,9 +206,57 @@ public class GameUIController {
             load3DCube();
         }
 
+        // Default board sizes
+        int rowNum = difficulty;
+        int colNum = difficulty;
+
+        // Change Game and Players boards for Painting Puzzle Mode
+        if (gameMode == GameOptionsController.GameModes.PAINTING_PUZZLE) {
+            // Behavior depends on the painting used
+            switch (PATTERN_NO) {
+
+                // 2x3 Paintings
+                case -1: // Does not exist, used as a placeholder
+                    rowNum = 2;
+                    rowNum = 3;
+                    this.solutionFaces = new CubeFaces[rowNum][colNum];
+                    solutionFaces[0][0] = CubeFaces.FACE_UP;
+                    solutionFaces[0][1] = CubeFaces.FACE_DOWN;
+                    solutionFaces[0][2] = CubeFaces.FACE_LEFT;
+                    solutionFaces[1][0] = CubeFaces.FACE_RIGHT;
+                    solutionFaces[1][1] = CubeFaces.FACE_FRONT;
+                    solutionFaces[1][2] = CubeFaces.FACE_BACK;
+                    this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
+                    this.game.setPattern(this.pattern);
+                    this.player.setBoardDimensions(rowNum, colNum);
+                    break;
+
+                // 3x2 Paintings
+                case 1: // Mona Lisa is pattern pack at index 1
+                    rowNum = 3;
+                    colNum = 2;
+                    this.solutionFaces = new CubeFaces[rowNum][colNum];
+                    solutionFaces[0][0] = CubeFaces.FACE_UP;
+                    solutionFaces[0][1] = CubeFaces.FACE_DOWN;
+                    solutionFaces[1][0] = CubeFaces.FACE_LEFT;
+                    solutionFaces[1][1] = CubeFaces.FACE_RIGHT;
+                    solutionFaces[2][0] = CubeFaces.FACE_FRONT;
+                    solutionFaces[2][1] = CubeFaces.FACE_BACK;
+                    this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
+                    this.game.setPattern(this.pattern);
+                    this.player.setBoardDimensions(rowNum, colNum);
+                    break;
+
+                // Non-painting pattern, complain in the console but do nothing
+                default:
+                    System.out.println("GameUIController: Encountered non-painting pattern pack in painting mode. Defaulting to pattern matching mode.");
+                    break;
+            }
+        }
+
         // Load the game and solution boards
-        loadSolutionBoard(isFromMemory);
-        loadBoard();
+        loadSolutionBoard(isFromMemory, rowNum, colNum);
+        loadBoard(rowNum, colNum);
 
         // This counts time and sets its label
         bindGameTime();
@@ -351,11 +400,11 @@ public class GameUIController {
      * Gets the corresponding backgrounds for those faces from the Cube class and sets them.
      * Sets the background for the solution board.
      */
-    private void loadSolutionBoard(boolean isFromMemory) {
+    private void loadSolutionBoard(boolean isFromMemory, int rowNum, int colNum) {
         final int SOLUTION_SIZE = 120;
 
-        for (int i = 0; i < difficulty; i++) {
-            for (int j = 0; j < difficulty; j++) {
+        for (int i = 0; i < rowNum; i++) {
+            for (int j = 0; j < colNum; j++) {
                 Image img = cube.get(solutionFaces[i][j]);
 
                 Pane pane = new Pane();
@@ -388,7 +437,7 @@ public class GameUIController {
             @Override
             public void handle(ActionEvent event) {
                 if (remainingReveals > 0) {
-                    setChildenVisibility(solutionGrid, true);
+                    setChildrenVisibility(solutionGrid, true);
                     remainingReveals--;
                     if (remainingReveals == 0) {
                         button.setVisible(false);
@@ -405,7 +454,7 @@ public class GameUIController {
                         public void handle(ActionEvent event) {
                             long gameTimeSeconds = curGameTime / 1000L;
                             if (gameTimeSeconds >= timeOnClick + 2) {
-                                setChildenVisibility(solutionGrid, false);
+                                setChildrenVisibility(solutionGrid, false);
                                 timer.stop();
                             }
                         }
@@ -426,7 +475,7 @@ public class GameUIController {
 
                 // for 3 --> 10s, 4 --> 20s, 5 --> 40s
                 if (gameTimeSeconds >= Math.pow(2, difficulty) * (5.0 / 4.0)) {
-                    setChildenVisibility(solutionGrid, false);
+                    setChildrenVisibility(solutionGrid, false);
                     button.setVisible(true);
                     timer.stop();
                 }
@@ -444,7 +493,7 @@ public class GameUIController {
      * @param node The node whose children will be changed.
      * @param visibility The visibility value to set to.
      */
-    private void setChildenVisibility(Pane node, boolean visibility) {
+    private void setChildrenVisibility(Pane node, boolean visibility) {
         for (Node n : node.getChildren()) {
             n.setVisible(visibility);
         }
@@ -456,10 +505,10 @@ public class GameUIController {
      * Sets all of the drag bindings for the board faces. This includes
      * dropping an image onto the board from 2DCube, 3DCube or another face of the board.
      */
-    private void loadBoard() {
+    private void loadBoard(int rowNum, int colNum) {
         final int BOARD_PANE_SIZE = 120;
-        for(int i = 0; i < difficulty; i++) {
-            for(int j = 0; j < difficulty; j++) {
+        for(int i = 0; i < colNum; i++) {
+            for(int j = 0; j < rowNum; j++) {
                 Pane pane = new Pane();
                 pane.setPrefSize(BOARD_PANE_SIZE, BOARD_PANE_SIZE);
                 pane.getStyleClass().add("pane");

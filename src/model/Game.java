@@ -176,6 +176,14 @@ public class Game implements Serializable {
         }
     }
 
+    /**
+     * Changes the internal pattern to the one given.
+     * @param pattern New pattern to store in the game.
+     */
+    public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
+    }
+
     public Pattern getPattern() {
         return pattern;
     }

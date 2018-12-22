@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Pattern implements Serializable {
 
     // ATTRIBUTES
-    private final CubeFaces[][] patternGrid;
+    private CubeFaces[][] patternGrid;
 
     // CONSTRUCTORS
 
@@ -41,9 +41,12 @@ public class Pattern implements Serializable {
      */
     public static Pattern createPatternFromPatternGrid(CubeFaces[][] patternGrid) {
         Pattern pattern = new Pattern(patternGrid.length);
+        pattern.patternGrid = new CubeFaces[patternGrid.length][];
 
         for (int i = 0; i < patternGrid.length; i++) {
-            for (int j = 0; j < patternGrid[0].length; j++) {
+            pattern.patternGrid[i] = new CubeFaces[patternGrid[i].length];
+
+            for (int j = 0; j < patternGrid[i].length; j++) {
                 pattern.patternGrid[i][j] = patternGrid[i][j];
             }
         }
@@ -69,20 +72,21 @@ public class Pattern implements Serializable {
      */
     public boolean isCorrect(CubeFaces[][] solution) throws IllegalArgumentException {
 
-        // Checking if dimensions are legal.
-        if (patternGrid.length != solution.length) {
+        // Checking if dimensions are legal. Assuming rectangular grids.
+        if (patternGrid.length != solution.length || patternGrid[0].length != solution[0].length) {
             throw new IllegalArgumentException("Pattern and solution dimensions do not match.");
         }
 
-        for (int i = 0; i < patternGrid.length; i++) {
-            if (patternGrid[i].length != solution[i].length) {
-                throw new IllegalArgumentException("Pattern and solution dimensions do not match.");
-            }
-        }
+        // Patterns are not square in Painting puzzle mode, hence this is disabled
+//        for (int i = 0; i < patternGrid.length; i++) {
+//            if (patternGrid[i].length != solution[i].length) {
+//                throw new IllegalArgumentException("Pattern and solution dimensions do not match.");
+//            }
+//        }
 
         // Check if solution is correct.
         for (int i = 0; i < patternGrid.length; i++) {
-            for (int j = 0; j < patternGrid.length; j++) {
+            for (int j = 0; j < patternGrid[i].length; j++) {
                 if (patternGrid[i][j] != solution[i][j]) {
                     return false;
                 }
