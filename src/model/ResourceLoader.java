@@ -5,9 +5,13 @@ import javafx.scene.image.Image;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.*;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,8 +149,14 @@ public class ResourceLoader {
         packs.sort(new Comparator<PatternPack>() {
             @Override
             public int compare(PatternPack o1, PatternPack o2) {
-                int patternNo1 = Integer.parseInt(o1.toString().substring(o1.toString().indexOf('_') + 1));
-                int patternNo2 = Integer.parseInt(o2.toString().substring(o1.toString().indexOf('_') + 1));
+                java.util.regex.Pattern pattern = Pattern.compile("([0-9]+)");
+                Matcher matcher = pattern.matcher(o1.toString());
+                matcher.find();
+                int patternNo1 = Integer.valueOf(matcher.group());
+
+                matcher = pattern.matcher(o2.toString());
+                matcher.find();
+                int patternNo2 = Integer.valueOf(matcher.group());
 
                 if (patternNo1 < patternNo2) return -1;
                 else if (patternNo1 > patternNo2) return 1;
