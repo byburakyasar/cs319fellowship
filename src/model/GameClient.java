@@ -9,10 +9,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 14.12.2018
- */
 public class GameClient {
     private BufferedReader in;
     private PrintWriter out;

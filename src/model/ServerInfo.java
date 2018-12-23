@@ -1,9 +1,5 @@
 package model;
 
-/**
- * @author Mert Duman
- * @version 23.12.2018
- */
 public class ServerInfo {
     private String serverAddress;
     private int serverPort;

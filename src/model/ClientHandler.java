@@ -3,10 +3,6 @@ package model;
 import java.io.*;
 import java.net.Socket;
 
-/**
- * @author Mert Duman
- * @version 14.12.2018
- */
 public class ClientHandler extends Thread {
     private HostServer hostServer;
     private Socket client;

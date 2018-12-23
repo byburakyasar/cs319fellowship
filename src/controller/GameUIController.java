@@ -29,10 +29,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
 public class GameUIController {
     @FXML private BorderPane mainBorderPane;
     @FXML private GridPane boardGrid;

@@ -4,10 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 23.12.2018
- */
 public class MainHandler extends Thread {
     private MainServer mainServer;
     private Socket client;

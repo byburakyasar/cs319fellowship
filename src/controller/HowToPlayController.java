@@ -16,10 +16,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class HowToPlayController {
     @FXML Button mainMenuBtn;
     @FXML ComboBox<String> gameModesComboBox;

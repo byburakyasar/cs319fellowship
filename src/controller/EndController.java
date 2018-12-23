@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class EndController {
     @FXML Label endGameLabel;
     @FXML Label endGameFirstLetter;

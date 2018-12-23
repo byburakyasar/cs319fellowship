@@ -11,10 +11,7 @@ import model.Player;
 
 import java.io.IOException;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class LevelSelectController {
     @FXML Button backToMenuBtn;
     @FXML Button goLeftBtn;

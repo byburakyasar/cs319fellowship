@@ -9,10 +9,6 @@ import java.net.ServerSocket;
 import java.net.UnknownHostException;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 14.12.2018
- */
 public class HostServer {
     private ServerSocket serverSocket;
     private MainClient mainClient;

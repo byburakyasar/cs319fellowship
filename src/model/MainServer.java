@@ -5,10 +5,6 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 23.12.2018
- */
 public class MainServer {
     private ServerSocket serverSocket;
     private Vector<MainHandler> mainHandlers;

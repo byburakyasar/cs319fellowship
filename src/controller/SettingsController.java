@@ -14,10 +14,7 @@ import java.io.IOException;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class SettingsController {
     @FXML Button mainMenuBtn;
     @FXML CheckBox musicBtn;
