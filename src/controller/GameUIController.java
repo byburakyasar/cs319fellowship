@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private int PATTERN_NO = 1;
+    private int PATTERN_NO = 7;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -250,16 +250,16 @@ public class GameUIController {
         // Behavior depends on the painting used
         switch (PATTERN_NO) {
             // 2x3 Paintings
-            case -1: // Does not exist, used as a placeholder
+            case 7: // Starry Night by Van Gogh I think
                 rowNum = 2;
                 colNum = 3;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];
                 solutionFaces[0][0] = CubeFaces.FACE_UP;
-                solutionFaces[0][1] = CubeFaces.FACE_DOWN;
-                solutionFaces[0][2] = CubeFaces.FACE_LEFT;
-                solutionFaces[1][0] = CubeFaces.FACE_RIGHT;
-                solutionFaces[1][1] = CubeFaces.FACE_FRONT;
-                solutionFaces[1][2] = CubeFaces.FACE_BACK;
+                solutionFaces[0][1] = CubeFaces.FACE_BACK;
+                solutionFaces[0][2] = CubeFaces.FACE_FRONT;
+                solutionFaces[1][0] = CubeFaces.FACE_DOWN;
+                solutionFaces[1][1] = CubeFaces.FACE_RIGHT;
+                solutionFaces[1][2] = CubeFaces.FACE_LEFT;
                 this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
                 this.game.setPattern(this.pattern);
 
