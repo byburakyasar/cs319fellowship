@@ -202,7 +202,7 @@ public class GameOptionsController {
         startBtn.setText("Looking for players...");
         startBtn.setDisable(true);
 
-        mainClient = new MainClient("139.179.211.250", 8000);
+        mainClient = new MainClient("localhost", 8000);
         mainClient.joinServer();
         Vector<ServerInfo> matchingServers = mainClient.getMatchingServers(playerCount, difficulty, cubeDimension, String.valueOf(gameMode), patternNo);
 
