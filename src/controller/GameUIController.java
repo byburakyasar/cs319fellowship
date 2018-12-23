@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private int PATTERN_NO = 8;
+    private int PATTERN_NO = 9;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -229,6 +229,7 @@ public class GameUIController {
             // 2x3 Paintings
             case 6: // Starry Night by Van Gogh
             case 8: // Blossoms by Van Gogh
+            case 9: // Convergence by Jackson Pollock
                 rowNum = 2;
                 colNum = 3;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];

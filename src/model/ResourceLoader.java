@@ -145,7 +145,12 @@ public class ResourceLoader {
         packs.sort(new Comparator<PatternPack>() {
             @Override
             public int compare(PatternPack o1, PatternPack o2) {
-                return o1.toString().compareTo(o2.toString());
+                int patternNo1 = Integer.parseInt(o1.toString().substring(o1.toString().indexOf('_') + 1));
+                int patternNo2 = Integer.parseInt(o2.toString().substring(o1.toString().indexOf('_') + 1));
+
+                if (patternNo1 < patternNo2) return -1;
+                else if (patternNo1 > patternNo2) return 1;
+                else return 0;
             }
         });
 
@@ -174,6 +179,7 @@ public class ResourceLoader {
                             }
 
                             String pathName = path.getFileName().toString();
+                            
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });
