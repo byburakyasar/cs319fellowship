@@ -12,10 +12,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
+
 public class EndController {
     @FXML Label endGameLabel;
     @FXML Label endGameFirstLetter;
@@ -37,6 +34,7 @@ public class EndController {
     private EndType endType;
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
+
 
     public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, int lastPatternNo, long lastGameTime, Player lastWinner, boolean wasFromLevelSelection, boolean wasMultiplayer, EndType endType) {
         this.lastPlayer = lastPlayer;

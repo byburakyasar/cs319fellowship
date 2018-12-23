@@ -4,10 +4,6 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 23.12.2018
- */
 public class MainHandler extends Thread {
     private MainServer mainServer;
     private Socket client;
@@ -61,10 +57,11 @@ public class MainHandler extends Thread {
                     int serverDifficulty = Integer.valueOf(in.readLine());
                     int serverCubeDimension = Integer.valueOf(in.readLine());
                     String serverGameMode = in.readLine();
+                    int serverPatternNo = Integer.valueOf(in.readLine());
 
                     //System.out.println("received server info: " + serverAddress + " " + serverPort + " "
                     //                    + serverMaxSize + " " + serverDifficulty + " " + serverCubeDimension + " " + serverGameMode);
-                    HostServer server = new HostServer(serverAddress, serverPort, serverMaxSize, serverDifficulty, serverCubeDimension, serverGameMode);
+                    HostServer server = new HostServer(serverAddress, serverPort, serverMaxSize, serverDifficulty, serverCubeDimension, serverGameMode, serverPatternNo);
                     mainServer.getAvailableServers().add(server);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -87,8 +84,9 @@ public class MainHandler extends Thread {
                     int serverDifficulty = Integer.valueOf(in.readLine());
                     int serverCubeDimension = Integer.valueOf(in.readLine());
                     String serverGameMode = in.readLine();
+                    int serverPatternNo = Integer.valueOf(in.readLine());
 
-                    Vector<HostServer> filteredServers = mainServer.filterServers(serverMaxSize, serverDifficulty, serverCubeDimension, serverGameMode);
+                    Vector<HostServer> filteredServers = mainServer.filterServers(serverMaxSize, serverDifficulty, serverCubeDimension, serverGameMode, serverPatternNo);
                     for (HostServer sd : filteredServers) {
                         out.println(sd.getServerAddress());
                         out.println(sd.getServerPort());

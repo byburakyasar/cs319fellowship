@@ -5,10 +5,6 @@ import java.net.BindException;
 import java.net.ServerSocket;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 23.12.2018
- */
 public class MainServer {
     private ServerSocket serverSocket;
     private Vector<MainHandler> mainHandlers;
@@ -57,13 +53,14 @@ public class MainServer {
         return null;
     }
 
-    public Vector<HostServer> filterServers(int playerCount, int difficulty, int cubeDimension, String gameMode) {
+    public Vector<HostServer> filterServers(int playerCount, int difficulty, int cubeDimension, String gameMode, int patternNo) {
         Vector<HostServer> filteredVectors = new Vector<>();
         for (HostServer hs : availableServers) {
             if (hs.getServerMaxSize() == playerCount &&
                     hs.getServerDifficulty() == difficulty &&
                         hs.getServerCubeDimension() == cubeDimension &&
-                            hs.getServerGameMode().equals(gameMode)) {
+                            hs.getServerGameMode().equals(gameMode) &&
+                                hs.getServerPatternNo() == patternNo) {
                 filteredVectors.add(hs);
             }
         }

@@ -29,10 +29,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 
-/**
- * @author Mert Duman
- * @version 17.11.2018
- */
 public class GameUIController {
     @FXML private BorderPane mainBorderPane;
     @FXML private GridPane boardGrid;
@@ -64,7 +60,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private int PATTERN_NO = 1;
+    private int patternNo = 0;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -91,33 +87,14 @@ public class GameUIController {
      * @param playerCount The number of players in the game.
      * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode) {
-        this.player = player;
-        this.difficulty = difficulty;
-        this.playerCount = playerCount;
-        this.cubeDimension = cubeDimension;
-        this.gameMode = gameMode;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
-        this.game = Game.createRandomGame(1, difficulty);
-        this.pattern = game.getPattern();
-        this.solutionFaces = this.pattern.getPatternGrid();
-    }
-
-    /**
-     * Constructs a GameUIController object for single player use, with predefined game options and pattern no.
-     * @param player The player will play the game.
-     * @param difficulty The board size (3, 4, 5 for 3x3, 4x4, 5x5).
-     * @param playerCount The number of players in the game.
-     * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
-     */
     public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, int patternNo) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
         this.gameMode = gameMode;
-        this.PATTERN_NO = patternNo;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
+        this.patternNo = patternNo;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(this.patternNo).getCube();
         this.game = Game.createRandomGame(1, difficulty);
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
@@ -133,13 +110,14 @@ public class GameUIController {
      * @param gameClient The gameClient that will play the game.
      * @param game The game object shared between all people in the hostServer.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, GameClient gameClient, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, int patternNo, GameClient gameClient, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
         this.gameMode = gameMode;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
+        this.patternNo = patternNo;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(this.patternNo).getCube();
         this.game = game;
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
@@ -156,13 +134,14 @@ public class GameUIController {
      * @param gameClient The gameClient that will play the game.
      * @param game The game object shared between all people in the hostServer.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, HostServer hostServer, GameClient gameClient, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, int patternNo, HostServer hostServer, GameClient gameClient, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
         this.cubeDimension = cubeDimension;
         this.gameMode = gameMode;
-        this.cube = ResourceLoader.getInstance().getPatternPacks().get(PATTERN_NO).getCube();
+        this.patternNo = patternNo;
+        this.cube = ResourceLoader.getInstance().getPatternPacks().get(this.patternNo).getCube();
         this.game = game;
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
@@ -175,29 +154,6 @@ public class GameUIController {
      */
     public void initialize() {
         loadPatternMatching();
-        /*switch (gameMode)
-        {
-            case PATTERN_MATCHING:
-                loadPatternMatching();
-                break;
-            case FROM_MEMORY:
-                loadPatternMatching();
-                break;
-            case MAXIMUM_PATTERNS:
-                break;
-            case AGAINST_TIME:
-                loadPatternMatching();
-                break;
-            case PAINTING_PUZZLE:
-                loadPatternMatching();
-                break;
-            case DIFFERENT_CUBES:
-                break;
-            case TWO_VS_TWO:
-                loadPatternMatching();
-                break;
-        }*/
-
     }
 
     private void loadPatternMatching() {
@@ -248,18 +204,20 @@ public class GameUIController {
         int rowNum = difficulty;
         int colNum = difficulty;
         // Behavior depends on the painting used
-        switch (PATTERN_NO) {
+        switch (patternNo) {
             // 2x3 Paintings
-            case -1: // Does not exist, used as a placeholder
+            case 6: // Starry Night by Van Gogh
+            case 8: // Blossoms by Van Gogh
+            case 9: // Convergence by Jackson Pollock
                 rowNum = 2;
                 colNum = 3;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];
                 solutionFaces[0][0] = CubeFaces.FACE_UP;
-                solutionFaces[0][1] = CubeFaces.FACE_DOWN;
-                solutionFaces[0][2] = CubeFaces.FACE_LEFT;
-                solutionFaces[1][0] = CubeFaces.FACE_RIGHT;
-                solutionFaces[1][1] = CubeFaces.FACE_FRONT;
-                solutionFaces[1][2] = CubeFaces.FACE_BACK;
+                solutionFaces[0][1] = CubeFaces.FACE_BACK;
+                solutionFaces[0][2] = CubeFaces.FACE_FRONT;
+                solutionFaces[1][0] = CubeFaces.FACE_DOWN;
+                solutionFaces[1][1] = CubeFaces.FACE_RIGHT;
+                solutionFaces[1][2] = CubeFaces.FACE_LEFT;
                 this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
                 this.game.setPattern(this.pattern);
 
@@ -274,7 +232,8 @@ public class GameUIController {
                 break;
 
             // 3x2 Paintings
-            case 1: // Mona Lisa is pattern pack at index 1
+            case 1: // Mona Lisa by Da Vinci
+            case 10: // Girl with the Perl Earring by Vermeer
                 rowNum = 3;
                 colNum = 2;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];
@@ -709,7 +668,7 @@ public class GameUIController {
         GridPane multiplayerBoard = new GridPane();
         multiplayerBoard.setGridLinesVisible(true);
         multiplayerBoard.setAlignment(Pos.CENTER);
-        multiplayerBoard.getStyleClass().add("bordered");
+        //multiplayerBoard.getStyleClass().add("bordered");
 
         for(int i = 0; i < solutionFaces.length; i++) {
             for(int j = 0; j < solutionFaces[i].length; j++) {
@@ -789,7 +748,12 @@ public class GameUIController {
         }
 
         try {
+            System.out.println("closing client");
             gameClient.close();
+            if (hostServer != null) {
+                System.out.println("closing server");
+                hostServer.close();
+            }
 
             loadEndScene(winTime, winner, endType);
         } catch (IOException e) {
@@ -840,25 +804,32 @@ public class GameUIController {
         Stage current = (Stage) boardGrid.getScene().getWindow();
         EndController endC;
 
+        if (gameClient != null) {
+            gameClient.close();
+        }
+        if (hostServer != null) {
+            hostServer.close();
+        }
+
         switch (endType) {
             case NORMAL:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case GIVE_UP:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case LOST_AGAINST_TIME:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case TWO_VS_TWO:
                 if (teamLeader.getName().equals(winner.getName())) {
-                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, player, isFromLevelSelection, gameClient != null, endType);
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, player, isFromLevelSelection, gameClient != null, endType);
                 } else {
-                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 }
                 break;
             default:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, patternNo, winTime, winner, isFromLevelSelection, gameClient != null, endType);
 
         }
 

@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.MainClient;
 import model.MainServer;
 import model.ResourceLoader;
 
@@ -33,8 +34,11 @@ public class Main extends Application {
     }
 
     public void createMainServer() {
-        // The error thrown by this is caught to print that the server is running already.
-        MainServer mainServer = new MainServer(8000);
+        MainClient mainClient = new MainClient("139.179.211.250", 8000);
+        if (!mainClient.joinServer()) {
+            // The error thrown by this is caught to print that the server is running already.
+            MainServer mainServer = new MainServer(8000);
+        }
     }
 
     @Override
