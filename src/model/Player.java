@@ -89,7 +89,7 @@ public class Player implements Serializable {
     public void play(int row, int col, CubeFaces face) throws IllegalArgumentException {
 
         // Range checks.
-        if (row >= solutionGrid.length || col >= solutionGrid.length || row < 0 || col < 0) {
+        if (row >= solutionGrid.length || col >= solutionGrid[row].length || row < 0 || col < 0) {
             throw new IllegalArgumentException("Player: Illegal move outside board bounds.");
         }
 
