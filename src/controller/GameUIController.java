@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private int PATTERN_NO = 6;
+    private int PATTERN_NO = 8;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -227,7 +227,8 @@ public class GameUIController {
         // Behavior depends on the painting used
         switch (PATTERN_NO) {
             // 2x3 Paintings
-            case 6: // Starry Night by Van Gogh I think
+            case 6: // Starry Night by Van Gogh
+            case 8: // Blossoms by Van Gogh
                 rowNum = 2;
                 colNum = 3;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];
