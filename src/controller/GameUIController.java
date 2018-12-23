@@ -842,7 +842,7 @@ public class GameUIController {
         loader.setLocation(getClass().getResource("/view/EndStage.fxml"));
 
         BorderPane root = loader.load();
-
+        
         current.getScene().setRoot(root);
     }
 
