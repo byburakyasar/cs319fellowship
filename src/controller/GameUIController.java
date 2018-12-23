@@ -672,7 +672,7 @@ public class GameUIController {
         GridPane multiplayerBoard = new GridPane();
         multiplayerBoard.setGridLinesVisible(true);
         multiplayerBoard.setAlignment(Pos.CENTER);
-        multiplayerBoard.getStyleClass().add("bordered");
+        //multiplayerBoard.getStyleClass().add("bordered");
 
         for(int i = 0; i < solutionFaces.length; i++) {
             for(int j = 0; j < solutionFaces[i].length; j++) {
@@ -842,7 +842,7 @@ public class GameUIController {
         loader.setLocation(getClass().getResource("/view/EndStage.fxml"));
 
         BorderPane root = loader.load();
-        
+
         current.getScene().setRoot(root);
     }
 
