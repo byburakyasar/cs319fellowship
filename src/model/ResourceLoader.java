@@ -179,7 +179,7 @@ public class ResourceLoader {
                             }
 
                             String pathName = path.getFileName().toString();
-                            
+
                             return pathName.startsWith(PATTERN_PACK_PREFIX);
                         }
                     });

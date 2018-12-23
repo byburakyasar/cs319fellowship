@@ -64,7 +64,7 @@ public class GameUIController {
     private Game game;
     private MouseControl mc;
     private CubeFaces[][] solutionFaces;
-    private int PATTERN_NO = 9;
+    private int PATTERN_NO = 10;
     private CubeFaces[] cubeFaces = {CubeFaces.FACE_UP, CubeFaces.FACE_LEFT, CubeFaces.FACE_FRONT,
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
@@ -253,7 +253,8 @@ public class GameUIController {
                 break;
 
             // 3x2 Paintings
-            case 1: // Mona Lisa is pattern pack at index 1
+            case 1: // Mona Lisa by Da Vinci
+            case 10: // Girl with the Perl Earring by Vermeer
                 rowNum = 3;
                 colNum = 2;
                 this.solutionFaces = new CubeFaces[rowNum][colNum];
