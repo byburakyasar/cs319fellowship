@@ -69,8 +69,8 @@ public class GameUIController {
             CubeFaces.FACE_DOWN, CubeFaces.FACE_RIGHT, CubeFaces.FACE_BACK};
 
     // Online related
-    private Server server;
-    private Client client;
+    private HostServer hostServer;
+    private GameClient gameClient;
 
     // From Memory
     private int remainingReveals = 3;
@@ -125,15 +125,15 @@ public class GameUIController {
     }
 
     /**
-     * Constructs a GameUIController object for multi player use for client machine.
+     * Constructs a GameUIController object for multi player use for gameClient machine.
      * @param player The player will play the game.
      * @param difficulty The board size (3, 4, 5 for 3x3, 4x4, 5x5).
      * @param playerCount The number of players in the game.
      * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
-     * @param client The client that will play the game.
-     * @param game The game object shared between all people in the server.
+     * @param gameClient The gameClient that will play the game.
+     * @param game The game object shared between all people in the hostServer.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, Client client, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, GameClient gameClient, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
@@ -143,20 +143,20 @@ public class GameUIController {
         this.game = game;
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
-        this.client = client;
+        this.gameClient = gameClient;
     }
 
     /**
-     * Constructs a GameUIController object for multi player use for server machine that also registers as a client.
+     * Constructs a GameUIController object for multi player use for hostServer machine that also registers as a gameClient.
      * @param player The player will play the game.
      * @param difficulty The board size (3, 4, 5 for 3x3, 4x4, 5x5).
      * @param playerCount The number of players in the game.
      * @param cubeDimension The dimensions of the cube (2, 3 for 2D, 3D)
-     * @param server The server that is responsible for handling the clients to play this game.
-     * @param client The client that will play the game.
-     * @param game The game object shared between all people in the server.
+     * @param hostServer The hostServer that is responsible for handling the clients to play this game.
+     * @param gameClient The gameClient that will play the game.
+     * @param game The game object shared between all people in the hostServer.
      */
-    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, Server server, Client client, Game game) {
+    public GameUIController(Player player, int difficulty, int playerCount, int cubeDimension, GameOptionsController.GameModes gameMode, HostServer hostServer, GameClient gameClient, Game game) {
         this.player = player;
         this.difficulty = difficulty;
         this.playerCount = playerCount;
@@ -166,8 +166,8 @@ public class GameUIController {
         this.game = game;
         this.pattern = game.getPattern();
         this.solutionFaces = this.pattern.getPatternGrid();
-        this.server = server;
-        this.client = client;
+        this.hostServer = hostServer;
+        this.gameClient = gameClient;
     }
 
     /**
@@ -263,8 +263,8 @@ public class GameUIController {
                 this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
                 this.game.setPattern(this.pattern);
 
-                if (client != null) {
-                    for (Player p : client.getClientPlayers()) {
+                if (gameClient != null) {
+                    for (Player p : gameClient.getClientPlayers()) {
                         p.setBoardDimensions(rowNum, colNum);
                     }
                     this.player.setBoardDimensions(rowNum, colNum);
@@ -287,8 +287,8 @@ public class GameUIController {
                 this.pattern = Pattern.createPatternFromPatternGrid(solutionFaces);
                 this.game.setPattern(this.pattern);
 
-                if (client != null) {
-                    for (Player p : client.getClientPlayers()) {
+                if (gameClient != null) {
+                    for (Player p : gameClient.getClientPlayers()) {
                         p.setBoardDimensions(rowNum, colNum);
                     }
                     this.player.setBoardDimensions(rowNum, colNum);
@@ -561,11 +561,11 @@ public class GameUIController {
                             int row = GridPane.getRowIndex(pane);
                             int col = GridPane.getColumnIndex(pane);
                             if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
-                                client.sendPlayerMove(teamLeader.getName(), row, col, null);
+                                gameClient.sendPlayerMove(teamLeader.getName(), row, col, null);
                                 game.playerMove(teamLeader.getName(), row, col, null);
                             } else {
-                                if (client != null) {
-                                    client.sendPlayerMove(player.getName(), row, col, null);
+                                if (gameClient != null) {
+                                    gameClient.sendPlayerMove(player.getName(), row, col, null);
                                 }
                                 game.playerMove(player.getName(), row, col, null);
                             }
@@ -602,11 +602,11 @@ public class GameUIController {
 
                         numOfMoves.set(numOfMoves.get() + 1);
                         if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
-                            client.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
+                            gameClient.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
                             playerPlayed(teamLeader.getName(), row, col, cubeFace);
                         } else {
-                            if (client != null) {
-                                client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                            if (gameClient != null) {
+                                gameClient.sendPlayerMove(player.getName(), row, col, cubeFace);
                             }
                             playerPlayed(player.getName(), row, col, cubeFace);
                         }
@@ -635,11 +635,11 @@ public class GameUIController {
 
                             numOfMoves.set(numOfMoves.get() + 1);
                             if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
-                                client.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
+                                gameClient.sendPlayerMove(teamLeader.getName(), row, col, cubeFace);
                                 playerPlayed(teamLeader.getName(), row, col, cubeFace);
                             } else {
-                                if (client != null) {
-                                    client.sendPlayerMove(player.getName(), row, col, cubeFace);
+                                if (gameClient != null) {
+                                    gameClient.sendPlayerMove(player.getName(), row, col, cubeFace);
                                 }
                                 playerPlayed(player.getName(), row, col, cubeFace);
                             }
@@ -656,13 +656,13 @@ public class GameUIController {
     }
 
     private void setupForMultiplayer() {
-        // If this is a multiplayer game, make client ready
-        client.setGameUIController(this);
-        client.readMessageNonBlockedAlways();
+        // If this is a multiplayer game, make gameClient ready
+        gameClient.setGameUIController(this);
+        gameClient.readMessageNonBlockedAlways();
 
         centerVBox.setAlignment(Pos.TOP_CENTER);
 
-        Vector<Player> players = client.getClientPlayers();
+        Vector<Player> players = gameClient.getClientPlayers();
 
         if (gameMode == GameOptionsController.GameModes.TWO_VS_TWO) {
             for (int i = 0; i < players.size(); i++) {
@@ -685,7 +685,6 @@ public class GameUIController {
                     // Load boards for every other player
                     loadMultiplayerBoard(players.get(i).getName(), players.get(i).getVisibleName());
 
-                    System.out.println(players.get(i).getBoardDimensions()[0] + " " + players.get(i).getBoardDimensions()[1]);
                     // Add all other players to the game
                     game.addPlayer(players.get(i));
                 }
@@ -695,8 +694,8 @@ public class GameUIController {
 
     /**
      * Loads the boards of other clients connected to this game.
-     * @param playerName The name of the other client
-     * @param playerVisibleName The visible (username) name of the other client
+     * @param playerName The name of the other gameClient
+     * @param playerVisibleName The visible (username) name of the other gameClient
      */
     private void loadMultiplayerBoard(String playerName, String playerVisibleName) {
         final int BOARD_PANE_SIZE;
@@ -775,25 +774,22 @@ public class GameUIController {
      * Loads the end game scene and sends/receives the end time of the winning player
      * to other clients if there is a winner.
      * Closes the always waiting thread of all other clients.
-     * Closes the client and server.
+     * Closes the gameClient and hostServer.
      */
     public void handleGameEndMultiplayer(long winTime, Player winner, EndController.EndType endType) {
         if (winner == null) {
 
         } else if (winner.getName().equals(player.getName())) {
             // If you are the winner send your end time to others and close their always waiting thread.
-            client.sendPlayerEndTime(winTime);
-            winTime = Long.valueOf(client.readMessageBlocked());
+            gameClient.sendPlayerEndTime(winTime);
+            winTime = Long.valueOf(gameClient.readMessageBlocked());
         } else {
             // If you are not the winner, wait for the winner player's end time.
-            winTime = Long.valueOf(client.readMessageBlocked());
+            winTime = Long.valueOf(gameClient.readMessageBlocked());
         }
 
         try {
-            client.close();
-            if (server != null) {
-                server.close();
-            }
+            gameClient.close();
 
             loadEndScene(winTime, winner, endType);
         } catch (IOException e) {
@@ -802,13 +798,13 @@ public class GameUIController {
     }
 
     /**
-     * Called from the client to set the board face when another client makes a move.
+     * Called from the gameClient to set the board face when another gameClient makes a move.
      * Sets the multiplayer board face at row, col with the given cubeFace, for the given player.
      * @param playerName Name of the player to set the board for.
      * @param row Row of the board face.
      * @param col Column of the board face.
      * @param cubeFace Cube face to set the board to.
-     * @param clientNo No of the client who made the move.
+     * @param clientNo No of the gameClient who made the move.
      */
     public void setBoardFace(String playerName, int row, int col, CubeFaces cubeFace, int clientNo) {
         Pane pane;
@@ -846,23 +842,23 @@ public class GameUIController {
 
         switch (endType) {
             case NORMAL:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case GIVE_UP:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case LOST_AGAINST_TIME:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 break;
             case TWO_VS_TWO:
                 if (teamLeader.getName().equals(winner.getName())) {
-                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, player, isFromLevelSelection, client != null, endType);
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, player, isFromLevelSelection, gameClient != null, endType);
                 } else {
-                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                    endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
                 }
                 break;
             default:
-                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, client != null, endType);
+                endC = new EndController(player, difficulty, playerCount, cubeDimension, gameMode, PATTERN_NO, winTime, winner, isFromLevelSelection, gameClient != null, endType);
 
         }
 
@@ -916,8 +912,8 @@ public class GameUIController {
      */
     @FXML
     public void giveUp() {
-        if (client != null) {
-            client.sendPlayerGiveUp(player.getName());
+        if (gameClient != null) {
+            gameClient.sendPlayerGiveUp(player.getName());
         } else {
             try {
                 loadEndScene(0, null, EndController.EndType.GIVE_UP);

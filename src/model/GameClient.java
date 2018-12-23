@@ -13,7 +13,7 @@ import java.util.Vector;
  * @author Mert Duman
  * @version 14.12.2018
  */
-public class Client {
+public class GameClient {
     private BufferedReader in;
     private PrintWriter out;
     private Socket client;
@@ -32,7 +32,7 @@ public class Client {
         this.gameUIController = gameUIController;
     }
 
-    public Client(String host, int port, Player player) {
+    public GameClient(String host, int port, Player player) {
         this.host = host;
         this.port = port;
         this.player = player;
@@ -91,14 +91,14 @@ public class Client {
     }
 
     public String sendMessageBlocked(String msg) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_TEXT));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_TEXT));
         out.println(msg);
         return msg;
     }
 
     public <T> T sendObjectBlocked(T obj) {
         try {
-            alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_GAME));
+            alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_GAME));
             outObj.writeObject(obj);
             outObj.flush();
             return obj;
@@ -109,7 +109,7 @@ public class Client {
     }
 
     public void sendPlayerMove(String playerName, int row, int col, CubeFaces cubeFace) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_MOVE));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_MOVE));
         out.println(playerName);
         out.println(row);
         out.println(col);
@@ -118,7 +118,7 @@ public class Client {
     }
 
     public void sendPlayer(Player player) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_PLAYER));
         try {
             outObj.writeObject(player);
             outObj.flush();
@@ -128,7 +128,7 @@ public class Client {
     }
 
     public void sendPlayerProperties(String playerName, String playerVisibleName, int dimensions) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER_PROPERTIES));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_PLAYER_PROPERTIES));
         out.println(playerName);
         out.println(playerVisibleName);
         out.println(dimensions);
@@ -136,24 +136,24 @@ public class Client {
     }
 
     public void sendPlayerEndTime(long endTime) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_ENDTIME));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_ENDTIME));
         out.println(endTime);
     }
 
     public void sendPlayerGiveUp(String playerName) {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RECEIVE_PLAYER_GIVE_UP));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RECEIVE_PLAYER_GIVE_UP));
         out.println(playerName);
     }
 
     public String waitUntilGameReady() {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.RESPOND_GAME_READY));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.RESPOND_GAME_READY));
         String in = readMessageBlocked();
         clientNo = Integer.parseInt(in);
         return in;
     }
 
     public void distributeClientPlayers() {
-        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.DISTRIBUTE_CLIENT_PLAYERS));
+        alertServerForAction(String.valueOf(ClientHandler.HostServerCodes.DISTRIBUTE_CLIENT_PLAYERS));
         Vector<Player> players = readObjectBlocked();
         System.out.println(players);
         clientPlayers = players;
@@ -220,7 +220,7 @@ public class Client {
 
                                     // If you are the last person to give up, close the server and exit.
                                     if (everyoneGaveUp) {
-                                        alertServerForAction(String.valueOf(ClientHandler.ServerCodes.CLOSE_SERVER));
+                                        close();
 
                                         Platform.runLater(new Runnable() {
                                             @Override

@@ -8,7 +8,7 @@ import java.net.Socket;
  * @version 14.12.2018
  */
 public class ClientHandler extends Thread {
-    private Server server;
+    private HostServer hostServer;
     private Socket client;
     private int clientNo;
 
@@ -17,9 +17,9 @@ public class ClientHandler extends Thread {
     private ObjectInputStream inObj;
     private ObjectOutputStream outObj;
 
-    public ClientHandler(Socket socket, Server server, int clientNo) {
+    public ClientHandler(Socket socket, HostServer hostServer, int clientNo) {
         this.client = socket;
-        this.server = server;
+        this.hostServer = hostServer;
         this.clientNo = clientNo;
     }
 
@@ -34,7 +34,7 @@ public class ClientHandler extends Thread {
             outObj = new ObjectOutputStream(client.getOutputStream());
             inObj = new ObjectInputStream(client.getInputStream());
 
-            // Serve the client based on server codes
+            // Serve the client based on hostServer codes
             while (true) {
                 String codeStr = in.readLine();
                 System.out.println("READ CODE: " + codeStr);
@@ -42,7 +42,7 @@ public class ClientHandler extends Thread {
                     System.out.println("Closing thread for client: " + clientNo);
                     break;
                 }
-                ServerCodes code = Enum.valueOf(ServerCodes.class, codeStr);
+                HostServerCodes code = Enum.valueOf(HostServerCodes.class, codeStr);
                 handleClientRequest(code);
             }
         } catch (IOException e) {
@@ -56,7 +56,7 @@ public class ClientHandler extends Thread {
         }
     }
 
-    public synchronized void handleClientRequest(ServerCodes code) {
+    public synchronized void handleClientRequest(HostServerCodes code) {
         switch (code) {
             case RECEIVE_TEXT:
                 try {
@@ -70,7 +70,7 @@ public class ClientHandler extends Thread {
                 try {
                     Player player = (Player)inObj.readObject();
                     System.out.println("Added player: " + player.getVisibleName());
-                    server.getPlayers().add(player);
+                    hostServer.getPlayers().add(player);
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -84,7 +84,7 @@ public class ClientHandler extends Thread {
                     player.setVisibleName(playerVisibleName);
 
                     System.out.println("Added player: " + player.getVisibleName());
-                    server.getPlayers().add(player);
+                    hostServer.getPlayers().add(player);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -94,8 +94,8 @@ public class ClientHandler extends Thread {
                     System.out.println("Receiving object for client: " + clientNo);
                     Game obj = (Game)inObj.readObject();
 
-                    server.setObject(obj);
-                    server.alertAllClientsButSelf(ServerCodes.SEND_OBJECT, this);
+                    hostServer.setObject(obj);
+                    hostServer.alertAllClientsButSelf(HostServerCodes.SEND_OBJECT, this);
                 } catch (ClassNotFoundException | IOException e) {
                     e.printStackTrace();
                 }
@@ -109,8 +109,8 @@ public class ClientHandler extends Thread {
                     CubeFaces cubeFace = cubeFaceStr.equals("null") ? null : Enum.valueOf(CubeFaces.class, cubeFaceStr);
                     int clientNoOfMover = Integer.parseInt(in.readLine());
 
-                    server.setData(new Object[]{playerName, row, col, cubeFace, clientNoOfMover});
-                    server.alertAllClientsButSelf(ServerCodes.SEND_MOVE, this);
+                    hostServer.setData(new Object[]{playerName, row, col, cubeFace, clientNoOfMover});
+                    hostServer.alertAllClientsButSelf(HostServerCodes.SEND_MOVE, this);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -119,8 +119,8 @@ public class ClientHandler extends Thread {
                 try {
                     String endTime = in.readLine();
 
-                    server.setObject(endTime);
-                    server.alertAllClients(ServerCodes.SEND_ENDTIME);
+                    hostServer.setObject(endTime);
+                    hostServer.alertAllClients(HostServerCodes.SEND_ENDTIME);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -129,8 +129,8 @@ public class ClientHandler extends Thread {
                 try {
                     String playerName = in.readLine();
                     System.out.println("Player gave up: "+ playerName);
-                    server.setObject(playerName);
-                    server.alertAllClients(ServerCodes.SEND_PLAYER_GIVE_UP);
+                    hostServer.setObject(playerName);
+                    hostServer.alertAllClients(HostServerCodes.SEND_PLAYER_GIVE_UP);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -139,60 +139,60 @@ public class ClientHandler extends Thread {
                 break;
             case SEND_OBJECT:
                 try {
-                    outObj.writeObject(server.getObject());
+                    outObj.writeObject(hostServer.getObject());
                     outObj.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case SEND_MOVE:
-                out.println(String.valueOf(Client.ClientCodes.RECEIVE_MOVE));
-                out.println(server.getData()[0]);
-                out.println(server.getData()[1]);
-                out.println(server.getData()[2]);
-                out.println(server.getData()[3]);
-                out.println(server.getData()[4]);
+                out.println(String.valueOf(GameClient.ClientCodes.RECEIVE_MOVE));
+                out.println(hostServer.getData()[0]);
+                out.println(hostServer.getData()[1]);
+                out.println(hostServer.getData()[2]);
+                out.println(hostServer.getData()[3]);
+                out.println(hostServer.getData()[4]);
                 break;
             case SEND_PLAYERS:
                 try {
-                    outObj.writeObject(server.getPlayers());
+                    outObj.writeObject(hostServer.getPlayers());
                     outObj.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 break;
             case SEND_ENDTIME:
-                out.println(String.valueOf(Client.ClientCodes.CLOSE));
-                out.println(server.getObject());
+                out.println(String.valueOf(GameClient.ClientCodes.CLOSE));
+                out.println(hostServer.getObject());
                 break;
             case SEND_PLAYER_GIVE_UP:
-                out.println(String.valueOf(Client.ClientCodes.RECEIVE_PLAYER_GIVE_UP));
-                out.println(server.getObject());
+                out.println(String.valueOf(GameClient.ClientCodes.RECEIVE_PLAYER_GIVE_UP));
+                out.println(hostServer.getObject());
                 break;
             case RESPOND_GAME_READY:
                 int serverSize = -1;
-                while (serverSize < server.getServerMaxSize()) {
-                    serverSize = server.getPlayersSize();
+                while (serverSize < hostServer.getServerMaxSize()) {
+                    serverSize = hostServer.getPlayersSize();
 
                     //System.out.print("");
 
-                    if (serverSize >= server.getServerMaxSize()) {
+                    if (serverSize >= hostServer.getServerMaxSize()) {
                         out.println(clientNo);
                         break;
                     }
                 }
                 break;
             case DISTRIBUTE_CLIENT_PLAYERS:
-                server.alertAllClients(ServerCodes.SEND_PLAYERS);
+                hostServer.alertAllClients(HostServerCodes.SEND_PLAYERS);
                 break;
             case CLOSE_SERVER:
                 System.out.println("CLOSING SERVER...");
-                server.close();
+                hostServer.close();
                 break;
         }
     }
 
-    public enum ServerCodes {
+    public enum HostServerCodes {
         RECEIVE_GAME,
         RECEIVE_TEXT,
         RECEIVE_MOVE,

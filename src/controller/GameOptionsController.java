@@ -10,14 +10,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import model.Client;
-import model.Game;
-import model.Player;
-import model.Server;
+import model.*;
 
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.Vector;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameOptionsController {
@@ -32,8 +31,9 @@ public class GameOptionsController {
     @FXML ToggleGroup playerGroup;
     @FXML ToggleGroup dimensionGroup;
 
-    Client client;
-    Server server;
+    MainClient mainClient;
+    GameClient gameClient;
+    HostServer hostServer;
 
     private int difficulty = 4;
     private int playerCount = 1;
@@ -139,19 +139,41 @@ public class GameOptionsController {
         startBtn.setText("Looking for players...");
         startBtn.setDisable(true);
 
-        client = new Client("localhost", 8000, player);
-        boolean foundServer = client.joinServer();
+        mainClient = new MainClient("localhost", 50000);
+        mainClient.joinServer();
+        Vector<ServerInfo> matchingServers = mainClient.getMatchingServers(playerCount, difficulty, cubeDimension, String.valueOf(gameMode));
+
+        boolean foundServer = false;
+        for (ServerInfo si : matchingServers) {
+            System.out.println(si);
+        }
+
+        if (matchingServers.size() == 0) {
+            int port = ThreadLocalRandom.current().nextInt(15000, 64000);
+            hostServer = new HostServer(port, playerCount, difficulty, cubeDimension, gameMode, mainClient);
+            mainClient.setHostServer(hostServer);
+            mainClient.sendServerInfo();
+            gameClient = new GameClient("localhost", port, player);
+            gameClient.joinServer();
+            foundServer = false;
+        } else {
+            String serverAddress = matchingServers.firstElement().getServerAddress();
+            int port = matchingServers.firstElement().getServerPort();
+
+            gameClient = new GameClient(serverAddress, port, player);
+            foundServer = gameClient.joinServer();
+        }
 
         if (foundServer) {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
-                    String serverMessage = client.waitUntilGameReady();
-                    System.out.println("Client ready with no: " + serverMessage);
-                    client.waitClientPlayers();
+                    gameClient.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
+                    String serverMessage = gameClient.waitUntilGameReady();
+                    System.out.println("GameClient ready with no: " + serverMessage);
+                    gameClient.waitClientPlayers();
 
-                    Game obj = client.readObjectBlocked();
+                    Game obj = gameClient.readObjectBlocked();
 
                     if (serverMessage != null) {
                         Platform.runLater(new Runnable() {
@@ -159,7 +181,7 @@ public class GameOptionsController {
                             public void run() {
                                 try {
                                     FXMLLoader loader = new FXMLLoader();
-                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, client, obj);
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, gameClient, obj);
                                     loader.setController(gui);
                                     loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
                                     BorderPane root = loader.load();
@@ -174,26 +196,26 @@ public class GameOptionsController {
                 }
             }).start();
         } else {
-            server = new Server(8000, playerCount, difficulty, cubeDimension, gameMode);
-            client.joinServer();
+            //hostServer = new HostServer(8000, playerCount, difficulty, cubeDimension, gameMode, mainClient);
+            //gameClient.joinServer();
 
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    client.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
-                    String serverMessage = client.waitUntilGameReady(); // make it so that everyone exits at the same time
-                    System.out.println("Client ready with no: " + serverMessage);
-                    client.distributeClientPlayers();
+                    gameClient.sendPlayerProperties(player.getName(), player.getVisibleName(), difficulty);
+                    String serverMessage = gameClient.waitUntilGameReady(); // make it so that everyone exits at the same time
+                    System.out.println("GameClient ready with no: " + serverMessage);
+                    gameClient.distributeClientPlayers();
 
                     Game game = Game.createRandomGame(playerCount, difficulty);
-                    Game obj = client.sendObjectBlocked(game);
+                    Game obj = gameClient.sendObjectBlocked(game);
                     if (serverMessage != null) {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     FXMLLoader loader = new FXMLLoader();
-                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, server, client, obj);
+                                    GameUIController gui = new GameUIController(player, difficulty, playerCount, cubeDimension, gameMode, hostServer, gameClient, obj);
                                     loader.setController(gui);
                                     loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
 

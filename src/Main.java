@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import model.MainServer;
 import model.ResourceLoader;
 
 public class Main extends Application {
@@ -12,6 +13,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         try {
+            createMainServer();
+
             Screen screen = Screen.getPrimary();
             Rectangle2D bounds = screen.getVisualBounds();
 
@@ -27,6 +30,11 @@ public class Main extends Application {
             e.printStackTrace();
             stop();
         }
+    }
+
+    public void createMainServer() {
+        // The error thrown by this is caught to print that the server is running already.
+        MainServer mainServer = new MainServer(50000);
     }
 
     @Override
