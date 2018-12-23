@@ -233,9 +233,7 @@ public class GameOptionsController {
     public enum GameModes{
         PATTERN_MATCHING,
         FROM_MEMORY,
-        MAXIMUM_PATTERNS,
         AGAINST_TIME,
-        DIFFERENT_CUBES,
         PAINTING_PUZZLE,
         TWO_VS_TWO
     }
