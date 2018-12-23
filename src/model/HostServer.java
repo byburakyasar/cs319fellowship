@@ -21,26 +21,29 @@ public class HostServer {
     private int serverDifficulty;
     private int serverCubeDimension;
     private GameOptionsController.GameModes serverGameMode;
+    private int serverPatternNo;
     private String serverAddress;
     private int serverPort;
     private int curClients;
     private Object object;
     private Object[] data;
 
-    public HostServer(String serverAddress, int serverPort, int serverMaxSize, int serverDifficulty, int serverCubeDimension, String serverGameMode) {
+    public HostServer(String serverAddress, int serverPort, int serverMaxSize, int serverDifficulty, int serverCubeDimension, String serverGameMode, int serverPatternNo) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
         this.serverMaxSize = serverMaxSize;
         this.serverDifficulty = serverDifficulty;
         this.serverCubeDimension = serverCubeDimension;
         this.serverGameMode = Enum.valueOf(GameOptionsController.GameModes.class, serverGameMode);
+        this.serverPatternNo = serverPatternNo;
     }
 
-    public HostServer(int serverMaxSize, int serverDifficulty, int serverCubeDimension, GameOptionsController.GameModes serverGameMode, MainClient mainClient) {
+    public HostServer(int serverMaxSize, int serverDifficulty, int serverCubeDimension, GameOptionsController.GameModes serverGameMode, int serverPatternNo, MainClient mainClient) {
         this.serverMaxSize = serverMaxSize;
         this.serverDifficulty = serverDifficulty;
         this.serverCubeDimension = serverCubeDimension;
         this.serverGameMode = serverGameMode;
+        this.serverPatternNo = serverPatternNo;
         this.curClients = 0;
         this.players = new Vector<>();
         this.mainClient = mainClient;
@@ -144,6 +147,10 @@ public class HostServer {
 
     public String getServerGameMode() {
         return String.valueOf(serverGameMode);
+    }
+
+    public int getServerPatternNo() {
+        return serverPatternNo;
     }
 
     public String getServerAddress() {

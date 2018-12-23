@@ -57,13 +57,14 @@ public class MainServer {
         return null;
     }
 
-    public Vector<HostServer> filterServers(int playerCount, int difficulty, int cubeDimension, String gameMode) {
+    public Vector<HostServer> filterServers(int playerCount, int difficulty, int cubeDimension, String gameMode, int patternNo) {
         Vector<HostServer> filteredVectors = new Vector<>();
         for (HostServer hs : availableServers) {
             if (hs.getServerMaxSize() == playerCount &&
                     hs.getServerDifficulty() == difficulty &&
                         hs.getServerCubeDimension() == cubeDimension &&
-                            hs.getServerGameMode().equals(gameMode)) {
+                            hs.getServerGameMode().equals(gameMode) &&
+                                hs.getServerPatternNo() == patternNo) {
                 filteredVectors.add(hs);
             }
         }

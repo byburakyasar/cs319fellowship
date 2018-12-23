@@ -48,6 +48,7 @@ public class MainClient {
             out.println(hostServer.getServerDifficulty());
             out.println(hostServer.getServerCubeDimension());
             out.println(hostServer.getServerGameMode());
+            out.println(hostServer.getServerPatternNo());
         }
     }
 
@@ -59,12 +60,13 @@ public class MainClient {
         }
     }
 
-    public Vector<ServerInfo> getMatchingServers(int serverMaxSize, int serverDifficulty, int serverCubeDimension, String serverGameMode) {
+    public Vector<ServerInfo> getMatchingServers(int serverMaxSize, int serverDifficulty, int serverCubeDimension, String serverGameMode, int serverPatternNo) {
         alertServerForAction(String.valueOf(MainHandler.MainServerCodes.SEND_MATCHING_SERVERS));
         out.println(serverMaxSize);
         out.println(serverDifficulty);
         out.println(serverCubeDimension);
         out.println(serverGameMode);
+        out.println(serverPatternNo);
 
         Vector<ServerInfo> matchingServers = new Vector<>();
 
