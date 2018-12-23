@@ -1,15 +1,11 @@
 package controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
@@ -27,8 +23,14 @@ public class SettingsController {
     @FXML CheckBox musicBtn;
     @FXML CheckBox soundBtn;
 
+    private static AudioClip music = new AudioClip(ClassLoader.getSystemClassLoader().getResource("res/background_music.wav").toString());
+
     public void initialize(){
-        AudioClip music = new AudioClip(getClass().getResource("/res/background_music.wav").toString());
+        if (music.isPlaying()) {
+            musicBtn.selectedProperty().setValue(true);
+        } else {
+            musicBtn.selectedProperty().setValue(false);
+        }
 
         EventHandler musicHandler = new EventHandler<ActionEvent>() {
             @Override
@@ -46,23 +48,6 @@ public class SettingsController {
             }
         };
         musicBtn.setOnAction(musicHandler);
-
-        /*
-        EventHandler soundHandler = new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if(event.getSource() instanceof CheckBox){
-                    if(soundBtn.isSelected()){
-
-                    }
-                    else{
-
-                    }
-                }
-            }
-        };
-        soundBtn.setOnAction(soundHandler);
-        */
     }
 
 

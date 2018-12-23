@@ -121,6 +121,8 @@ public class GameOptionsController {
                             }
                             playerCount = 4;
                         }
+
+                        fixList();
                         break;
                     case AGAINST_TIME:
                         for (int i = 0; i < playerGroup.getToggles().size(); i++) {
@@ -132,22 +134,34 @@ public class GameOptionsController {
                             }
                             playerCount = 1;
                         }
+
+                        fixList();
                         break;
                     case PAINTING_PUZZLE:
+                        unlockButtons();
+
                         patternComboBox.setItems(paintingList);
                         patternComboBox.valueProperty().setValue(paintingList.get(0));
                         break;
                     default:
-                        for (int i = 0; i < playerGroup.getToggles().size(); i++) {
-                            ((RadioButton) playerGroup.getToggles().get(i)).setDisable(false);
-                        }
+                        unlockButtons();
 
-                        patternComboBox.setItems(patternList);
-                        patternComboBox.valueProperty().setValue(patternList.get(0));
+                        fixList();
                         break;
                 }
             }
         });
+    }
+
+    private void unlockButtons() {
+        for (int i = 0; i < playerGroup.getToggles().size(); i++) {
+            ((RadioButton) playerGroup.getToggles().get(i)).setDisable(false);
+        }
+    }
+
+    private void fixList() {
+        patternComboBox.setItems(patternList);
+        patternComboBox.valueProperty().setValue(patternList.get(0));
     }
 
     @FXML
@@ -188,7 +202,7 @@ public class GameOptionsController {
         startBtn.setText("Looking for players...");
         startBtn.setDisable(true);
 
-        mainClient = new MainClient("localhost", 8000);
+        mainClient = new MainClient("139.179.211.250", 8000);
         mainClient.joinServer();
         Vector<ServerInfo> matchingServers = mainClient.getMatchingServers(playerCount, difficulty, cubeDimension, String.valueOf(gameMode), patternNo);
 

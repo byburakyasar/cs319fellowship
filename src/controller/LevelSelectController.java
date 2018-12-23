@@ -115,98 +115,98 @@ public class LevelSelectController {
                 loadGame(gui);
                 break;
             case 8:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 0);
 
                 loadGame(gui);
                 break;
             case 9:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 1);
 
                 loadGame(gui);
                 break;
             case 10:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 2);
 
                 loadGame(gui);
                 break;
             case 11:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 5);
 
                 loadGame(gui);
                 break;
             case 12:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 6);
 
                 loadGame(gui);
                 break;
             case 13:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 3);
 
                 loadGame(gui);
                 break;
             case 14:
-                player = new Player("single", 3);
+                player = new Player("single", 4);
                 gui = new GameUIController(player, 4, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 4);
 
                 loadGame(gui);
                 break;
             case 15:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 0);
 
                 loadGame(gui);
                 break;
             case 16:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 1);
 
                 loadGame(gui);
                 break;
             case 17:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 2);
 
                 loadGame(gui);
                 break;
             case 18:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 5);
 
                 loadGame(gui);
                 break;
             case 19:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 6);
 
                 loadGame(gui);
                 break;
             case 20:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 3);
 
                 loadGame(gui);
                 break;
             case 21:
-                player = new Player("single", 3);
+                player = new Player("single", 5);
                 gui = new GameUIController(player, 5, 1, 3,
                         GameOptionsController.GameModes.PATTERN_MATCHING, 4);
 

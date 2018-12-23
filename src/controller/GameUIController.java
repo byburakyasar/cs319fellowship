@@ -752,8 +752,10 @@ public class GameUIController {
         }
 
         try {
+            System.out.println("closing client");
             gameClient.close();
             if (hostServer != null) {
+                System.out.println("closing server");
                 hostServer.close();
             }
 
@@ -805,6 +807,13 @@ public class GameUIController {
     public void loadEndScene(long winTime, Player winner, EndController.EndType endType) throws IOException {
         Stage current = (Stage) boardGrid.getScene().getWindow();
         EndController endC;
+
+        if (gameClient != null) {
+            gameClient.close();
+        }
+        if (hostServer != null) {
+            hostServer.close();
+        }
 
         switch (endType) {
             case NORMAL:
