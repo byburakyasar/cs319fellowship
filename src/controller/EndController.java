@@ -38,6 +38,7 @@ public class EndController {
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
+
     public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, int lastPatternNo, long lastGameTime, Player lastWinner, boolean wasFromLevelSelection, boolean wasMultiplayer, EndType endType) {
         this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;

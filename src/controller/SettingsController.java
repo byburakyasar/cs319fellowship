@@ -30,7 +30,7 @@ public class SettingsController {
     public void initialize(){
         AudioClip music = new AudioClip(getClass().getResource("/res/background_music.wav").toString());
 
-        EventHandler eventHandler = new EventHandler<ActionEvent>() {
+        EventHandler musicHandler = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if(event.getSource() instanceof CheckBox){
@@ -45,7 +45,24 @@ public class SettingsController {
                 }
             }
         };
-        musicBtn.setOnAction(eventHandler);
+        musicBtn.setOnAction(musicHandler);
+
+        /*
+        EventHandler soundHandler = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if(event.getSource() instanceof CheckBox){
+                    if(soundBtn.isSelected()){
+
+                    }
+                    else{
+
+                    }
+                }
+            }
+        };
+        soundBtn.setOnAction(soundHandler);
+        */
     }
 
 

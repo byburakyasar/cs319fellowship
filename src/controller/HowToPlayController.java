@@ -104,14 +104,8 @@ public class HowToPlayController {
                     case "FROM_MEMORY":
                         textArea.setText(fromMemoryText);
                         break;
-                    case "MAXIMUM_PATTERNS":
-                        textArea.setText("MAXIMUM_PATTERNS");
-                        break;
                     case "AGAINST_TIME":
                         textArea.setText(againstTimeText);
-                        break;
-                    case "DIFFERENT_CUBES":
-                        textArea.setText("DIFFERENT_CUBES");
                         break;
                     case "PAINTING_PUZZLE":
                         textArea.setText(paintingPuzzleText);
