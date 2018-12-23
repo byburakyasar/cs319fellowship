@@ -753,6 +753,9 @@ public class GameUIController {
 
         try {
             gameClient.close();
+            if (hostServer != null) {
+                hostServer.close();
+            }
 
             loadEndScene(winTime, winner, endType);
         } catch (IOException e) {

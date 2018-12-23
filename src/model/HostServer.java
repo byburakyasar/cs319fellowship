@@ -3,6 +3,7 @@ package model;
 import controller.GameOptionsController;
 
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.UnknownHostException;
@@ -50,6 +51,12 @@ public class HostServer {
 
         try {
             this.serverAddress = InetAddress.getLocalHost().getHostAddress();
+            try(final DatagramSocket socket = new DatagramSocket()){
+                socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+                this.serverAddress = socket.getLocalAddress().getHostAddress();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
