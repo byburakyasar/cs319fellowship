@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.collections.FXCollections?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml" id="mainBorderPane"
             fx:controller="controller.HowToPlayController" stylesheets="@styles/HowToPlay.css, @styles/Buttons.css"
@@ -22,29 +21,45 @@
     </top>
 
     <center>
-        <VBox alignment="CENTER" spacing="10" id="contentVBox">
-            <Label text="Q-bitz is a game about building a pattern.">
-            </Label>
-            <Label text= "The  patterns  are  chosen randomly from a pile of cards and  players try  to match">
-            </Label>
-            <Label text= "the pattern using cubes. Cubes are identical to each other but each face of a cube">
-            </Label>
-            <Label text= "is different from  its other faces.  Depending on the specifics of the current round">
-            </Label>
-            <Label text= "the player who  builds the correct  pattern fastest or the player who gets closest">
-            </Label>
-            <Label text= "to  the correct pattern wins the round. Player with the most rounds wins the game.">
-            </Label>
-        </VBox>
+        <HBox alignment="CENTER">
+            <TextArea fx:id="textArea" id="contentBox" editable="false" wrapText="true">
+                <HBox.margin>
+                    <Insets top="30"/>
+                </HBox.margin>
+            </TextArea>
+        </HBox>
     </center>
 
     <bottom>
-        <VBox alignment="BOTTOM_LEFT">
+        <HBox alignment="BOTTOM_LEFT">
             <Button text="Main Menu" fx:id="mainMenuBtn" onAction="#backToMainMenu">
-                <VBox.margin>
+                <HBox.margin>
                     <Insets top="40" left="40" right="40" bottom="40"/>
-                </VBox.margin>
+                </HBox.margin>
             </Button>
-        </VBox>
+
+            <Region prefHeight="100" prefWidth="100" HBox.hgrow="ALWAYS"/>
+
+            <HBox spacing="20" alignment="CENTER" id="contentBox">
+                <Label text="Info: "/>
+                <ComboBox fx:id="gameModesComboBox" value="General" maxWidth="400" minWidth="400">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="General"/>
+                            <String fx:value="Multiplayer"/>
+                            <String fx:value="Pattern Matching"/>
+                            <String fx:value="From Memory"/>
+                            <String fx:value="Maximum Patterns"/>
+                            <String fx:value="Against Time"/>
+                            <String fx:value="Painting Puzzle"/>
+                            <String fx:value="Different Cubes"/>
+                            <String fx:value="Two vs Two"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+            </HBox>
+
+            <Region prefHeight="100" prefWidth="600" HBox.hgrow="ALWAYS"/>
+        </HBox>
     </bottom>
 </BorderPane>

@@ -10,6 +10,51 @@
     -fx-text-fill: linear-gradient(to right, rgba(167, 60, 0, 0.6) 40%, #000000 40%);
 }
 
-#contentVBox {
+#contentBox {
     -fx-font-size: 30px;
+}
+
+.combo-box {
+    -fx-background-color: rgba(167, 60, 0, 0.6);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: rgba(167, 60, 0, 0.1);
+}
+
+.combo-box .list-cell:hover {
+    -fx-background-color: rgba(213, 75, 0, 0.8);
+}
+
+/* combo-box-popup .list-view is inside combo-box .list-view */
+.combo-box .list-view {
+    -fx-background-color: rgb(189, 112, 69);
+}
+
+.combo-box-popup .list-view {
+    -fx-border-style: solid;
+    -fx-border-radius: 1px;
+    -fx-border-color: black;
+}
+
+.text-area {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content .text {
+    -fx-text-alignment: justify;
+    -fx-line-spacing: 5px;
 }

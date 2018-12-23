@@ -10,7 +10,7 @@ public class Player implements Serializable {
     // ATTRIBUTES
     private final String name;
     private String visibleName;
-    private final CubeFaces[][] solutionGrid;
+    private CubeFaces[][] solutionGrid;
     private long endTime;
     private boolean didWin;
     private boolean didGiveUp;
@@ -149,5 +149,18 @@ public class Player implements Serializable {
     @Override
     public String toString() {
         return "Name: " + name + " Did win: " + didWin;
+    }
+
+    /**
+     * Gives the Player a new empty board with given dimensions.
+     * @param rows Number of rows of the board.
+     * @param columns Number of columns of the board.
+     */
+    public void setBoardDimensions(int rows, int columns) {
+        this.solutionGrid = new CubeFaces[rows][columns];
+    }
+
+    public int[] getBoardDimensions() {
+        return new int[]{solutionGrid.length, solutionGrid[0].length};
     }
 }

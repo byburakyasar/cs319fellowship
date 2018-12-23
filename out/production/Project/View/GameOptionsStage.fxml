@@ -29,7 +29,7 @@
                 <Insets top="75"/>
             </BorderPane.margin>
 
-            <HBox spacing="40" alignment="CENTER">
+            <HBox fx:id="difficultyHBox" spacing="40" alignment="CENTER">
                 <Label text="Difficulty: "/>
                 <RadioButton text="3x3" userData="3" toggleGroup="$difficultyGroup"/>
                 <RadioButton text="4x4" userData="4" toggleGroup="$difficultyGroup" selected="true"/>
@@ -42,7 +42,7 @@
                 <RadioButton text="3" userData="3" toggleGroup="$playerGroup"/>
                 <RadioButton text="4" userData="4" toggleGroup="$playerGroup"/>
             </HBox>
-            <HBox spacing="40" alignment="CENTER">
+            <HBox fx:id="dimensionsHBox" spacing="40" alignment="CENTER">
                 <Label text="Cube: "/>
                 <RadioButton text="3D Cube" userData="3" toggleGroup="$dimensionGroup" selected="true"/>
                 <RadioButton text="2D Cube" userData="2" toggleGroup="$dimensionGroup"/>
@@ -53,7 +53,6 @@
                     <items>
                         <FXCollections fx:factory="observableArrayList">
                             <String fx:value="Pattern Matching"/>
-                            <String fx:value="Racing and Rolling"/>
                             <String fx:value="From Memory"/>
                             <String fx:value="Maximum Patterns"/>
                             <String fx:value="Against Time"/>

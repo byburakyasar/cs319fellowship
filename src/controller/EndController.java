@@ -29,20 +29,26 @@ public class EndController {
     private int lastPlayerCount;
     private int lastCubeDimension;
     private GameOptionsController.GameModes lastGameMode;
+    private int lastPatternNo;
     private long lastGameTime;
-    private EndType endType;
     private Player lastWinner;
+    private boolean wasFromLevelSelection;
+    private boolean wasMultiplayer;
+    private EndType endType;
     private DateFormat dateFormatS = new SimpleDateFormat( "ss.SSS");
     private DateFormat dateFormatM = new SimpleDateFormat( "m");
 
-    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, long lastGameTime, Player lastWinner, EndType endType) {
+    public EndController(Player lastPlayer, int lastDifficulty, int lastPlayerCount, int lastCubeDimension, GameOptionsController.GameModes lastGameMode, int lastPatternNo, long lastGameTime, Player lastWinner, boolean wasFromLevelSelection, boolean wasMultiplayer, EndType endType) {
         this.lastPlayer = lastPlayer;
         this.lastDifficulty = lastDifficulty;
         this.lastPlayerCount = lastPlayerCount;
         this.lastCubeDimension = lastCubeDimension;
         this.lastGameMode = lastGameMode;
         this.lastGameTime = lastGameTime;
+        this.lastPatternNo = lastPatternNo;
         this.lastWinner = lastWinner;
+        this.wasFromLevelSelection = wasFromLevelSelection;
+        this.wasMultiplayer = wasMultiplayer;
         this.endType = endType;
     }
 
@@ -85,6 +91,14 @@ public class EndController {
 
         }
 
+        if (wasFromLevelSelection) {
+            gameOptionsBtn.setManaged(false);
+        }
+
+        if (wasMultiplayer) {
+            restartBtn.setManaged(false);
+        }
+
         if (!dateFormatM.format(lastGameTime).equals("0")) {
             if (dateFormatM.format(lastGameTime).equals("1")) {
                 finishedText.setText(winner + " finished in: " + dateFormatM.format(lastGameTime)+ " minute and " + dateFormatS.format(lastGameTime) + " seconds!");
@@ -101,9 +115,9 @@ public class EndController {
         Stage current = (Stage) restartBtn.getScene().getWindow();
 
         FXMLLoader loader = new FXMLLoader();
-        GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension, lastGameMode);
+        GameUIController gui = new GameUIController(lastPlayer, lastDifficulty, lastPlayerCount, lastCubeDimension, lastGameMode, lastPatternNo);
         loader.setController(gui);
-        loader.setLocation(getClass().getResource("../view/GameUIStage.fxml"));
+        loader.setLocation(getClass().getResource("/view/GameUIStage.fxml"));
 
         BorderPane root = loader.load();
 
@@ -113,7 +127,8 @@ public class EndController {
     @FXML
     public void loadGameOptions() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/GameOptionsStage.fxml"));
+
+        BorderPane root = FXMLLoader.load(getClass().getResource("/view/GameOptionsStage.fxml"));
 
         current.getScene().setRoot(root);
     }
@@ -121,7 +136,8 @@ public class EndController {
     @FXML
     public void backToMainMenu() throws IOException {
         Stage current = (Stage) restartBtn.getScene().getWindow();
-        BorderPane root = FXMLLoader.load(getClass().getResource("../view/MainMenuStage.fxml"));
+
+        BorderPane root = FXMLLoader.load(getClass().getResource("/view/MainMenuStage.fxml"));
 
         current.getScene().setRoot(root);
     }
