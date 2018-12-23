@@ -212,50 +212,6 @@ public class LevelSelectController {
 
                 loadGame(gui);
                 break;
-            /*
-            case 4:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 4, 1, 3,
-                        GameOptionsController.GameModes.PATTERN_MATCHING, 2);
-
-                loadGame(gui);
-                break;
-            case 5:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 4, 1, 3,
-                        GameOptionsController.GameModes.AGAINST_TIME, 4);
-
-                loadGame(gui);
-                break;
-            case 6:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 4, 1, 3,
-                        GameOptionsController.GameModes.FROM_MEMORY, 1);
-
-                loadGame(gui);
-                break;
-            case 7:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 4, 1, 3,
-                        GameOptionsController.GameModes.AGAINST_TIME, 5);
-
-                loadGame(gui);
-                break;
-            case 8:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 5, 1, 3,
-                        GameOptionsController.GameModes.FROM_MEMORY, 1);
-
-                loadGame(gui);
-                break;
-            case 9:
-                player = new Player("single", 3);
-                gui = new GameUIController(player, 5, 1, 3,
-                        GameOptionsController.GameModes.FROM_MEMORY, 3);
-
-                loadGame(gui);
-                break;
-            */
             default:
 
         }
