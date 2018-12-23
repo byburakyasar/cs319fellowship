@@ -36,7 +36,7 @@ public class HostServer {
         this.serverGameMode = Enum.valueOf(GameOptionsController.GameModes.class, serverGameMode);
     }
 
-    public HostServer(int serverPort, int serverMaxSize, int serverDifficulty, int serverCubeDimension, GameOptionsController.GameModes serverGameMode, MainClient mainClient) {
+    public HostServer(int serverMaxSize, int serverDifficulty, int serverCubeDimension, GameOptionsController.GameModes serverGameMode, MainClient mainClient) {
         this.serverMaxSize = serverMaxSize;
         this.serverDifficulty = serverDifficulty;
         this.serverCubeDimension = serverCubeDimension;
@@ -47,13 +47,13 @@ public class HostServer {
 
         try {
             this.serverAddress = InetAddress.getLocalHost().getHostAddress();
-            this.serverPort = serverPort;
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
 
         try {
-            serverSocket = new ServerSocket(serverPort);
+            serverSocket = new ServerSocket(0);
+            this.serverPort = serverSocket.getLocalPort();
             System.out.println("HostServer running.");
 
             clientHandlers = new Vector<>();

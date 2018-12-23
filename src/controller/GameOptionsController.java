@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
-import java.util.concurrent.ThreadLocalRandom;
 
 
 public class GameOptionsController {
@@ -139,7 +138,7 @@ public class GameOptionsController {
         startBtn.setText("Looking for players...");
         startBtn.setDisable(true);
 
-        mainClient = new MainClient("localhost", 50000);
+        mainClient = new MainClient("localhost", 8000);
         mainClient.joinServer();
         Vector<ServerInfo> matchingServers = mainClient.getMatchingServers(playerCount, difficulty, cubeDimension, String.valueOf(gameMode));
 
@@ -149,11 +148,10 @@ public class GameOptionsController {
         }
 
         if (matchingServers.size() == 0) {
-            int port = ThreadLocalRandom.current().nextInt(15000, 64000);
-            hostServer = new HostServer(port, playerCount, difficulty, cubeDimension, gameMode, mainClient);
+            hostServer = new HostServer(playerCount, difficulty, cubeDimension, gameMode, mainClient);
             mainClient.setHostServer(hostServer);
             mainClient.sendServerInfo();
-            gameClient = new GameClient("localhost", port, player);
+            gameClient = new GameClient("localhost", hostServer.getServerPort(), player);
             gameClient.joinServer();
             foundServer = false;
         } else {

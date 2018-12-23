@@ -34,7 +34,7 @@ public class Main extends Application {
 
     public void createMainServer() {
         // The error thrown by this is caught to print that the server is running already.
-        MainServer mainServer = new MainServer(50000);
+        MainServer mainServer = new MainServer(8000);
     }
 
     @Override
